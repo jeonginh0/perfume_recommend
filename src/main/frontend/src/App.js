@@ -1,24 +1,20 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+import React from 'react';
+import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import UserList from './component/UserList'; // 컴포넌트의 경로를 정확히 맞추어야 합니다.
+import UserRegister from "./component/UserRegister";
 
 function App() {
-  const [hello, setHello] = useState('');
-
-  const api = axios.create({
-        baseURL: 'http://localhost:8080'
-  });
-
-  useEffect(() => {
-      api.get('/api/hello')
-        .then(response => setHello(response.data))
-        .catch(error => console.log(error))
-  }, []);
-
-  return (
-      <div>
-        백엔드에서 가져온 데이터 : {hello}
-      </div>
-  );
+    return (
+        <Router>
+            <div>
+                <Routes>
+                    <Route path="/" element={<UserList />} />
+                    <Route path="/register" element={<UserRegister/>} />
+                </Routes>
+            </div>
+        </Router>
+    );
 }
 
 export default App;

@@ -1,87 +1,56 @@
 package jeonginho.perfume_recommend.service.user;
 
-import jeonginho.perfume_recommend.dto.user.CreateUserRequestDto;
-import jeonginho.perfume_recommend.dto.user.UpdateUserRequestDto;
-import jeonginho.perfume_recommend.dto.user.UserResponseDto;
-import jeonginho.perfume_recommend.exception.user.UserNotFoundException;
 import jeonginho.perfume_recommend.model.User;
 import jeonginho.perfume_recommend.repository.user.UserRepository;
+import jeonginho.perfume_recommend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-/*
-*
-* UserService.java (class)
-*
-* 1. createUser 메서드 : 새로운 사용자를 생성하는 메서드
-* 2. getUserByEmail 메서드 : 이메일을 통해 사용자를 조회하는 메서드
-* 3. updateUser 메서드 : 사용자의 정보를 업데이트하는 메서드
-*
-* */
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    public UserResponseDto createUser(CreateUserRequestDto dto) {
+    public User create(String nickname, String email, String password, String phoneNumber, String preferenceAcode, String preferenceSeason) {
         User user = new User();
-        user.setName(dto.getName());
-        user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword()); // 암호화 필요 함 (구현예정)
-
-        User savedUser = userRepository.save(user);
-
-        return UserResponseDto.builder()
-                .id(savedUser.getId())
-                .name(savedUser.getName())
-                .email(savedUser.getEmail())
-                .createdAt(savedUser.getCreatedAt())
-                .build();
+        user.setNickname(nickname); //닉네임 기입
+        user.setEmail(email); //이메일 기입
+        user.setPassword(passwordEncoder.encode(password)); //비밀번호 기입
+        user.setPhoneNumber(phoneNumber); //휴대폰 정보 기입
+        user.setPreferenceAcode(preferenceAcode);
+        user.setPreferenceSeason(preferenceSeason);
+        user.setCreatedAt(LocalDateTime.now());
+        this.userRepository.save(user);
+        return user;
     }
 
-    public UserResponseDto getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new UserNotFoundException("User not found");
-        }
-        return UserResponseDto.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .createdAt(user.getCreatedAt())
-                .build();
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
-    public UserResponseDto updateUser(String email, UpdateUserRequestDto dto) {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new UserNotFoundException("User not found with email: " + email);
-        }
+    public Optional<User> findById(String id) {
+        return userRepository.findById(id);
+    }
 
-        // 이름 업데이트
-        if (dto.getName() != null && !dto.getName().isEmpty()) {
-            user.setName(dto.getName());
-        }
-
-        // 이메일 업데이트
-        if (dto.getEmail() != null && !dto.getEmail().isEmpty() && !dto.getEmail().equals(email)) {
-            // 새 이메일이 이미 존재하는지 확인
-            if (userRepository.findByEmail(dto.getEmail()) != null) {
-                throw new IllegalArgumentException("Email already exists");
+    public String login(String email, String password) throws Exception {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                return jwtUtil.generateToken(user.getEmail());
+            } else {
+                throw new Exception("Invalid credentials");
             }
-            user.setEmail(dto.getEmail());
+        } else {
+            throw new Exception("User not found");
         }
-
-        User updatedUser = userRepository.save(user);
-
-        return UserResponseDto.builder()
-                .id(updatedUser.getId())
-                .name(updatedUser.getName())
-                .email(updatedUser.getEmail())
-                .createdAt(updatedUser.getCreatedAt())
-                .build();
     }
-
 }

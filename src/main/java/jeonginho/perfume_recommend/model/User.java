@@ -14,16 +14,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(collection = "Users")
+@Document(collection = "users")
 public class User {
+
     @Id
     private String id;
 
-    private String name;
-    private String email;
-    private String password;
+    private String nickname; //사용자 닉네임
+    private String email; //이메일
+    private String password; //비밀번호
+    private String phoneNumber; //휴대폰번호
 
-    @CreatedDate
-    private LocalDateTime createdAt;
+    private String preferenceAcode; //사용자가 선호하는 향기 코드
+    private String preferenceSeason; //사용자가 선호하는 계절
+
+    private LocalDateTime createdAt; //계정 생성일자
 }
 

@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 /*
 *
 * PerfumeRecommendController.java
-* 프로젝트의 전반적인 Controller 클래스 파일
-* api 구현예정
+* Test Controller 클래스 파일
 *
 * */
 
