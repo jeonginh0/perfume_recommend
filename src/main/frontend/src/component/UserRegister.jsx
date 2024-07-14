@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+import GoogleLoginComponent from './GoogleLogin';
+
 const RegisterForm = () => {
     const [formData, setFormData] = useState({
         nickname: '',
@@ -39,6 +41,8 @@ const RegisterForm = () => {
                 <input type="password" name="password" placeholder="비밀번호" value={formData.password} onChange={handleChange} required />
                 <input type="tel" name="phoneNumber" placeholder="휴대폰번호" value={formData.phoneNumber} onChange={handleChange} required />
                 <button type="submit">회원가입</button>
+
+                <GoogleLoginComponent />
             </form>
         </div>
     );
