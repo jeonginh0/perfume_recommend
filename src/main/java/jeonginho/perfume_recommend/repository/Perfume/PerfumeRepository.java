@@ -9,5 +9,6 @@ import java.util.List;
 public interface PerfumeRepository extends MongoRepository<Perfume, String> {
 
     @Query("{'duration': ?0, 'acode': { $in: ?1 } }")
-    List<Perfume> findByDurationAndAcodeIn(String duration, List<String> acode);
+    List<Perfume> findByDurationAndAcodeIn(String duration, List<String> acodes);
+
 }

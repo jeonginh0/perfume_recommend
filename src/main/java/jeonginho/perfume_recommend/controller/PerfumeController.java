@@ -4,6 +4,7 @@ import jeonginho.perfume_recommend.model.Perfume;
 import jeonginho.perfume_recommend.repository.Perfume.PerfumeRepository;
 import jeonginho.perfume_recommend.service.perfume.PerfumeService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -63,9 +64,10 @@ public class PerfumeController {
         perfumeService.importPerfumesJson(jsonFilePath);
     }
 
-    // 추천 받는 데이터
+    // 향수 추천 컨트롤러 수정
     @GetMapping("/recommend")
-    public List<Perfume> recommendPerfumes(@RequestParam String duration, @RequestParam List<String> acode) {
-        return perfumeService.recommendPerfumesByCriteria(duration, acode);
+    public ResponseEntity<List<Perfume>> recommendPerfumes(@RequestParam String userId) {
+        List<Perfume> recommendedPerfumes = perfumeService.recommendPerfumeByUser(userId);
+        return ResponseEntity.ok(recommendedPerfumes);
     }
 }

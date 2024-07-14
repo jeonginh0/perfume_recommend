@@ -9,6 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -25,7 +26,8 @@ public class User {
     private String password; //비밀번호
     private String phoneNumber; //휴대폰번호
 
-    private String preferenceAcode; //사용자가 선호하는 향기 코드
+    private List<String> preferenceAcode; //사용자가 선호하는 향기 코드
+    private String preferenceDuration; //사용자가 선호하는 향기 코드
     private String preferenceSeason; //사용자가 선호하는 계절
 
     private LocalDateTime createdAt; //계정 생성일자

@@ -19,13 +19,18 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public User create(String nickname, String email, String password, String phoneNumber, String preferenceAcode, String preferenceSeason) {
+    public User create(String id, String nickname, String email,
+                       String password, String phoneNumber,
+                       List<String> preferenceAcode, String preferenceDuration,
+                       String preferenceSeason) {
         User user = new User();
+        user.getId(); //고유 아이디
         user.setNickname(nickname); //닉네임 기입
         user.setEmail(email); //이메일 기입
         user.setPassword(passwordEncoder.encode(password)); //비밀번호 기입
         user.setPhoneNumber(phoneNumber); //휴대폰 정보 기입
         user.setPreferenceAcode(preferenceAcode);
+        user.setPreferenceDuration(preferenceDuration);
         user.setPreferenceSeason(preferenceSeason);
         user.setCreatedAt(LocalDateTime.now());
         this.userRepository.save(user);

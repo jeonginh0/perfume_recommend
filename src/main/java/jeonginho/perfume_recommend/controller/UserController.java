@@ -22,11 +22,14 @@ public class UserController {
     //사용자 계정 생성
     @PostMapping("/register")
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        User savedUser = userService.create(user.getNickname(),
+        User savedUser = userService.create(
+                user.getId(),
+                user.getNickname(),
                 user.getEmail(),
                 user.getPassword(),
                 user.getPhoneNumber(),
                 user.getPreferenceAcode(),
+                user.getPreferenceDuration(),
                 user.getPreferenceSeason()
         );
 

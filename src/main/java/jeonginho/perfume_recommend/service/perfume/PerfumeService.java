@@ -2,7 +2,9 @@ package jeonginho.perfume_recommend.service.perfume;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jeonginho.perfume_recommend.model.Perfume;
+import jeonginho.perfume_recommend.model.User;
 import jeonginho.perfume_recommend.repository.Perfume.PerfumeRepository;
+import jeonginho.perfume_recommend.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -10,8 +12,10 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class PerfumeService {
@@ -20,11 +24,15 @@ public class PerfumeService {
     private PerfumeRepository perfumeRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     /*
     * importPerfumesJson
     * param : String filePath (JSON 파일의 경로)
+    * 1. 프로젝트 내 최초 1회 호출
     * */
     public void importPerfumesJson(String filePath) throws IOException {
         ClassPathResource resource = new ClassPathResource(filePath); //리소스를 로드하기 위한 클래스 객체 선언
@@ -36,22 +44,25 @@ public class PerfumeService {
         perfumeRepository.saveAll(perfumes); // Perfume list 객체들을 DB에 저장
     }
 
-    public List<Perfume> recommendPerfumesByCriteria(String duration, List<String> acode) {
-        // duration과 acode를 기반으로 향수를 조회하여 랜덤으로 5개 추천
-        // duration이 일치하고 acode가 포함되는 향수들을 데이터베이스에서 조회
-        List<Perfume> matchingPerfumes = perfumeRepository.findByDurationAndAcodeIn(duration, acode);
+    public List<Perfume> recommendPerfumeByUser(String userId) {
+        // 사용자 정보 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-        // 랜덤으로 5개 향수 선택
-        List<Perfume> recommendedPerfumes = new ArrayList<>();
-        Random random = new Random();
-        int size = matchingPerfumes.size();
-        int limit = Math.min(size, 10); // 매칭된 향수가 10개보다 적을 수도 있음
+        List<String> preferenceAcodes = user.getPreferenceAcode();
+        String preferenceDuration = user.getPreferenceDuration();
 
-        for (int i = 0; i < limit; i++) {
-            int randomIndex = random.nextInt(size);
-            recommendedPerfumes.add(matchingPerfumes.get(randomIndex));
-        }
+        // preferenceAcode와 preferenceDuration을 기반으로 향수를 조회
+        List<Perfume> matchingPerfumes = perfumeRepository.findByDurationAndAcodeIn(preferenceDuration, preferenceAcodes);
+
+        // 향수를 랜덤하게 섞고 상위 5개 선택
+        Collections.shuffle(matchingPerfumes);
+        List<Perfume> recommendedPerfumes = matchingPerfumes.stream()
+                .limit(5)
+                .collect(Collectors.toList());
+
         System.out.println("추천된 향수 정보: " + recommendedPerfumes);
         return recommendedPerfumes;
     }
+
 }
