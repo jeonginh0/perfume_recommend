@@ -1,4 +1,4 @@
-package jeonginho.perfume_recommend.controller;
+package jeonginho.perfume_recommend.controller.perfume;
 
 import jeonginho.perfume_recommend.model.Perfume;
 import jeonginho.perfume_recommend.repository.Perfume.PerfumeRepository;

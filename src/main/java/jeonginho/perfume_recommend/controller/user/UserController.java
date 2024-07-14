@@ -1,4 +1,4 @@
-package jeonginho.perfume_recommend.controller;
+package jeonginho.perfume_recommend.controller.user;
 
 import jeonginho.perfume_recommend.model.User;
 import jeonginho.perfume_recommend.service.user.UserService;
@@ -23,7 +23,6 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User savedUser = userService.create(
-                user.getId(),
                 user.getNickname(),
                 user.getEmail(),
                 user.getPassword(),
@@ -42,17 +41,6 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
-    }
-
-    //특정 사용자 조회
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable String id) {
-        Optional<User> userOptional = userService.findById(id);
-        if (userOptional.isPresent()) {
-            return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
     }
 
     //로컬 로그인
@@ -77,10 +65,4 @@ public class UserController {
         System.out.println("로그아웃 성공 ! ");
         return "로그아웃 성공 ! ";
     }
-
-    //소셜 로그인
-
-
-
-
 }

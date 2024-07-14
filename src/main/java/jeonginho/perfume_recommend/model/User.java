@@ -31,5 +31,6 @@ public class User {
     private String preferenceSeason; //사용자가 선호하는 계절
 
     private LocalDateTime createdAt; //계정 생성일자
+
 }
 
