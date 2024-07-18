@@ -46,7 +46,6 @@ public class PerfumeController {
     public Perfume updatePerfume(@PathVariable String id, @RequestBody Perfume perfumeDetails) {
         Perfume perfume = perfumeRepository.findById(id).orElse(null);
         if (perfume != null) {
-            // Update fields here
             return perfumeRepository.save(perfume);
         } else {
             return null;
