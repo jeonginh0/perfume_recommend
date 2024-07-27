@@ -27,9 +27,10 @@ public class UserController {
                 user.getEmail(),
                 user.getPassword(),
                 user.getPhoneNumber(),
-                user.getPreferenceAcode(),
+                user.getPreferenceNote(),
                 user.getPreferenceDuration(),
-                user.getPreferenceSeason()
+                user.getPreferenceSeason(),
+                user.getPreferenceSituation()
         );
 
         System.out.println("유저 정보 : " + savedUser);

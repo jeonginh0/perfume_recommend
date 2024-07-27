@@ -26,9 +26,10 @@ public class User {
     private String password; //비밀번호
     private String phoneNumber; //휴대폰번호
 
-    private List<String> preferenceAcode; //사용자가 선호하는 향기 코드
-    private String preferenceDuration; //사용자가 선호하는 향기 코드
-    private String preferenceSeason; //사용자가 선호하는 계절
+    private List<String> preferenceNote; //사용자가 선호하는 향기 노트
+    private List<String> preferenceDuration; //사용자가 선호하는 향기 지속 시간
+    private List<String> preferenceSeason; //사용자가 선호하는 계절
+    private List<String> preferenceSituation; //사용자가 향수를 뿌리는 시기
 
     private LocalDateTime createdAt; //계정 생성일자
 

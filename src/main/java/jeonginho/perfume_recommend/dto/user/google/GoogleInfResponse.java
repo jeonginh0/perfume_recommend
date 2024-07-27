@@ -27,8 +27,8 @@ public class GoogleInfResponse {
     private String typ;
 
     private String phoneNumber;
-    private List<String> preferenceAcode;
-    private String preferenceDuration;
-    private String preferenceSeason;
-
+    private List<String> preferenceNote;
+    private List<String> preferenceDuration;
+    private List<String> preferenceSeason;
+    private List<String> preferenceSituation;
 }
