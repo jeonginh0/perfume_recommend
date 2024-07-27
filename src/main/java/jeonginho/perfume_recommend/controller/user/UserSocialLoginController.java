@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 public class UserSocialLoginController {
     @Autowired
@@ -27,6 +29,13 @@ public class UserSocialLoginController {
     @Value("${kakao.redirect-uri}")
     private String kakaoRedirectUri;
 
+    @Value("${naver.client-id}")
+    private String naverClientId;
+    @Value("${naver.client-secret}")
+    private String naverClientSecret;
+    @Value("${naver.redirect-uri}")
+    private String naverRedirectUri;
+
     /*
      * GOOGLE 소셜 로그인
      * */
@@ -35,7 +44,7 @@ public class UserSocialLoginController {
         return userService.getGoogleLoginUrl();
     }
 
-    @GetMapping(value="/api/v1/oauth2/google")
+    @GetMapping(value="api/v1/oauth2/google")
     public String loginGoogle(@RequestParam(value = "code") String authCode){
         String jwtToken = userService.getGoogleAccessToken(authCode);
         User user = userService.createOrGetGoogleUser(jwtToken);
@@ -47,15 +56,34 @@ public class UserSocialLoginController {
     /*
      * KAKAO 소셜 로그인
      * */
-    @PostMapping("/api/v1/oauth2/kakao")
+    @PostMapping(value="api/v1/oauth2/kakao")
     public String loginUrlKakao() {
         return userService.getKakaoLoginUrl();
     }
 
-    @GetMapping("/api/v1/oauth2/kakao")
+    @GetMapping(value="api/v1/oauth2/kakao")
     public String loginKakao(@RequestParam(value = "code") String authcode) {
         String accessToken = userService.getKakaoAccessToken(authcode);
         User user = userService.createOrGetKakaoUser(accessToken);
+
+        String jwtToken = jwtUtil.generateToken(user.getEmail());
+
+        return jwtToken;
+    }
+
+    /*
+    * NAVER 소셜 로그인
+    * */
+    @PostMapping(value="api/v1/oauth2/naver")
+    public String loginUrlNaver() {
+        String state = UUID.randomUUID().toString();
+        return userService.getNaverLoginUrl(state);
+    }
+
+    @GetMapping(value="api/v1/oauth2/naver")
+    public String loginNaver(@RequestParam String code, String state) {
+        String accessToken = userService.getNaverAccessToken(code, state);
+        User user = userService.createOrGetNaverUser(accessToken);
 
         String jwtToken = jwtUtil.generateToken(user.getEmail());
 

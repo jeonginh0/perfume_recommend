@@ -14,6 +14,7 @@ public class KakaoUserResponse {
         private String email;
         private KakaoProfile profile;
         private String phone_number;
+
         private List<String> preferenceNote;
         private List<String> preferenceDuration;
         private List<String> preferenceSeason;
