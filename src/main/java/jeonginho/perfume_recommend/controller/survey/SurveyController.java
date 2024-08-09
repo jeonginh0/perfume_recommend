@@ -18,10 +18,10 @@ public class SurveyController {
     @PostMapping("/response/member/{userId}")
     public ResponseEntity<String> saveMemberSurveyResponse(@RequestBody SurveyResponse surveyResponse) {
         if (surveyResponse.getUserId() == null) {
-            return ResponseEntity.badRequest().body("User ID is required for member");
+            return ResponseEntity.badRequest().body("회원 ID 필요.");
         }
         surveyResponseRepository.save(surveyResponse);
-        return ResponseEntity.ok("Survey response saved successfully for member");
+        return ResponseEntity.ok("회원 설문 응답 저장완료.");
     }
 
     // 비회원(게스트) 응답 저장
@@ -32,6 +32,6 @@ public class SurveyController {
             surveyResponse.setGuestSessionId(session.getId());
         }
         surveyResponseRepository.save(surveyResponse);
-        return ResponseEntity.ok("Survey response saved successfully for guest");
+        return ResponseEntity.ok("비회원 설문 응답 저장완료.");
     }
 }
