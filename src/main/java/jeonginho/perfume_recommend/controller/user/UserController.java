@@ -1,6 +1,7 @@
 package jeonginho.perfume_recommend.controller.user;
 
-import jeonginho.perfume_recommend.model.User;
+import jeonginho.perfume_recommend.dto.user.preference.UserPreferencesDto;
+import jeonginho.perfume_recommend.Entity.User;
 import jeonginho.perfume_recommend.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -65,5 +65,12 @@ public class UserController {
         }
         System.out.println("로그아웃 성공 ! ");
         return "로그아웃 성공 ! ";
+    }
+
+    //로컬/소셜 로그인 시 설문 컨트롤러
+    @PostMapping("/update-preferences")
+    public ResponseEntity<?> updateUserPreferences(@RequestParam String email, @RequestBody UserPreferencesDto preferencesDto) {
+        User updatedUser = userService.updateUserPreferences(email, preferencesDto);
+        return ResponseEntity.ok(updatedUser);
     }
 }

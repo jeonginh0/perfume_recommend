@@ -7,7 +7,8 @@ import jeonginho.perfume_recommend.dto.user.google.GoogleResponse;
 import jeonginho.perfume_recommend.dto.user.kakao.KakaoUserResponse;
 import jeonginho.perfume_recommend.dto.user.naver.NaverResponse;
 import jeonginho.perfume_recommend.dto.user.naver.NaverUserResponse;
-import jeonginho.perfume_recommend.model.User;
+import jeonginho.perfume_recommend.dto.user.preference.UserPreferencesDto;
+import jeonginho.perfume_recommend.Entity.User;
 import jeonginho.perfume_recommend.repository.user.UserRepository;
 import jeonginho.perfume_recommend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -72,6 +73,18 @@ public class UserService {
         } else {
             throw new Exception("User not found");
         }
+    }
+
+    public User updateUserPreferences(String email, UserPreferencesDto preferencesDto) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        user.setPreferenceNote(preferencesDto.getPreferenceNote());
+        user.setPreferenceDuration(preferencesDto.getPreferenceDuration());
+        user.setPreferenceSeason(preferencesDto.getPreferenceSeason());
+        user.setPreferenceSituation(preferencesDto.getPreferenceSituation());
+
+        return userRepository.save(user);
     }
 
     /*

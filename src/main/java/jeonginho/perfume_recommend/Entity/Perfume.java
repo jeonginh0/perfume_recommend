@@ -1,4 +1,4 @@
-package jeonginho.perfume_recommend.model;
+package jeonginho.perfume_recommend.Entity;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;

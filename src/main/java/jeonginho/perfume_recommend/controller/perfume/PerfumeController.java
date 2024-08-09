@@ -1,10 +1,12 @@
 package jeonginho.perfume_recommend.controller.perfume;
 
-import jeonginho.perfume_recommend.model.Perfume;
+import jakarta.servlet.http.HttpSession;
+import jeonginho.perfume_recommend.Entity.Perfume;
 import jeonginho.perfume_recommend.repository.perfume.PerfumeRepository;
+import jeonginho.perfume_recommend.service.survey.SurveyService;
 import jeonginho.perfume_recommend.service.perfume.PerfumeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -13,6 +15,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/perfumes")
 public class PerfumeController {
+
+    @Autowired
+    private SurveyService surveyService;
 
     private final PerfumeRepository perfumeRepository;
 
@@ -57,17 +62,28 @@ public class PerfumeController {
         perfumeRepository.deleteById(id);
     }
 
-    // json 데이터를 디비에 저장하기 위한 메서드. 프로젝트 최초 1회만 사용.
+    // json 데이터를 디비에 저장하기 위한 컨트롤러. 프로젝트 최초 1회만 사용.
     @PostMapping("/importData")
     public void importData() throws IOException {
         perfumeService.importPerfumesJson(jsonFilePath);
     }
 
-    // 향수 추천 컨트롤러
-    @GetMapping("/recommend")
-    public ResponseEntity<List<Perfume>> recommendPerfumes(@RequestParam String userId) {
-        List<Perfume> recommendedPerfumes = perfumeService.recommendPerfumes(userId);
-        System.out.println("추천된 향수 목록\n" + recommendedPerfumes);
-        return ResponseEntity.ok(recommendedPerfumes);
+    // 회원일 때 향수 추천
+    @GetMapping("/recommend/member/{userId}")
+    public List<Perfume> recommendForMember(@PathVariable String userId) {
+        return surveyService.processSurveyAndRecommendForMember(userId);
+    }
+
+    // 비회원일 때 향수 추천
+    @GetMapping("/recommend/guest")
+    public List<Perfume> recommendForGuest(HttpSession session) {
+        String guestSessionId = (String) session.getAttribute("guestSessionId");
+
+        if (guestSessionId == null) {
+            guestSessionId = session.getId();
+            session.setAttribute("guestSessionId", guestSessionId);
+        }
+
+        return surveyService.processSurveyAndRecommendForGuest(guestSessionId);
     }
 }

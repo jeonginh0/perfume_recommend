@@ -1,8 +1,8 @@
 package jeonginho.perfume_recommend.controller.note;
 
-import jeonginho.perfume_recommend.model.note.SeasonNote;
-import jeonginho.perfume_recommend.model.note.CategoryNote;
-import jeonginho.perfume_recommend.model.note.SituationNote;
+import jeonginho.perfume_recommend.Entity.note.SeasonNote;
+import jeonginho.perfume_recommend.Entity.note.CategoryNote;
+import jeonginho.perfume_recommend.Entity.note.SituationNote;
 import jeonginho.perfume_recommend.service.note.SeasonNoteService;
 import jeonginho.perfume_recommend.service.note.CategoryNoteService;
 import jeonginho.perfume_recommend.service.note.SituationNoteService;

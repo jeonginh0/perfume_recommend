@@ -1,6 +1,6 @@
 package jeonginho.perfume_recommend.repository.user;
 
-import jeonginho.perfume_recommend.model.User;
+import jeonginho.perfume_recommend.Entity.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;

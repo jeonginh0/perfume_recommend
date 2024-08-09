@@ -1,12 +1,10 @@
 package jeonginho.perfume_recommend.controller.user;
 
-import jeonginho.perfume_recommend.model.User;
+import jeonginho.perfume_recommend.Entity.User;
 import jeonginho.perfume_recommend.service.user.UserService;
 import jeonginho.perfume_recommend.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;

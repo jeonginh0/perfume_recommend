@@ -1,4 +1,4 @@
-package jeonginho.perfume_recommend.model.note;
+package jeonginho.perfume_recommend.Entity.note;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,11 +13,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(collection = "situation_notes")
-public class SituationNote {
+@Document(collection = "type_notes")
+public class CategoryNote {
 
     @Id
     private String id;
-    private String situation;
+    private String category;
     private List<String> notes;
 }

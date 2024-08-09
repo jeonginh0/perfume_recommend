@@ -1,6 +1,6 @@
 package jeonginho.perfume_recommend.service.note;
 
-import jeonginho.perfume_recommend.model.note.SituationNote;
+import jeonginho.perfume_recommend.Entity.note.SituationNote;
 import jeonginho.perfume_recommend.repository.note.SituationNoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
