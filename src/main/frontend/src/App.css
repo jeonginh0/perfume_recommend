@@ -16,6 +16,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Average&display=swap');
 @import url('https://webfontworld.github.io/naver/NanumMyeongjo.css');
 @import url('https://fonts.googleapis.com/css2?family=Average&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Average&family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 .App-header {
   background-color: #282c34;
@@ -130,7 +131,7 @@
 }
 
 .recommend-btn {
-  padding: 15px 30px;
+  padding: 15px 80px;
   cursor: pointer;
   background-color: #0F0F0F;
   color: white;
@@ -141,9 +142,77 @@
   font-weight: 500;
   font-size: 14px;
   line-height: 21px;
-
+  margin-top: 30px;
 }
 
 .recommend-btn:hover {
   background-color: rgba(0, 0, 0, 0.8);
+}
+
+
+.recommendation-section {
+  text-align: center;
+  padding: 50px 20px;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #DADADA
+}
+
+.section-title {
+  margin-bottom: 40px;
+  position: relative;
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 27px;
+  line-height: 37px;
+
+}
+
+.section-title::after {
+  content: "";
+  width: 220px;
+  height: 1px;
+  background-color: black;
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.recommendation-cards {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.card {
+  padding: 20px;
+  max-width: 300px;
+  text-align: center;
+}
+
+.card-image {
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  margin-bottom: 15px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 36px;
+}
+
+.card-description {
+  color: #000000;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 22px;
+  text-align: center;
 }
