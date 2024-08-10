@@ -13,6 +13,10 @@
   }
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Average&display=swap');
+@import url('https://webfontworld.github.io/naver/NanumMyeongjo.css');
+@import url('https://fonts.googleapis.com/css2?family=Average&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -35,4 +39,111 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.app {
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  color: #FFFFFF;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+.logo-nav-container {
+  display: flex;
+}
+
+.logo {
+  font-family: 'Average';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 49px;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+}
+
+.nav-links li {
+  font-family: 'Average';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  margin-left: 50px;
+  cursor: pointer;
+}
+
+.nav-icons {
+  display: flex;
+  list-style: none;
+  margin-right: 50px;
+}
+
+.nav-icons li {
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.main-banner {
+  height: 700px;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.banner-content {
+  color: #FFFFFF;
+  font-family: 'NanumMyeongjo';
+  font-style: normal;
+  font-weight: 400;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
+}
+
+.banner-content1 {
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.banner-content2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 40px;
+}
+
+.recommend-btn {
+  padding: 15px 30px;
+  cursor: pointer;
+  background-color: #0F0F0F;
+  color: white;
+  border: none;
+  box-shadow: 0 0 0 5px rgb(0 0 0 / 24%);
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+
+}
+
+.recommend-btn:hover {
+  background-color: rgba(0, 0, 0, 0.8);
 }
