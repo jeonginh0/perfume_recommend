@@ -14,7 +14,7 @@ public class SurveyController {
     @Autowired
     private SurveyResponseRepository surveyResponseRepository;
 
-    // 회원 응답 저장
+    // 회원 응답 저장 API
     @PostMapping("/response/member/{userId}")
     public ResponseEntity<String> saveMemberSurveyResponse(@RequestBody SurveyResponse surveyResponse) {
         if (surveyResponse.getUserId() == null) {
@@ -24,14 +24,15 @@ public class SurveyController {
         return ResponseEntity.ok("회원 설문 응답 저장완료.");
     }
 
-    // 비회원(게스트) 응답 저장
     @PostMapping("/response/guest")
     public ResponseEntity<String> saveGuestSurveyResponse(@RequestBody SurveyResponse surveyResponse, HttpSession session) {
-        // 세션 ID를 설정
-        if (surveyResponse.getGuestSessionId() == null) {
-            surveyResponse.setGuestSessionId(session.getId());
+        if (surveyResponse != null) {
+            session.setAttribute("비회원 응답", surveyResponse);
+            System.out.println("세션에 SurveyResponse 저장 완료: " + surveyResponse);
+        } else {
+            System.out.println("SurveyResponse가 null입니다.");
         }
-        surveyResponseRepository.save(surveyResponse);
-        return ResponseEntity.ok("비회원 설문 응답 저장완료.");
+        return ResponseEntity.ok("비회원 응답 저장 성공");
     }
+
 }

@@ -90,4 +90,25 @@ public class PerfumeService {
     public List<Perfume> findPerfumesByDuration(String duration) {
         return perfumeRepository.findByDurationContaining(duration);
     }
+
+    // 향수 필터링 - 전체 조회
+    public List<Perfume> getAllPerfumes() {
+        return perfumeRepository.findAll();
+    }
+
+    // 향수 필터링 - 단일/다중 조회
+    public List<Perfume> getPerfumesBrandDuration(List<String> brands, List<String> durations) {
+        if ((brands == null || brands.isEmpty()) && (durations == null || durations.isEmpty())) {
+            return List.of();  // 둘 다 없으면 빈 리스트 반환
+        } else if (brands != null && !brands.isEmpty() && (durations == null || durations.isEmpty())) {
+            // 브랜드만 있는 경우
+            return perfumeRepository.findByBrandInIgnoreCase(brands);
+        } else if ((brands == null || brands.isEmpty()) && durations != null && !durations.isEmpty()) {
+            // 지속시간만 있는 경우
+            return perfumeRepository.findByDurationInIgnoreCase(durations);
+        } else {
+            // 브랜드와 지속시간 모두 있는 경우
+            return perfumeRepository.findByBrandInIgnoreCaseAndDurationInIgnoreCase(brands, durations);
+        }
+    }
 }

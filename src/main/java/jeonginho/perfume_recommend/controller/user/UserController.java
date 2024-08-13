@@ -26,11 +26,7 @@ public class UserController {
                 user.getNickname(),
                 user.getEmail(),
                 user.getPassword(),
-                user.getPhoneNumber(),
-                user.getPreferenceNote(),
-                user.getPreferenceDuration(),
-                user.getPreferenceSeason(),
-                user.getPreferenceSituation()
+                user.getPhoneNumber()
         );
 
         System.out.println("유저 정보 : " + savedUser);
@@ -73,4 +69,6 @@ public class UserController {
         User updatedUser = userService.updateUserPreferences(email, preferencesDto);
         return ResponseEntity.ok(updatedUser);
     }
+
+
 }

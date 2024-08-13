@@ -35,18 +35,12 @@ public class UserService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public User create(String nickname, String email,
-                       String password, String phoneNumber,
-                       List<String> preferenceNote, List<String> preferenceDuration,
-                       List<String> preferenceSeason, List<String> preferenceSituation) {
+                       String password, String phoneNumber) {
         User user = new User();
         user.setNickname(nickname); //닉네임 기입
         user.setEmail(email); //이메일 기입
         user.setPassword(passwordEncoder.encode(password)); //비밀번호 기입
         user.setPhoneNumber(phoneNumber); //휴대폰 정보 기입
-        user.setPreferenceNote(preferenceNote);
-        user.setPreferenceDuration(preferenceDuration);
-        user.setPreferenceSeason(preferenceSeason);
-        user.setPreferenceSituation(preferenceSituation);
         user.setCreatedAt(LocalDateTime.now());
         this.userRepository.save(user);
         return user;
@@ -78,11 +72,6 @@ public class UserService {
     public User updateUserPreferences(String email, UserPreferencesDto preferencesDto) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
-
-        user.setPreferenceNote(preferencesDto.getPreferenceNote());
-        user.setPreferenceDuration(preferencesDto.getPreferenceDuration());
-        user.setPreferenceSeason(preferencesDto.getPreferenceSeason());
-        user.setPreferenceSituation(preferencesDto.getPreferenceSituation());
 
         return userRepository.save(user);
     }
@@ -121,10 +110,6 @@ public class UserService {
         String email = resultEntity2.getBody().getEmail();
         String name = resultEntity2.getBody().getName();
         String phoneNumber = resultEntity2.getBody().getPhoneNumber(); // 추가 정보
-        List<String> preferenceNote = resultEntity2.getBody().getPreferenceNote(); // 추가 정보
-        List<String> preferenceDuration = resultEntity2.getBody().getPreferenceDuration(); // 추가 정보
-        List<String> preferenceSeason = resultEntity2.getBody().getPreferenceSeason(); // 추가 정보
-        List<String> preferenceSituation = resultEntity2.getBody().getPreferenceSituation(); // 추가 정보
 
         Optional<User> existingUser = userRepository.findByEmail(email);
         if (existingUser.isPresent()) {
@@ -134,10 +119,6 @@ public class UserService {
             newUser.setEmail(email);
             newUser.setNickname(name);
             newUser.setPhoneNumber(phoneNumber);
-            newUser.setPreferenceNote(preferenceNote);
-            newUser.setPreferenceDuration(preferenceDuration);
-            newUser.setPreferenceSeason(preferenceSeason);
-            newUser.setPreferenceSituation(preferenceSituation);
             newUser.setCreatedAt(LocalDateTime.now());
 
             return userRepository.save(newUser);
@@ -154,10 +135,6 @@ public class UserService {
             newUser.setEmail(email);
             newUser.setNickname(name);
             newUser.setPhoneNumber(phoneNumber);
-            newUser.setPreferenceNote(preferenceNote);
-            newUser.setPreferenceDuration(preferenceDuration);
-            newUser.setPreferenceSeason(preferenceSeason);
-            newUser.setPreferenceSituation(preferenceSituation);
             newUser.setCreatedAt(LocalDateTime.now());
 
             return userRepository.save(newUser);
@@ -219,10 +196,6 @@ public class UserService {
             String email = userInfo.getKakao_account().getEmail();
             String nickname = userInfo.getKakao_account().getProfile().getNickname();
             String phoneNumber = userInfo.getKakao_account().getPhone_number();
-            List<String> preferenceNote = userInfo.getKakao_account().getPreferenceNote();
-            List<String> preferenceDuration = userInfo.getKakao_account().getPreferenceDuration();
-            List<String> preferenceSeason = userInfo.getKakao_account().getPreferenceSeason();
-            List<String> preferenceSituation = userInfo.getKakao_account().getPreferenceSituation();
 
             if (email == null) {
                 throw new RuntimeException("Email not provided by Kakao");
@@ -236,10 +209,6 @@ public class UserService {
                 newUser.setEmail(email);
                 newUser.setNickname(nickname);
                 newUser.setPhoneNumber(phoneNumber);
-                newUser.setPreferenceNote(preferenceNote);
-                newUser.setPreferenceDuration(preferenceDuration);
-                newUser.setPreferenceSeason(preferenceSeason);
-                newUser.setPreferenceSituation(preferenceSituation);
                 newUser.setCreatedAt(LocalDateTime.now());
 
                 return userRepository.save(newUser);
@@ -306,10 +275,6 @@ public class UserService {
             String email = userInfo.getEmail();
             String nickname = userInfo.getNickname();
             String phoneNumber = userInfo.getMobile();
-            List<String> preferenceNote = userInfo.getPreferenceNote();
-            List<String> preferenceDuration = userInfo.getPreferenceDuration();
-            List<String> preferenceSeason = userInfo.getPreferenceSeason();
-            List<String> preferenceSituation = userInfo.getPreferenceSituation();
 
 
             if (email == null) {
@@ -324,10 +289,6 @@ public class UserService {
                 newUser.setEmail(email);
                 newUser.setNickname(nickname);
                 newUser.setPhoneNumber(phoneNumber);
-                newUser.setPreferenceNote(preferenceNote);
-                newUser.setPreferenceDuration(preferenceDuration);
-                newUser.setPreferenceSeason(preferenceSeason);
-                newUser.setPreferenceSituation(preferenceSituation);
                 newUser.setCreatedAt(LocalDateTime.now());
 
                 return userRepository.save(newUser);

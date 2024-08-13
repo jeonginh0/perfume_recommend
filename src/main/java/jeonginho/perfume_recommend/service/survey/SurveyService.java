@@ -2,11 +2,12 @@ package jeonginho.perfume_recommend.service.survey;
 
 import jeonginho.perfume_recommend.Entity.survey.SurveyResponse;
 import jeonginho.perfume_recommend.Entity.Perfume;
-import jeonginho.perfume_recommend.service.perfume.PerfumeService;
 import jeonginho.perfume_recommend.repository.Survey.SurveyResponseRepository;
+import jeonginho.perfume_recommend.service.perfume.PerfumeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,48 +16,42 @@ import java.util.stream.Collectors;
 public class SurveyService {
 
     @Autowired
-    private SurveyResponseRepository surveyResponseRepository;
+    private PerfumeService perfumeService;
 
     @Autowired
-    private PerfumeService perfumeService;
+    private SurveyResponseRepository surveyResponseRepository;
 
     // 회원일 때 추천
     public List<Perfume> processSurveyAndRecommendForMember(String userId) {
+        // userId에 해당하는 SurveyResponse를 조회
         List<SurveyResponse> responses = surveyResponseRepository.findByUserId(userId);
-
-        System.out.println("향수 추천받기를 시도한 회원 ID:" + userId);
-        if (responses.isEmpty()) {
-            System.out.println("No survey responses found for user ID: " + userId);
+        if (responses == null || responses.isEmpty()) {
             return List.of(); // 빈 리스트 반환
         }
 
-        // 가장 높은 가중치의 응답을 우선적으로 사용하여 필터링
         SurveyResponse.ResponseItem highestPriorityItem = getHighestPriorityResponse(responses);
 
         if (highestPriorityItem != null) {
             List<Perfume> recommendedPerfumes = filterPerfumesByResponse(highestPriorityItem);
-            return limitPerfumes(recommendedPerfumes, 10);
+            return getRandomPerfumes(recommendedPerfumes, 10);
         }
 
         return List.of(); // 매칭된 향수가 없을 경우 빈 리스트 반환
     }
 
-    // 비회원일 때 추천
-    public List<Perfume> processSurveyAndRecommendForGuest(String sessionId) {
-        List<SurveyResponse> responses = surveyResponseRepository.findByGuestSessionId(sessionId);
-
-        System.out.println("향수 추천받기를 시도한 세션 ID:" + sessionId);
-        if (responses.isEmpty()) {
-            System.out.println("No survey responses found for session ID: " + sessionId);
+    // 비회원일 때 추천 (세션 기반)
+    public List<Perfume> processSurveyAndRecommendForGuest(SurveyResponse surveyResponse) {
+        if (surveyResponse == null || surveyResponse.getResponses().isEmpty()) {
+            System.out.println("No survey responses found for guest session");
             return List.of(); // 빈 리스트 반환
         }
 
         // 가장 높은 가중치의 응답을 우선적으로 사용하여 필터링
-        SurveyResponse.ResponseItem highestPriorityItem = getHighestPriorityResponse(responses);
+        SurveyResponse.ResponseItem highestPriorityItem = getHighestPriorityResponse(List.of(surveyResponse));
 
         if (highestPriorityItem != null) {
             List<Perfume> recommendedPerfumes = filterPerfumesByResponse(highestPriorityItem);
-            return limitPerfumes(recommendedPerfumes, 10);
+            return getRandomPerfumes(recommendedPerfumes, 10);
         }
 
         return List.of(); // 매칭된 향수가 없을 경우 빈 리스트 반환
@@ -89,8 +84,10 @@ public class SurveyService {
         }
     }
 
-    private List<Perfume> limitPerfumes(List<Perfume> perfumes, int limit) {
-        // 향수 리스트의 크기를 제한
+    private List<Perfume> getRandomPerfumes(List<Perfume> perfumes, int limit) {
+        // 리스트를 섞어서 랜덤하게 만듭니다.
+        Collections.shuffle(perfumes);
+        // 최대 limit개의 향수를 반환합니다.
         return perfumes.stream().limit(limit).collect(Collectors.toList());
     }
 }
