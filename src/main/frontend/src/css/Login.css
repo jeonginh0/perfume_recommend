@@ -1,0 +1,216 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    color: #ffffff;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+    border-bottom: 1px solid #939393;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    box-sizing: border-box;
+  }
+
+  .logo-nav-container {
+    display: flex;
+  }
+
+  .logo {
+    font-family: 'Average';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 49px;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-left: 50px;
+    margin-right: 50px;
+  }
+
+  .nav-links-blk {
+    display: flex;
+    list-style: none;
+  }
+  
+  .nav-links-blk li {
+    font-family: 'Average';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    margin-left: 50px;
+    cursor: pointer;
+    color: #000000;
+  }
+
+
+
+  .login-container {
+    width: 100%;
+    max-width: 428px;
+    margin: 90px auto;
+    padding-top: 80px;
+    background-color: #fff;
+  }
+
+  
+  .login-form {
+    text-align: center;
+  }
+
+  .login-form h2 {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 36px;
+    color: #000000;
+    border-bottom: 1px solid #F5F5F5;
+    padding-bottom: 26px;
+  }
+  
+  /* .input-group {
+    margin-bottom: 15px;
+  } */
+  
+  .input-group label {
+    margin-top: 25px;
+    margin-bottom: 13px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    display: flex;
+    align-items: center;
+    color: #696F79;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 14px;
+    border: 1px solid #8692A6;
+    border-radius: 6px;
+    height: 64px;
+  }
+
+  input:-webkit-autofill { -webkit-box-shadow: 0 0 0 30px #fff inset ; -webkit-text-fill-color: #000; }
+  input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active { transition: background-color 5000s ease-in-out 0s; }
+
+  .input-group ::placeholder {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    display: flex;
+    align-items: center;
+    color: #D9D9D9;
+  }
+  
+  .checkbox-group {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  
+  .checkbox-group input {
+    margin-right: 5px;
+  }
+
+  .checkbox-group label {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    align-items: center;
+    color: #696F79;
+  }
+  
+  .login-button {
+    width: 100%;
+    height: 64px;
+    padding: 10px;
+    background-color: #D9D9D9;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: not-allowed;
+  }
+
+  .login-button.active {
+      background-color: #000000;
+      cursor: pointer;
+  }
+
+  .login-button:disabled {
+      cursor: not-allowed;
+  }
+
+  
+  .login-options {
+    margin: 20px 0;
+    padding-bottom: 20px;
+    font-size: 14px;
+    color: #696F79;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #F5F5F5;
+  }
+  
+  .login-options a {
+    color: #696F79;
+    text-decoration: none;
+    display: flex;
+  }
+
+  .login-options p {
+    color: #696F79;
+    text-decoration: none;
+    margin: 0 30px;
+    cursor: pointer;
+  }
+
+  .login-options p:hover {
+    text-decoration: underline;
+  }
+  
+  .social-login {
+    display: flex;
+    justify-content: center;
+    gap: 65px;
+  }
+  
+  .social-button {
+    width: 50px;
+    height: 50px;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .social-button img {
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  .login-button {
+    width: 100%;
+    height: 64px;
+    padding: 10px;
+    background-color: #D9D9D9;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: not-allowed;
+  }
+  
+  .login-button.active {
+    background-color: #000000;
+    cursor: pointer;
+  }

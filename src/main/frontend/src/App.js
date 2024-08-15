@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+import React from 'react';
+// import axios from 'axios';
 import './App.css';
 import main_bg from './img/main_background.png';
 import heartIcon from './img/Heart_icon.png';
@@ -8,6 +8,8 @@ import searchIcon from './img/Search_icon.png';
 import note from './img/main_note.png';  
 import life from './img/main_life.png';      
 import season from './img/main_season.png';
+
+import { Link } from 'react-router-dom';
 
 function App() {
   // const [hello, setHello] = useState('');
@@ -27,7 +29,9 @@ function App() {
       <div className="main-banner" style={{ backgroundImage: `url(${main_bg})` }}>
         <header className="header">
           <div className="logo-nav-container">
-            <div className="logo">fragrance</div>
+            <Link to="/">
+              <div className="logo-white">fragrance</div>
+            </Link>
             <nav>
               <ul className="nav-links">
                 <li>Perfume</li>
@@ -76,6 +80,13 @@ function App() {
             </p>
           </div>
         </div>
+      </section>
+      <section className="button-section">
+        <p className="section2-title">
+          지금 바로 나만의 향수를 찾아보세요.<br/>
+          간단한 설문으로 몇 분 안에 맞춤형 향수를 추천받을 수 있습니다.
+        </p>
+        <button className="recommend-btn">향수 추천받기</button>
       </section>
     </div>
   );
