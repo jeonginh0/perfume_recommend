@@ -19,6 +19,17 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    // 사용자 ID로 닉네임 조회
+    @GetMapping("/nickname/{id}")
+    public ResponseEntity<String> getNicknameById(@PathVariable String id) {
+        try {
+            String nickname = userService.getNicknameById(id);
+            return ResponseEntity.ok(nickname);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("유저를 찾을 수 없습니다.");
+        }
+    }
+
     // 사용자 계정 생성
     @PostMapping("/register")
     public ResponseEntity<User> createUser(@RequestBody User user) {

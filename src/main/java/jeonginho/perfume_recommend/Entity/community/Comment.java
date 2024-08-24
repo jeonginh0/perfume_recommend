@@ -1,4 +1,4 @@
-package jeonginho.perfume_recommend.Entity;
+package jeonginho.perfume_recommend.Entity.community;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,17 +13,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(collection = "users")
-public class User {
-
+@Document("comments")
+public class Comment {
     @Id
     private String id;
 
-    private String nickname; //사용자 닉네임
-    private String email; //이메일
-    private String password; //비밀번호
-    private String phoneNumber; //휴대폰번호
-
-    private LocalDateTime createdAt; //계정 생성일자
+    private String postId;
+    private String userId;
+    private String content;
+    private LocalDateTime createdAt;
 }
-

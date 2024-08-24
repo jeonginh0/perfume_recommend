@@ -1,4 +1,4 @@
-package jeonginho.perfume_recommend.Entity;
+package jeonginho.perfume_recommend.Entity.community;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,22 +8,22 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(collection = "users")
-public class User {
+@Document(collection = "posts")
+public class Post {
 
     @Id
     private String id;
 
-    private String nickname; //사용자 닉네임
-    private String email; //이메일
-    private String password; //비밀번호
-    private String phoneNumber; //휴대폰번호
+    private String title;
+    private String content;
+    private LocalDateTime createdAt;
+    private String userId;
 
-    private LocalDateTime createdAt; //계정 생성일자
+    private List<Comment> comments; // 댓글 리스트
 }
-
