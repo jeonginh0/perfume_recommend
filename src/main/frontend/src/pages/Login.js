@@ -46,7 +46,7 @@ const Login = () => {
 
   return (
     <>
-      <header className="header">
+      <header className="login-header">
         <div className="logo-nav-container">
           <Link to="/">
             <div className="logo">fragrance</div>

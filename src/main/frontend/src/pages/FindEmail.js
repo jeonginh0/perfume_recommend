@@ -29,7 +29,7 @@ const FindEmail = () => {
 
     return (
         <>
-            <header className="header">
+            <header className="findemail-header">
                 <div className="logo-nav-container">
                 <Link to="/">
                     <div className="logo">fragrance</div>

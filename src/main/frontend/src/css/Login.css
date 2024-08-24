@@ -1,4 +1,4 @@
-.header {
+.login-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -43,8 +43,6 @@
     cursor: pointer;
     color: #000000;
   }
-
-
 
   .login-container {
     width: 100%;

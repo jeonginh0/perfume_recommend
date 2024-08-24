@@ -1,0 +1,56 @@
+.logo-nav-container {
+    display: flex;
+}
+
+.logo {
+    font-family: 'Average';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 49px;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-left: 50px;
+    margin-right: 50px;
+    color: #000000;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    color: #000000;
+}
+
+.nav-links li {
+    font-family: 'Average';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    margin-left: 50px;
+    cursor: pointer;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #C1C1C1;
+}
+
+.nav-link.active {
+    color: black;
+    text-decoration: underline 0.5px;
+}
+
+.nav-icons {
+    display: flex;
+    list-style: none;
+    margin-right: 50px;
+}
+
+.nav-icons li {
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.nav-icons img {
+    filter: invert();
+}

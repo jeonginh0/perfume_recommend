@@ -10,6 +10,8 @@ import Login from './pages/Login';
 import FindEmail from './pages/FindEmail';
 import FindPassword from './pages/FindPassword';
 import Signup from './pages/Signup';
+import SignupSuccess from './pages/SignupSuccess';
+import Perfume from './pages/Perfume';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -20,6 +22,8 @@ root.render(
         <Route path='/find_email' element={<FindEmail />} /> 
         <Route path='/find_password' element={<FindPassword />} />   
         <Route path='/signup' element={<Signup />} />
+        <Route path='/signup_success' element={<SignupSuccess />} />
+        <Route path='/perfume' element={<Perfume />} />
       </Routes>
     </BrowserRouter>
 );

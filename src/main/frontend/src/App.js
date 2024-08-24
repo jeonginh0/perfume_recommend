@@ -27,21 +27,27 @@ function App() {
   return (
     <div className="app">
       <div className="main-banner" style={{ backgroundImage: `url(${main_bg})` }}>
-        <header className="header">
+        <header className="main-header">
           <div className="logo-nav-container">
             <Link to="/">
               <div className="logo-white">fragrance</div>
             </Link>
             <nav>
-              <ul className="nav-links">
+              <ul className="nav-links-white">
+                <Link to="/perfume">
                 <li>Perfume</li>
+                </Link>
+                <Link to="/community">
                 <li>Community</li>
+                </Link>
+                <Link to="/recommend">
                 <li>Recommend</li>
+                </Link>
               </ul>
             </nav>
           </div>
           <nav>
-            <ul className="nav-icons">
+            <ul className="nav-icons-white">
               <li><img src={heartIcon} alt="Heart icon" /></li>
               <li><img src={profileIcon} alt="Profile icon" /></li>
               <li><img src={searchIcon} alt="Search icon" /></li>

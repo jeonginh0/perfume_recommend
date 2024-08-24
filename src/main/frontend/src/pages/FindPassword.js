@@ -29,7 +29,7 @@ const FindPassword = () => {
 
     return (
         <>
-            <header className="header">
+            <header className="findpassword-header">
                 <div className="logo-nav-container">
                 <Link to="/">
                     <div className="logo">fragrance</div>

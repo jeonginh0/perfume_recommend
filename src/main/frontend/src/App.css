@@ -46,7 +46,7 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 
-.header {
+.main-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -86,12 +86,13 @@
   color: #ffffff;
 }
 
-.nav-links {
+.nav-links-white {
   display: flex;
   list-style: none;
+  color: #FFFFFF;
 }
 
-.nav-links li {
+.nav-links-white li {
   font-family: 'Average';
   font-style: normal;
   font-weight: 400;
@@ -101,13 +102,13 @@
   cursor: pointer;
 }
 
-.nav-icons {
+.nav-icons-white {
   display: flex;
   list-style: none;
   margin-right: 50px;
 }
 
-.nav-icons li {
+.nav-icons-white li {
   margin-left: 20px;
   cursor: pointer;
 }
