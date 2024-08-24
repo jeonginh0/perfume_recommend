@@ -18,7 +18,7 @@ public class FindUserInfoController {
     @Autowired
     FindUserInfoService findUserInfoService;
 
-    // 비밀번호 찾기 API
+    // 비밀번호 찾기 API 
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestParam String email) {
         try {
