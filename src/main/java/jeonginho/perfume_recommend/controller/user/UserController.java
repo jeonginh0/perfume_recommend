@@ -19,7 +19,18 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    //사용자 계정 생성
+    // 사용자 ID로 닉네임 조회
+    @GetMapping("/nickname/{id}")
+    public ResponseEntity<String> getNicknameById(@PathVariable String id) {
+        try {
+            String nickname = userService.getNicknameById(id);
+            return ResponseEntity.ok(nickname);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("유저를 찾을 수 없습니다.");
+        }
+    }
+
+    // 사용자 계정 생성
     @PostMapping("/register")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User savedUser = userService.create(
@@ -33,14 +44,14 @@ public class UserController {
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
-    //모든 사용자 조회
+    // 모든 사용자 조회
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    //로컬 로그인
+    // 로컬 로그인
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody User user) {
         try {
@@ -52,21 +63,27 @@ public class UserController {
         }
     }
 
-    //로컬 로그아웃
+    // 로컬 로그아웃
     @PostMapping("/logout")
-    public String logout() {
+    public ResponseEntity<String> logout() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
             SecurityContextHolder.getContext().setAuthentication(null);
         }
         System.out.println("로그아웃 성공 ! ");
-        return "로그아웃 성공 ! ";
+        return ResponseEntity.ok("로그아웃이 성공적으로 처리되었습니다.");
     }
 
-    //로컬/소셜 로그인 시 설문 컨트롤러
+    // 로컬/소셜 로그인 시 설문 컨트롤러
     @PostMapping("/update-preferences")
-    public ResponseEntity<?> updateUserPreferences(@RequestParam String email, @RequestBody UserPreferencesDto preferencesDto) {
-        User updatedUser = userService.updateUserPreferences(email, preferencesDto);
+    public ResponseEntity<?> updateUserPreferences(@RequestParam String email,
+                                                   @RequestBody UserPreferencesDto preferencesDto,
+                                                   @RequestHeader("Authorization") String token) {
+
+        // Authorization 헤더에서 "Bearer " 제거
+        String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+
+        User updatedUser = userService.updateUserPreferences(email, preferencesDto, jwtToken);
         return ResponseEntity.ok(updatedUser);
     }
 

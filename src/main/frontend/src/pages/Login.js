@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../css/Login.css';
 import googleLogo from '../img/Google.png';
 import kakaoLogo from '../img/kakaotalk.png';
 import naverLogo from '../img/naver.png';
+
+const API_BASE_URL = 'http://localhost:8080/api/v1';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [loginError, setLoginError] = useState('');
-
-  const registeredUser = {
-    email: 'user@example.com',
-    password: 'password123'
-  };
+  const navigate = useNavigate();
 
   const isFormValid = email !== '' && password !== '';
 
@@ -22,7 +21,6 @@ const Login = () => {
     const emailValue = e.target.value;
     setEmail(emailValue);
 
-    // 이메일 형식 검증
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(emailValue)) {
       setEmailError('이메일 주소를 정확히 입력해주세요.');
@@ -31,17 +29,12 @@ const Login = () => {
     }
   };
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+  const handleLogin = async (e) => {
+    
+  };
 
-    // 이메일과 비밀번호 검증
-    if (email === registeredUser.email && password === registeredUser.password) {
-      setLoginError('');
-      // 로그인 성공 시 http://localhost:3000/로 리다이렉트
-      window.location.href = 'http://localhost:3000/';
-    } else {
-      setLoginError('이메일 또는 비밀번호가 일치하지 않습니다.');
-    }
+  const handleSocialLogin = async (provider) => {
+    
   };
 
   return (
@@ -105,13 +98,13 @@ const Login = () => {
             </Link>
           </div>
           <div className="social-login">
-            <button className="social-button">
+            <button className="social-button" onClick={() => handleSocialLogin('google')}>
               <img src={googleLogo} alt="Google" />
             </button>
-            <button className="social-button">
+            <button className="social-button" onClick={() => handleSocialLogin('kakao')}>
               <img src={kakaoLogo} alt="KakaoTalk" />
             </button>
-            <button className="social-button">
+            <button className="social-button" onClick={() => handleSocialLogin('naver')}>
               <img src={naverLogo} alt="Naver" />
             </button>
           </div>

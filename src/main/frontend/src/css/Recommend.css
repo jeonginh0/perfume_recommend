@@ -1,0 +1,219 @@
+.recommend-container {
+    width: 100%;
+    max-width: 682px;
+    margin: 110px auto;
+    padding-top: 50px;
+    background-color: #fff;
+    position: relative; /* 화살표 버튼 위치를 위해 추가 */
+}
+
+.recommend-form {
+    text-align: center;
+}
+
+.recommend-p {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #000000;
+    border-bottom: 1px solid #F5F5F5;
+    padding-bottom: 10px;
+}
+
+.progress-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 14px;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    padding-inline: 10px;
+    width: 56px;
+}
+
+.progress-step p {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #A1AEBE;
+    padding-bottom: 10px;
+    margin-top: 5px;
+}
+
+.circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid #A1AEBE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #A1AEBE;
+    background-color: white;
+}
+
+.progress-step.active .circle { /* 선택된 단계 */
+    border-color: black; 
+    color: black;
+}
+
+.progress-step.active p {
+    color: black;
+}
+
+.progress-line {
+    width: 85px;
+    height: 2px;
+    background-color: #A1AEBE;
+    z-index: 1;
+    margin-top: 15px;
+    position: relative; /* 애니메이션을 위한 상대 위치 */
+    overflow: hidden;
+}
+
+.progress-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s ease-in-out;
+}
+
+.progress-line.active::after {
+    transform: scaleX(1);
+}
+
+.step-title {
+    margin: 20px 0;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    align-items: center;
+    text-align: center;
+    color: #000000;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.button-option {
+    width: 426px;
+    height: 52px;
+    border: 1px solid #8692A6;
+    border-radius: 6px;
+    margin-top: 14px;
+    color: #696F79;
+    background-color: #fff;
+    cursor: pointer;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.button-option.selected {
+    background-color: #8692A6;
+    border: 1px solid #8692A6;
+    color: #FFFFFF;
+}
+
+.next-button {
+    width: 426px;
+    height: 64px;
+    background-color: #0F0F0F;
+    border-radius: 6px;
+    color: #fff;
+    margin-top: 58px;
+    cursor: pointer;
+    border: none;
+}
+
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 30px;
+    color: #000;
+    cursor: pointer;
+}
+
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+    text-align: center;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid #ccc;
+    border-top: 6px solid #000;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.results-container {
+    text-align: center;
+}
+
+.perfume-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.perfume-item {
+    width: 150px;
+    margin: 10px;
+    text-align: center;
+}
+
+.retry-button {
+    width: 310px;
+    height: 64px;
+    background-color: #0F0F0F;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    margin-top: 20px;
+    cursor: pointer;
+}

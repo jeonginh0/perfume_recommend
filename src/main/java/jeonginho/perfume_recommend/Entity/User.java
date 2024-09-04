@@ -8,7 +8,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -26,6 +25,5 @@ public class User {
     private String phoneNumber; //휴대폰번호
 
     private LocalDateTime createdAt; //계정 생성일자
-
 }
 

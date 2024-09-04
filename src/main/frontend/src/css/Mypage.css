@@ -1,0 +1,153 @@
+.mypage-container {
+    width: 100%;
+    max-width: 700px;
+    margin: 90px auto;
+    padding-top: 80px;
+    background-color: #fff;
+  }
+
+  
+  .mypage-form {
+    text-align: center;
+  }
+
+  .mypage-form h2 {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 36px;
+    align-items: center;
+    color: #000000;
+    border-bottom: 1px solid #F5F5F5;
+    margin: 0;
+    padding-bottom: 24px;
+  }
+
+  .mypage-username {
+    display: flex;
+    margin-top: 63px;
+    align-items: center;
+    border-bottom: 1px solid #EBEBEB;
+    padding-bottom: 20px;
+  }
+
+  .username {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 29px;
+    display: flex;
+    align-items: center;
+    color: #000000;
+    margin-left: 23px;
+  }
+
+  .ch-name-button {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+    color: #000000;
+
+    width: 116px;
+    height: 46px;
+    border: 1px solid #DFDFDF;
+    border-radius: 6px;
+    background-color: #fff;
+    margin-left: auto;
+  }
+
+  .mypage-email {
+    display: flex;
+    margin-top: 25px;
+  }
+
+  .email-p {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    align-items: center;
+    color: #000000;
+    margin-left: 68px;
+    width: 64px;
+    display: flex;
+
+  }
+
+  .email {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    align-items: center;
+    color: #000000;
+    margin-left: 70px;
+  }
+
+  .mypage-number {
+    display: flex;
+    margin-top: 25px;
+  }
+
+  .number-p {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    align-items: center;
+    color: #000000;
+    margin-left: 68px;
+  }
+
+  .number {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    align-items: center;
+    color: #000000;
+    margin-left: 70px;
+  }
+
+  .mypage-password {
+    display: flex;
+    margin-top: 25px;
+    border-bottom: 1px solid #EBEBEB;
+    padding-bottom: 25px;
+  }
+
+  .password-p {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    align-items: center;
+    color: #000000;
+    margin-left: 68px;
+  }
+
+  .ses {
+    display: flex;
+  }
+
+  .ses-p {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    display: flex;
+    align-items: center;
+    color: #FF0000;
+    margin-left: auto;
+  }

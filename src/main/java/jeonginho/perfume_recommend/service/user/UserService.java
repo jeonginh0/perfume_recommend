@@ -32,7 +32,14 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final Environment env;
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
+
+    // 사용자 ID로 닉네임 조회
+    public String getNicknameById(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다."));
+        return user.getNickname();
+    }
 
     public User create(String nickname, String email,
                        String password, String phoneNumber) {
@@ -50,9 +57,21 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public User getUserFromToken(String token) {
+        String email = jwtUtil.extractEmail(token);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
     public User getUserByEmail(String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);
         return userOptional.orElse(null);
+    }
+
+    public String getUserNicknameById(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다."));
+        return user.getNickname(); // 사용자 닉네임 필드가 있다고 가정
     }
 
     public String login(String email, String password) throws Exception {
@@ -69,7 +88,13 @@ public class UserService {
         }
     }
 
-    public User updateUserPreferences(String email, UserPreferencesDto preferencesDto) {
+    public User updateUserPreferences(String email, UserPreferencesDto preferencesDto, String token) {
+        String tokenEmail = jwtUtil.extractEmail(token);
+
+        if (!email.equals(tokenEmail)) {
+            throw new SecurityException("Invalid token for the provided email");
+        }
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
@@ -125,8 +150,7 @@ public class UserService {
         }
     }
 
-    public User createOrGetUser(String email, String name, String phoneNumber,
-                                List<String> preferenceNote, List<String> preferenceDuration, List<String> preferenceSeason, List<String> preferenceSituation) {
+    public User createOrGetUser(String email, String name, String phoneNumber) {
         Optional<User> existingUser = userRepository.findByEmail(email);
         if (existingUser.isPresent()) {
             return existingUser.get();
