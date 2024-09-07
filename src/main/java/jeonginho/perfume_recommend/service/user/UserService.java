@@ -66,7 +66,7 @@ public class UserService {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             if (passwordEncoder.matches(password, user.getPassword())) {
-                return jwtUtil.generateToken(user.getEmail());
+                return jwtUtil.generateToken(user.getId());
             } else {
                 throw new Exception("Invalid credentials");
             }

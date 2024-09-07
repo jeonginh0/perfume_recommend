@@ -1,8 +1,10 @@
 package jeonginho.perfume_recommend.controller.note;
 
+import jakarta.annotation.PostConstruct;
 import jeonginho.perfume_recommend.Entity.note.SeasonNote;
 import jeonginho.perfume_recommend.Entity.note.CategoryNote;
 import jeonginho.perfume_recommend.Entity.note.SituationNote;
+import jeonginho.perfume_recommend.repository.note.SeasonNoteRepository;
 import jeonginho.perfume_recommend.service.note.SeasonNoteService;
 import jeonginho.perfume_recommend.service.note.CategoryNoteService;
 import jeonginho.perfume_recommend.service.note.SituationNoteService;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/notes")
@@ -25,9 +29,18 @@ public class NoteController {
     @Autowired
     private SituationNoteService situationNoteService;
 
+    @Autowired
+    private SeasonNoteRepository seasonNoteRepository;
+
     @PostMapping("/importSeasonNotes")
     public void importSeasonNotes(@RequestBody SeasonNote note) {
         seasonNoteService.saveNotes(note);
+    }
+
+    @PostConstruct
+    public void checkSeasonNotes() {
+        List<SeasonNote> allNotes = seasonNoteRepository.findAll();
+        System.out.println("저장된 시즌 노트: " + allNotes);
     }
 
     @PostMapping("/importTypeNotes")

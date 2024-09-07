@@ -30,6 +30,6 @@ public class SurveyResponse {
     public static class ResponseItem {
         private String questionType;  // 질문 유형 ("category", "season", "situation", "duration")
         private String response;  // 사용자 응답 ("Floral", "Spring", 등)
-        private double weight; // 해당 질문의 가중치
+        private int weight; // 해당 질문의 가중치
     }
 }

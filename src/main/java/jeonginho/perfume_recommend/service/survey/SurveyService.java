@@ -84,6 +84,11 @@ public class SurveyService {
         }
     }
 
+    // 회원의 설문 응답을 조회하는 메서드
+    public List<SurveyResponse> getSurveyResponsesForMember(String userId) {
+        return surveyResponseRepository.findByUserId(userId);
+    }
+
     private List<Perfume> getRandomPerfumes(List<Perfume> perfumes, int limit) {
         // 리스트를 섞어서 랜덤하게 만듭니다.
         Collections.shuffle(perfumes);

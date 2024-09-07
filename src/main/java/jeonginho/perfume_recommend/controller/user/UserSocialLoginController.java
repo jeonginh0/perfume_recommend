@@ -1,12 +1,16 @@
 package jeonginho.perfume_recommend.controller.user;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jeonginho.perfume_recommend.Entity.User;
 import jeonginho.perfume_recommend.service.user.UserService;
 import jeonginho.perfume_recommend.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -38,8 +42,11 @@ public class UserSocialLoginController {
      * GOOGLE 소셜 로그인
      * */
     @PostMapping(value="api/v1/oauth2/google")
-    public String loginUrlGoogle() {
-        return userService.getGoogleLoginUrl();
+    public ResponseEntity<Void> loginUrlGoogle(HttpServletResponse response) throws IOException {
+        String googleLoginUrl = userService.getGoogleLoginUrl();
+        response.sendRedirect(googleLoginUrl);
+        System.out.println(userService.getGoogleLoginUrl());
+        return ResponseEntity.status(HttpStatus.FOUND).build();
     }
 
     @GetMapping(value="api/v1/oauth2/google")
@@ -54,9 +61,12 @@ public class UserSocialLoginController {
     /*
      * KAKAO 소셜 로그인
      * */
-    @PostMapping(value="api/v1/oauth2/kakao")
-    public String loginUrlKakao() {
-        return userService.getKakaoLoginUrl();
+    @PostMapping(value = "api/v1/oauth2/kakao")
+    public ResponseEntity<Void> loginUrlKakao(HttpServletResponse response) throws IOException {
+        String kakaoLoginUrl = userService.getKakaoLoginUrl();
+        response.sendRedirect(kakaoLoginUrl);
+        System.out.println(userService.getKakaoLoginUrl());
+        return ResponseEntity.status(HttpStatus.FOUND).build();
     }
 
     @GetMapping(value="api/v1/oauth2/kakao")
@@ -70,12 +80,15 @@ public class UserSocialLoginController {
     }
 
     /*
-    * NAVER 소셜 로그인
-    * */
-    @PostMapping(value="api/v1/oauth2/naver")
-    public String loginUrlNaver() {
+     * NAVER 소셜 로그인
+     * */
+    @PostMapping(value = "api/v1/oauth2/naver")
+    public ResponseEntity<Void> loginUrlNaver(HttpServletResponse response) throws IOException {
         String state = UUID.randomUUID().toString();
-        return userService.getNaverLoginUrl(state);
+        String naverLoginUrl = userService.getNaverLoginUrl(state);
+        response.sendRedirect(naverLoginUrl);
+        System.out.println(userService.getNaverLoginUrl(state));
+        return ResponseEntity.status(HttpStatus.FOUND).build();
     }
 
     @GetMapping(value="api/v1/oauth2/naver")
