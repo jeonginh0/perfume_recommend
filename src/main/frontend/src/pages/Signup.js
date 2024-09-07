@@ -1,21 +1,30 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../css/Signup.css';
 
 const Signup = () => {
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
+  const [inputCode, setInputCode] = useState(''); // 사용자가 입력한 인증번호
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
 
   const [nicknameError, setNicknameError] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [verificationMessage, setVerificationMessage] = useState(''); // 인증 메시지
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [phoneNumberError, setPhoneNumberError] = useState('');
 
+  const [isCodeSent, setIsCodeSent] = useState(false); // 인증번호 전송 여부
+  const [isCodeVerified, setIsCodeVerified] = useState(false); // 인증번호 확인 여부
+  const [isCodeValid, setIsCodeValid] = useState(false); // 인증번호 일치 여부
+
+  const navigate = useNavigate();
+
+  // 닉네임 유효성 검사
   const validateNickname = (e) => {
     const nicknameValue = e.target.value;
     setNickname(nicknameValue);
@@ -27,6 +36,7 @@ const Signup = () => {
     }
   };
 
+  // 이메일 유효성 검사
   const validateEmail = (e) => {
     const emailValue = e.target.value;
     setEmail(emailValue);
@@ -39,6 +49,7 @@ const Signup = () => {
     }
   };
 
+  // 비밀번호 유효성 검사
   const validatePassword = (e) => {
     const passwordValue = e.target.value;
     setPassword(passwordValue);
@@ -51,6 +62,7 @@ const Signup = () => {
     }
   };
 
+  // 비밀번호 확인 유효성 검사
   const validateConfirmPassword = (e) => {
     const confirmPasswordValue = e.target.value;
     setConfirmPassword(confirmPasswordValue);
@@ -62,6 +74,7 @@ const Signup = () => {
     }
   };
 
+  // 전화번호 유효성 검사
   const validatePhoneNumber = (e) => {
     const phoneNumberValue = e.target.value;
     setPhoneNumber(phoneNumberValue);
@@ -74,13 +87,74 @@ const Signup = () => {
     }
   };
 
-  const isFormValid = !nicknameError && !emailError && !passwordError && !confirmPasswordError && !phoneNumberError && nickname && email && password && confirmPassword && phoneNumber;
+  // 인증번호 전송 함수
+  const handleSendVerificationCode = async () => {
+    try {
+      const response = await fetch(`http://58.235.71.202:8080/api/users/send-verification-code?email=${encodeURIComponent(email)}`, {
+        method: 'POST',
+      });
 
-  const handleSubmit = (e) => {
+      if (response.ok) {
+        setIsCodeSent(true);
+        setVerificationMessage('인증번호가 발송되었습니다.');
+      } else {
+        setVerificationMessage('인증번호 전송에 실패했습니다.');
+      }
+    } catch (error) {
+      setVerificationMessage('인증번호 전송 중 오류가 발생했습니다.');
+    }
+  };
+
+  // 인증번호 확인 함수
+  const handleVerifyCode = async () => {
+    try {
+      const response = await fetch(`http://58.235.71.202:8080/api/users/verify-code?email=${encodeURIComponent(email)}&code=${encodeURIComponent(inputCode)}`, {
+        method: 'POST',
+      });
+
+      if (response.ok) {
+        setIsCodeVerified(true);
+        setIsCodeValid(true);
+        setVerificationMessage('인증번호가 확인되었습니다.');
+      } else {
+        setIsCodeValid(false);
+        setVerificationMessage('인증번호가 올바르지 않습니다.');
+      }
+    } catch (error) {
+      setVerificationMessage('인증번호 확인 중 오류가 발생했습니다.');
+    }
+  };
+
+  const isFormValid = !nicknameError && !emailError && !passwordError && !confirmPasswordError && !phoneNumberError && nickname && email && password && confirmPassword && phoneNumber && isCodeVerified;
+
+  // 회원가입 제출 함수
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (isFormValid) {
-      console.log('회원가입 진행');
-      // 서버와 통신하여 회원가입 처리 로직 추가
+      try {
+        const response = await fetch('http://58.235.71.202:8080/api/users/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            nickname,
+            email,
+            password,
+            phoneNumber,
+          }),
+        });
+
+        if (response.ok) {
+          // 회원가입 성공 시 /signup_success로 이동
+          navigate('/signup_success');
+        } else {
+          const errorData = await response.json();
+          console.error('회원가입 실패:', errorData);
+        }
+      } catch (error) {
+        console.error('에러 발생:', error);
+      }
     }
   };
 
@@ -122,6 +196,10 @@ const Signup = () => {
                 required
               />
               {emailError && <p className="error-text">{emailError}</p>}
+              <button type="button" onClick={handleSendVerificationCode} disabled={!email || emailError || isCodeSent}>
+                인증번호 전송
+              </button>
+              {isCodeSent && <p>{verificationMessage}</p>}
             </div>
 
             <div className="input-group">
@@ -129,10 +207,14 @@ const Signup = () => {
               <input
                 type="text"
                 id="verificationCode"
-                value={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value)}
+                value={inputCode}
+                onChange={(e) => setInputCode(e.target.value)}
                 required
               />
+              <button type="button" onClick={handleVerifyCode} disabled={!inputCode || isCodeValid}>
+                확인
+              </button>
+              {verificationMessage && <p>{verificationMessage}</p>}
             </div>
 
             <div className="input-group">
@@ -173,11 +255,10 @@ const Signup = () => {
               />
               {phoneNumberError && <p className="error-text">{phoneNumberError}</p>}
             </div>
-            <Link to="/signup_success">
+
             <button type="submit" className={`submit-button ${!isFormValid ? 'disabled' : ''}`} disabled={!isFormValid}>
               회원가입
             </button>
-            </Link>
           </form>
         </div>
       </div>

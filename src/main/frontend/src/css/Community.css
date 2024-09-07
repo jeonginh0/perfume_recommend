@@ -1,0 +1,123 @@
+.Community-container {
+    width: 100%;
+    margin-top: 170px;
+}
+
+.Community-form {
+    width: 80%;
+    margin: 20px auto;
+}
+
+.Community-header {
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'NanumMyeongjo';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 38px;
+    align-items: center;
+    color: #000000;
+}
+
+.community-hd {
+    display: flex;
+    justify-content: space-between;
+}
+
+.post-size {
+    font-size: 1rem;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+}
+
+.community-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.table-header {
+    display: flex;
+    background-color: #EDEDED;
+    font-weight: bold;
+    padding: 10px 0;
+}
+
+.table-row {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    padding: 20px 0;
+}
+
+.header-number, .row-number {
+    flex: 1;
+    text-align: center;
+    width: 5%; /* 42px 비율 적용 */
+}
+
+.header-title {
+    flex: 15;
+    padding-left: 10px;
+    width: 50%; 
+    text-align: center;
+}
+
+.row-title {
+    flex: 15;
+    padding-left: 40px;
+    width: 50%; 
+}
+
+.header-author, .row-author {
+    flex: 3;
+    text-align: center;
+    width: 10%; 
+}
+
+.header-date, .row-date {
+    flex: 4;
+    text-align: center;
+    width: 15%;
+}
+
+.post-size {
+    display: flex;
+    align-items: end;
+}
+
+.post-size p {
+    margin: 0;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+
+  .pagination-button.active {
+    background-color: #888;
+    color: white;
+  }
+  
+  .pagination button {
+    margin: 0 5px;
+    border: none;
+    background-color: transparent;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #666;
+    border-radius: 50%;
+  }
+  
+  .pagination button:disabled {
+    cursor: not-allowed;
+    color: #ccc;
+  }
+  

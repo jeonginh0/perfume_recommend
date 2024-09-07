@@ -6,8 +6,6 @@ import googleLogo from '../img/Google.png';
 import kakaoLogo from '../img/kakaotalk.png';
 import naverLogo from '../img/naver.png';
 
-const API_BASE_URL = 'http://localhost:8080/api/v1';
-
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,11 +28,35 @@ const Login = () => {
   };
 
   const handleLogin = async (e) => {
-    
+    e.preventDefault();
+  
+    if (!isFormValid) {
+      setLoginError('이메일과 비밀번호를 모두 입력해 주세요.');
+      return;
+    }
+  
+    try {
+      const response = await axios.post('http://58.235.71.202:8080/api/users/login', {
+        email,
+        password,
+      }, {
+        headers: {
+          'Content-Type': 'application/json', // 요청 헤더 설정
+        }
+      });
+  
+      localStorage.setItem('token', response.data);
+      navigate('/dashboard');
+    } catch (error) {
+      // 서버가 반환하는 에러 메시지와 상태 코드 출력
+      console.error('로그인 에러:', error.response?.data || error.message);
+      setLoginError(error.response?.data || '로그인에 실패했습니다.');
+    }
   };
+  
 
   const handleSocialLogin = async (provider) => {
-    
+   
   };
 
   return (

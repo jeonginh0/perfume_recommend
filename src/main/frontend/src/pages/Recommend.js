@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../css/Navbar.js';
 import '../css/Recommend.css';
-import { GoArrowLeft } from 'react-icons/go'; // react-icons에서 GoArrowLeft 아이콘 임포트
+import { GoArrowLeft } from 'react-icons/go';
+import axios from 'axios';
 
 const Recommend = () => {
     const [currentStep, setCurrentStep] = useState(1); // 현재 설문 단계
     const [selectedOptions, setSelectedOptions] = useState([]); // 선택된 옵션
+    const [surveyResponses, setSurveyResponses] = useState([]); // 설문 응답 저장
     const [isLoading, setIsLoading] = useState(false); // 로딩 상태 관리
     const [isResultVisible, setIsResultVisible] = useState(false); // 결과 표시 상태
+    const [recommendations, setRecommendations] = useState([]); // 추천 결과 저장
+    const [errorMessage, setErrorMessage] = useState(''); // 오류 메시지 관리
 
+    // 옵션 선택 시 호출되는 함수
     const handleOptionClick = (index) => {
         if (selectedOptions.includes(index)) {
             setSelectedOptions(selectedOptions.filter(item => item !== index));
@@ -17,35 +22,117 @@ const Recommend = () => {
         }
     };
 
+    // 다음 단계로 넘어갈 때 호출되는 함수
     const handleNextClick = () => {
         if (selectedOptions.length === 0) return; // 선택된 옵션이 없으면 넘어가지 않음
+
+        const currentResponse = {
+            questionType: getCurrentQuestionType(),
+            response: getSelectedOptionLabels(), // 선택된 옵션의 라벨을 서버에 보냄
+            weight: getCurrentQuestionWeight()
+        };
+
+        setSurveyResponses(prevResponses => {
+            const updatedResponses = [...prevResponses, currentResponse];
+            return updatedResponses;
+        });
 
         if (currentStep < 4) {
             setCurrentStep(currentStep + 1);
             setSelectedOptions([]); // 다음 단계로 넘어갈 때 선택 초기화
         } else {
             setIsLoading(true); // 로딩 상태로 전환
-            // 로딩 상태를 2초 동안 유지한 후 결과를 표시
-            setTimeout(() => {
-                setIsLoading(false);
-                setIsResultVisible(true);
-            }, 2000);
+            submitSurveyResponses(); // 설문 응답 제출
         }
     };
 
     const handleBackClick = () => {
         if (currentStep > 1) {
             setCurrentStep(currentStep - 1);
-            setSelectedOptions([]); // 이전 단계로 넘어갈 때 선택 초기화
+            setSelectedOptions([]);
         }
     };
 
     const handleRetryClick = () => {
         setCurrentStep(1);
         setSelectedOptions([]);
+        setSurveyResponses([]);
         setIsResultVisible(false);
     };
 
+    // 각 질문의 타입 반환
+    const getCurrentQuestionType = () => {
+        switch (currentStep) {
+            case 1: return 'category';
+            case 2: return 'situation';
+            case 3: return 'season';
+            case 4: return 'duration';
+            default: return '';
+        }
+    };
+
+    // 각 질문의 가중치 반환
+    const getCurrentQuestionWeight = () => {
+        switch (currentStep) {
+            case 1: return 0.7;
+            case 2: return 0.5;
+            case 3: return 0.3;
+            case 4: return 1.0;
+            default: return 1.0;
+        }
+    };
+
+    // 선택된 옵션의 첫 번째 값만 반환
+    const getSelectedOptionLabels = () => {
+        const optionLabels = [
+            ['Floral', 'Fruity', 'Woody', 'Musky', 'Spicy', 'Green', 'Citrus'],
+            ['Everyday', 'Special Occasions', 'Work'],
+            ['Spring', 'Summer', 'Autumn', 'Winter'],
+            ['퍼퓸', '오 드 퍼퓸', '오 드 뚜왈렛', '오 드 코롱']
+        ];
+
+        return optionLabels[currentStep - 1][selectedOptions[0]];
+    };
+
+    // 설문 응답 제출 함수
+    const submitSurveyResponses = async () => {
+        console.log('Submitting survey responses:', surveyResponses); // 저장된 설문 응답 확인
+        try {
+            const response = await axios.post('http://58.235.71.202:8080/survey/response/guest', { responses: surveyResponses });
+            if (response.status === 200) {
+                fetchRecommendations();
+            } else {
+                setErrorMessage('설문 응답 제출 실패');
+                setIsLoading(false);
+            }
+        } catch (error) {
+            console.error('설문 응답 제출 중 오류 발생', error.response?.data);
+            setErrorMessage('설문 응답 제출 중 오류 발생');
+            setIsLoading(false);
+        }
+    };
+
+    // 추천 결과 조회 함수
+    const fetchRecommendations = async () => {
+        try {
+            const response = await axios.get('http://58.235.71.202:8080/perfumes/recommend/guest/details');
+            if (response.status === 200) {
+                setRecommendations(response.data);
+                setIsLoading(false);
+                setIsResultVisible(true);
+                console.log('추천된 향수 목록:', response.data); // 추천 결과 확인
+            } else {
+                setErrorMessage('추천 결과 조회 실패');
+                setIsLoading(false);
+            }
+        } catch (error) {
+            console.error('추천 결과 조회 중 오류 발생', error.response?.data);
+            setErrorMessage('추천 결과 조회 중 오류 발생');
+            setIsLoading(false);
+        }
+    };
+
+    // 각 질문의 내용을 렌더링하는 함수
     const renderQuestion = () => {
         switch (currentStep) {
             case 1:
@@ -146,7 +233,7 @@ const Recommend = () => {
     const renderLoading = () => (
         <div className="loading-container">
             <div className="spinner"></div>
-            <p>해인님에게 맞는 향수를 찾는 중입니다...</p>
+            <p>당신에게 맞는 향수를 찾는 중입니다...</p>
         </div>
     );
 
@@ -154,12 +241,11 @@ const Recommend = () => {
         <div className="results-container">
             <h2>추천 향수</h2>
             <div className="perfume-grid">
-                {/* 예시 향수 결과 */}
-                {['Diptyque', 'Byredo', 'Diptyque', 'Byredo', 'Diptyque', 'Diptyque'].map((brand, index) => (
+                {recommendations.map((perfume, index) => (
                     <div className="perfume-item" key={index}>
-                        <img src="perfume_image_url" alt="향수 이미지" />
-                        <p>{brand}</p>
-                        <p>오 드 퍼퓸</p>
+                        <img src={perfume.imageUrl} alt="향수 이미지" />
+                        <p>{perfume.brand}</p>
+                        <p>{perfume.type}</p>
                     </div>
                 ))}
             </div>
@@ -172,7 +258,6 @@ const Recommend = () => {
             <Navbar />
             <div className="recommend-container">
                 <div className="recommend-form">
-                    {/* 로딩 상태 */}
                     {isLoading ? (
                         renderLoading()
                     ) : isResultVisible ? (
@@ -184,10 +269,11 @@ const Recommend = () => {
                                 몇 가지 질문에 답하면, 당신의 취향과 라이프스타일에 맞는 향수를 추천해드립니다.
                             </p>
 
-                            {/* 화살표 버튼: 첫 번째 단계가 아닌 경우에만 표시 */}
+                            {errorMessage && <p className="error-message">{errorMessage}</p>}
+
                             {currentStep > 1 && (
                                 <div className="back-button" onClick={handleBackClick}>
-                                    <GoArrowLeft size={30} /> {/* GoArrowLeft 아이콘 사용 */}
+                                    <GoArrowLeft size={30} />
                                 </div>
                             )}
 

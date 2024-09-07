@@ -120,3 +120,17 @@
     color: #FF0000;
     margin-bottom: 0;
   }
+
+  .num-check {
+    width: 9%;
+    height: 64px;
+    padding: 10px;
+    background-color: #D9D9D9;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: not-allowed;
+    position: absolute;
+    margin-left: 10px;
+  }
