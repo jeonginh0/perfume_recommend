@@ -146,7 +146,6 @@ const Signup = () => {
         });
 
         if (response.ok) {
-          // 회원가입 성공 시 /signup_success로 이동
           navigate('/signup_success');
         } else {
           const errorData = await response.json();

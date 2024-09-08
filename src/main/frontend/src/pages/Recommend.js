@@ -13,6 +13,9 @@ const Recommend = () => {
     const [recommendations, setRecommendations] = useState([]); // 추천 결과 저장
     const [errorMessage, setErrorMessage] = useState(''); // 오류 메시지 관리
 
+    // 고정된 질문 순서 배열
+    const questionOrder = ['category', 'season', 'situation', 'duration'];
+
     // 옵션 선택 시 호출되는 함수
     const handleOptionClick = (index) => {
         if (selectedOptions.includes(index)) {
@@ -32,9 +35,22 @@ const Recommend = () => {
             weight: getCurrentQuestionWeight()
         };
 
-        setSurveyResponses(prevResponses => {
-            const updatedResponses = [...prevResponses, currentResponse];
-            return updatedResponses;
+        // 설문 응답에 추가 (순서를 보장하여 추가)
+        setSurveyResponses((prevResponses) => {
+            const updatedResponses = [...prevResponses];
+            const index = questionOrder.indexOf(currentResponse.questionType);
+
+            if (index !== -1) {
+                // 순서에 맞게 배열에 저장
+                updatedResponses[index] = currentResponse;
+            }
+
+            // 응답 배열을 항상 순서대로 정렬하고 빈 객체를 필터링하여 제거
+            const sortedResponses = questionOrder
+                .map(type => updatedResponses.find(response => response.questionType === type) || {})
+                .filter(response => Object.keys(response).length !== 0);
+
+            return sortedResponses;
         });
 
         if (currentStep < 4) {
@@ -42,9 +58,15 @@ const Recommend = () => {
             setSelectedOptions([]); // 다음 단계로 넘어갈 때 선택 초기화
         } else {
             setIsLoading(true); // 로딩 상태로 전환
-            submitSurveyResponses(); // 설문 응답 제출
         }
     };
+
+    // surveyResponses가 업데이트된 후 submitSurveyResponses를 호출
+    useEffect(() => {
+        if (isLoading && currentStep === 4) {
+            submitSurveyResponses(); // 설문 응답 제출
+        }
+    }, [surveyResponses, isLoading]);
 
     const handleBackClick = () => {
         if (currentStep > 1) {
@@ -64,8 +86,8 @@ const Recommend = () => {
     const getCurrentQuestionType = () => {
         switch (currentStep) {
             case 1: return 'category';
-            case 2: return 'situation';
-            case 3: return 'season';
+            case 2: return 'season';
+            case 3: return 'situation';
             case 4: return 'duration';
             default: return '';
         }
@@ -74,11 +96,11 @@ const Recommend = () => {
     // 각 질문의 가중치 반환
     const getCurrentQuestionWeight = () => {
         switch (currentStep) {
-            case 1: return 0.7;
-            case 2: return 0.5;
-            case 3: return 0.3;
-            case 4: return 1.0;
-            default: return 1.0;
+            case 1: return 7;
+            case 2: return 5;
+            case 3: return 3;
+            case 4: return 10;
+            default: return 10;
         }
     };
 
@@ -86,33 +108,77 @@ const Recommend = () => {
     const getSelectedOptionLabels = () => {
         const optionLabels = [
             ['Floral', 'Fruity', 'Woody', 'Musky', 'Spicy', 'Green', 'Citrus'],
-            ['Everyday', 'Special Occasions', 'Work'],
             ['Spring', 'Summer', 'Autumn', 'Winter'],
+            ['Everyday', 'Special Occasions', 'Work'],
             ['퍼퓸', '오 드 퍼퓸', '오 드 뚜왈렛', '오 드 코롱']
         ];
 
         return optionLabels[currentStep - 1][selectedOptions[0]];
     };
 
-    // 설문 응답 제출 함수
-    const submitSurveyResponses = async () => {
-        console.log('Submitting survey responses:', surveyResponses); // 저장된 설문 응답 확인
+    // 1. 설문 응답을 세션에 저장하는 함수
+const submitSurveyResponses = async () => {
+    console.log('Submitting survey responses:', surveyResponses); // 저장된 설문 응답 확인
+
+    // 응답 필터링: 응답과 가중치가 비어 있지 않은 경우만 남김
+    const filteredResponses = surveyResponses.filter(response => {
+        return response.response && response.weight && Object.keys(response).length !== 0;
+    });
+
+    console.log('Filtered responses:', filteredResponses); // 필터링 후 응답 확인
+
+    // 빈 배열인지 확인 후 처리
+    if (filteredResponses.length === 0) {
+        setErrorMessage('설문 응답이 비어 있습니다.');
+        setIsLoading(false);
+        return;
+    }
+
+    try {
+        const response = await axios.post(
+            'http://58.235.71.202:8080/survey/response/guest', 
+            { responses: filteredResponses },
+            { withCredentials: true }  // withCredentials는 본문이 아니라 옵션으로 추가
+        );
+        if (response.status === 200) {
+            requestPerfumeRecommendations();
+        } else {
+            setErrorMessage('설문 응답 제출 실패');
+            setIsLoading(false);
+        }
+    } catch (error) {
+        console.error('설문 응답 제출 중 오류 발생', error.response?.data);
+        setErrorMessage('설문 응답 제출 중 오류 발생');
+        setIsLoading(false);
+    }
+};
+
+    
+
+    // 향수 추천을 요청하는 함수
+    const requestPerfumeRecommendations = async () => {
         try {
-            const response = await axios.post('http://58.235.71.202:8080/survey/response/guest', { responses: surveyResponses });
+            console.log('향수 추천 요청 중...');
+            const response = await axios.get('http://58.235.71.202:8080/perfumes/recommend/guest', {
+                withCredentials: true});
+            
             if (response.status === 200) {
+                console.log('향수 추천 요청 성공. 결과 조회 시작...');
                 fetchRecommendations();
             } else {
-                setErrorMessage('설문 응답 제출 실패');
+                setErrorMessage('향수 추천 요청 실패: 서버가 200 상태 코드를 반환하지 않았습니다.');
+                console.error('향수 추천 요청 실패:', response);
                 setIsLoading(false);
             }
         } catch (error) {
-            console.error('설문 응답 제출 중 오류 발생', error.response?.data);
-            setErrorMessage('설문 응답 제출 중 오류 발생');
+            console.error('향수 추천 요청 중 오류 발생:', error.response ? error.response.data : error.message);
+            setErrorMessage(`향수 추천 요청 중 오류 발생: ${error.message}`);
             setIsLoading(false);
         }
     };
+    
 
-    // 추천 결과 조회 함수
+    // 3. 추천 결과 조회 함수
     const fetchRecommendations = async () => {
         try {
             const response = await axios.get('http://58.235.71.202:8080/perfumes/recommend/guest/details');
@@ -120,7 +186,7 @@ const Recommend = () => {
                 setRecommendations(response.data);
                 setIsLoading(false);
                 setIsResultVisible(true);
-                console.log('추천된 향수 목록:', response.data); // 추천 결과 확인
+                console.log('추천된 향수 목록:', response.data);
             } else {
                 setErrorMessage('추천 결과 조회 실패');
                 setIsLoading(false);
@@ -163,12 +229,13 @@ const Recommend = () => {
             case 2:
                 return (
                     <>
-                        <p className="step-title">주로 언제 향수를 사용하는 것을 원하시나요?* (복수 선택 가능)</p>
+                        <p className="step-title">어떤 계절에 향수를 사용하는 것을 선호하시나요?* (복수 선택 가능)</p>
                         <div className="button-container">
                             {[
-                                '일상 생활',
-                                '특별한 날',
-                                '업무 중'
+                                '봄 (예: 플로럴, 그린)',
+                                '여름 (예: 시트러스, 아쿠아틱)',
+                                '가을 (예: 우디, 스파이시)',
+                                '겨울 (예: 머스크, 오리엔탈)'
                             ].map((label, index) => (
                                 <button
                                     key={index}
@@ -184,13 +251,12 @@ const Recommend = () => {
             case 3:
                 return (
                     <>
-                        <p className="step-title">어떤 계절에 향수를 사용하는 것을 선호하시나요?* (복수 선택 가능)</p>
+                        <p className="step-title">주로 언제 향수를 사용하는 것을 원하시나요?* (복수 선택 가능)</p>
                         <div className="button-container">
                             {[
-                                '봄 (예: 플로럴, 그린)',
-                                '여름 (예: 시트러스, 아쿠아틱)',
-                                '가을 (예: 우디, 스파이시)',
-                                '겨울 (예: 머스크, 오리엔탈)'
+                                '일상 생활',
+                                '특별한 날',
+                                '업무 중'
                             ].map((label, index) => (
                                 <button
                                     key={index}

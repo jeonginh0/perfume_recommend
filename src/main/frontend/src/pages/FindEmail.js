@@ -22,7 +22,7 @@ const FindEmail = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!error && phoneNumber !== '') {
-        // 이메일 찾기 로직을 여기에 추가하세요.
+        // 이메일 찾기 로직 추가 예정
         console.log('이메일 찾기 요청:', phoneNumber);
         }
     };

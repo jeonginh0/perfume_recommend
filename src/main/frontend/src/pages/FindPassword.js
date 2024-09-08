@@ -22,7 +22,7 @@ const FindPassword = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!emailError && email !== '') {
-        // 비밀번호 찾기 로직을 여기에 추가하세요.
+        // 비밀번호 찾기 로직 추가 예정
         console.log('비밀번호 찾기 요청:', email);
         }
     };
