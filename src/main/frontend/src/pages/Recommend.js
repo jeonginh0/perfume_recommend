@@ -136,12 +136,20 @@ const submitSurveyResponses = async () => {
 
     try {
         const response = await axios.post(
-            'http://58.235.71.202:8080/survey/response/guest', 
+            'http://58.235.71.202:8080/survey/response/guest',
             { responses: filteredResponses },
-            { withCredentials: true }  // withCredentials는 본문이 아니라 옵션으로 추가
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true
+            }  // withCredentials는 본문이 아니라 옵션으로 추가
         );
         if (response.status === 200) {
-            requestPerfumeRecommendations();
+            const surveyResponseId = response.data; // 서버에서 반환된 ID
+            console.log('SurveyResponse ID:', surveyResponseId);
+            await requestPerfumeRecommendations(surveyResponseId); // ID를 넘겨서 추천 요청
+            await fetchRecommendations(surveyResponseId); // ID를 넘겨서 추천 요청
         } else {
             setErrorMessage('설문 응답 제출 실패');
             setIsLoading(false);
@@ -153,18 +161,17 @@ const submitSurveyResponses = async () => {
     }
 };
 
-    
+
 
     // 향수 추천을 요청하는 함수
-    const requestPerfumeRecommendations = async () => {
+    const requestPerfumeRecommendations = async (surveyResponseId) => {
         try {
             console.log('향수 추천 요청 중...');
-            const response = await axios.get('http://58.235.71.202:8080/perfumes/recommend/guest', {
-                withCredentials: true});
-            
+            const response = await axios.get(`http://58.235.71.202:8080/perfumes/recommend/guest?surveyResponseId=${surveyResponseId}`);
+
             if (response.status === 200) {
                 console.log('향수 추천 요청 성공. 결과 조회 시작...');
-                fetchRecommendations();
+                await fetchRecommendations();
             } else {
                 setErrorMessage('향수 추천 요청 실패: 서버가 200 상태 코드를 반환하지 않았습니다.');
                 console.error('향수 추천 요청 실패:', response);
@@ -176,12 +183,12 @@ const submitSurveyResponses = async () => {
             setIsLoading(false);
         }
     };
-    
+
 
     // 3. 추천 결과 조회 함수
-    const fetchRecommendations = async () => {
+    const fetchRecommendations = async (surveyResponseId) => {
         try {
-            const response = await axios.get('http://58.235.71.202:8080/perfumes/recommend/guest/details');
+            const response = await axios.get(`http://58.235.71.202:8080/perfumes/recommend/guest/details?guestId=${surveyResponseId}`);
             if (response.status === 200) {
                 setRecommendations(response.data);
                 setIsLoading(false);
