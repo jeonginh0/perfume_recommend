@@ -2,6 +2,7 @@ import React from 'react';
 import {GoogleLogin, useGoogleLogin} from 'react-google-login';
 import axios from "axios";
 
+
 const GoogleLoginComponent = () => {
     const googleLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
@@ -31,7 +32,7 @@ const GoogleLoginComponent = () => {
     };
 
     return (
-        <GoogleLogin
+        <GoogleLoButtongin
             clientId="685614494989-7vrchp7iuhaqmdgntr061dcnresj2q25.apps.googleusercontent.com" // 구글 API 콘솔에서 발급받은 클라이언트 ID
             buttonText="구글로 로그인"
             onSuccess={responseGoogle}

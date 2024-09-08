@@ -37,12 +37,6 @@ public class NoteController {
         seasonNoteService.saveNotes(note);
     }
 
-    @PostConstruct
-    public void checkSeasonNotes() {
-        List<SeasonNote> allNotes = seasonNoteRepository.findAll();
-        System.out.println("저장된 시즌 노트: " + allNotes);
-    }
-
     @PostMapping("/importTypeNotes")
     public void importTypeNotes(@RequestBody CategoryNote note) {
         categoryNoteService.saveNotes(note);

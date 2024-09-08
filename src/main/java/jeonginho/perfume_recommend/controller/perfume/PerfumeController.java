@@ -70,31 +70,56 @@ public class PerfumeController {
 
         List<Perfume> recommendedPerfumes = surveyService.processSurveyAndRecommendForMember(userId);
         recommendPerfumesService.saveRecommendPerfumes(userId, recommendedPerfumes);
+
+        System.out.println("회원 추천 향수 저장 완료!\n" + "회원: " + userId);
         return ResponseEntity.ok(recommendedPerfumes);
     }
 
     // 비회원일 때 향수 추천 및 세션 저장 API
     @GetMapping("/recommend/guest")
     public ResponseEntity<List<Perfume>> recommendSaveGuest(HttpSession session) {
-        SurveyResponse surveyResponse = (SurveyResponse) session.getAttribute("guestSurveyResponse");
 
+        SurveyResponse surveyResponse = (SurveyResponse) session.getAttribute("guestSurveyResponse");
         if (surveyResponse == null) {
-            return ResponseEntity.badRequest().body(List.of());  // 세션에 응답이 없으면 빈 리스트 반환
+            System.out.println("세션에 guestSurveyResponse가 없습니다.");
+            return ResponseEntity.badRequest().body(List.of());  // 필요한 경우 적절한 오류 메시지 반환
+        } else {
+            System.out.println("세션에서 설문 응답을 성공적으로 가져왔습니다: " + surveyResponse);
         }
 
+        // 설문 응답을 바탕으로 향수 추천
         List<Perfume> recommendedPerfumes = surveyService.processSurveyAndRecommendForGuest(surveyResponse);
 
         if (recommendedPerfumes.isEmpty()) {
-            return ResponseEntity.badRequest().body(List.of());  // 추천된 향수가 없으면 400 반환
+            return ResponseEntity.noContent().build();  // 추천된 향수가 없으면 204 No Content 반환
         }
 
+        // 추천된 향수를 세션에 저장
+        session.setAttribute("guestRecommendedPerfumes", recommendedPerfumes);
+
+        System.out.println("게스트 추천 향수 저장 완료");
         return ResponseEntity.ok(recommendedPerfumes);  // 추천된 향수 리스트 반환
     }
 
 
     // 회원의 추천된 향수 조회 API
-    @GetMapping("/recommend/member/{userId}/details")
-    public ResponseEntity<List<Perfume>> getDetailRecommendUser(@PathVariable String userId) {
+    @GetMapping("/recommend/member/details")
+    public ResponseEntity<List<Perfume>> getDetailRecommendUser(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);  // "Bearer " 제거
+        } else {
+            return ResponseEntity.badRequest().body(List.of());  // 토큰이 없으면 빈 리스트 반환
+        }
+
+        String userId;
+        try {
+            userId = jwtTokenProvider.getUserIdFromJWT(token);
+        } catch (JwtException | IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(List.of());  // 유효하지 않은 토큰인 경우 빈 리스트 반환
+        }
+
         List<Perfume> perfumes = recommendPerfumesService.getRecommendPerfumesUser(userId);
         return ResponseEntity.ok(perfumes);
     }
@@ -102,10 +127,11 @@ public class PerfumeController {
     // 비회원의 추천된 향수 조회 API
     @GetMapping("/recommend/guest/details")
     public ResponseEntity<List<Perfume>> getDetailRecommendGuest(HttpSession session) {
-        List<Perfume> recommendedPerfumes = recommendPerfumesService.getGuestRecommendedPerfumes(session);
+        // 세션에서 추천된 향수를 조회
+        List<Perfume> recommendedPerfumes = (List<Perfume>) session.getAttribute("guestRecommendedPerfumes");
 
-        if (recommendedPerfumes.isEmpty()) {
-            return ResponseEntity.badRequest().body(List.of());  // 비어 있는 경우 400 반환
+        if (recommendedPerfumes == null || recommendedPerfumes.isEmpty()) {
+            return ResponseEntity.badRequest().body(List.of());  // 추천된 향수가 없으면 400 반환
         }
 
         return ResponseEntity.ok(recommendedPerfumes);  // 추천된 향수 리스트 반환

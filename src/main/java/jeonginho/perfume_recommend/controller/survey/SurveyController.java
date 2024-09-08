@@ -8,9 +8,6 @@ import jeonginho.perfume_recommend.config.jwt.JwtTokenProvider;
 import jeonginho.perfume_recommend.repository.Survey.SurveyResponseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -57,6 +54,7 @@ public class SurveyController {
     @PostMapping("/response/guest")
     public ResponseEntity<String> saveGuestSurveyResponse(@RequestBody SurveyResponse surveyResponse, HttpSession session) {
         session.setAttribute("guestSurveyResponse", surveyResponse);
+        System.out.println("게스트 응답: " + surveyResponse);
         return ResponseEntity.ok("비회원 설문 응답 세션에 저장완료.");
     }
 }
