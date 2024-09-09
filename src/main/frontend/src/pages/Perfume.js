@@ -3,6 +3,7 @@ import Navbar from '../css/Navbar.js';
 import '../css/Perfume.css';
 import { IoIosHeartEmpty, IoIosHeart } from 'react-icons/io';
 import { IoSearchSharp } from 'react-icons/io5';
+import { Link } from 'react-router-dom'; // 상세 페이지 연동을 위한 Link 사용
 
 const Perfume = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false); // 브랜드 드롭다운 열림 여부
@@ -162,6 +163,11 @@ const Perfume = () => {
     // 브랜드 목록을 중복 없이 정렬하여 가져옴
     const uniqueBrands = [...new Set(perfumes.map(perfume => perfume.brand.trim()))].sort();
 
+    // ID 생성 함수: 브랜드와 향수명을 조합하여 고유한 ID를 생성
+    const generateId = (brand, perfume) => {
+        return `${brand}-${perfume}`.replace(/\s+/g, '-').toLowerCase();
+    };
+
     return (
         <>
             <Navbar />
@@ -202,7 +208,7 @@ const Perfume = () => {
                             </div>
                         )}
                     </div>
- 
+
                     <div className="duration">
                         <div className="filter-item" onClick={toggleDurationDropdown}>
                             지속력 선택
@@ -264,15 +270,17 @@ const Perfume = () => {
 
                     return matchesSearchTerm && matchesBrand && matchesDuration;
                 }).slice(0, visibleCount).map(perfume => (
-                    <div key={perfume.id} className="perfume-item-2">
-                        <img src={perfume.image} alt={perfume.perfume} />
-                        <p className="brand">{perfume.brand}</p>
-                        <div className="perfume">{perfume.perfume}</div>
-                        <p className="acode">
-                            {Array.isArray(perfume.acode) ? perfume.acode.map(ac => `#${ac}`).join(' ') : ''}
-                        </p>
-                        <div className="heart-icon" onClick={() => toggleLike(perfume.id)}>
-                            {likedPerfumes.includes(perfume.id) ? <IoIosHeart size={25} color='#FC7979'/> : <IoIosHeartEmpty  size={25}/>}
+                    <div key={generateId(perfume.brand, perfume.perfume)} className="perfume-item-2">
+                        <Link to={`/perfume/${generateId(perfume.brand, perfume.perfume)}`}>
+                            <img src={perfume.image} alt={perfume.perfume} />
+                            <p className="brand">{perfume.brand}</p>
+                            <div className="perfume">{perfume.perfume}</div>
+                            <p className="acode">
+                                {Array.isArray(perfume.acode) ? perfume.acode.map(ac => `#${ac}`).join(' ') : ''}
+                            </p>
+                        </Link>
+                        <div className="heart-icon" onClick={() => toggleLike(generateId(perfume.brand, perfume.perfume))}>
+                            {likedPerfumes.includes(generateId(perfume.brand, perfume.perfume)) ? <IoIosHeart size={25} color='#FC7979'/> : <IoIosHeartEmpty  size={25}/>}
                         </div>
                     </div>
                 ))}

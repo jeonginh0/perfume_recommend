@@ -1,0 +1,32 @@
+.perfume-detail-container {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.perfume-detail {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    border: 1px solid #ddd;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.perfume-info h1 {
+    font-size: 2rem;
+}
+
+.perfume-info h2 {
+    font-size: 1.5rem;
+}
+
+.perfume-info p {
+    margin: 10px 0;
+}
+
+.perfume-info a {
+    color: #000;
+    text-decoration: underline;
+}

@@ -196,9 +196,10 @@
 }
 
 .perfume-grid {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
     justify-content: center;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
 }
 
 .perfume-item {

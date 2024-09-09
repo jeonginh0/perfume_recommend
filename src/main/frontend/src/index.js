@@ -16,6 +16,7 @@ import Recommend from './pages/Recommend';
 import Mypage from './pages/Mypage';
 import Community from './pages/Community';
 import SigninSuccess from './pages/SigninSuccess';
+import PerfumeDetail from './pages/PerfumeDetail';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -32,6 +33,7 @@ root.render(
         <Route path='/mypage' element={<Mypage />} />
         <Route path='/community' element={<Community />} />
         <Route path='/signin_success' element={<SigninSuccess />} />
+        <Route path="/perfume/:id" element={<PerfumeDetail />} />
       </Routes>
     </BrowserRouter>
 );
