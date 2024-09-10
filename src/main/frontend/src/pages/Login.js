@@ -46,7 +46,7 @@ const Login = () => {
       });
   
       localStorage.setItem('token', response.data);
-      navigate('/dashboard');
+      navigate('/');
     } catch (error) {
       // 서버가 반환하는 에러 메시지와 상태 코드 출력
       console.error('로그인 에러:', error.response?.data || error.message);

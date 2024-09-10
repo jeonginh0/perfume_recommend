@@ -17,6 +17,7 @@ import Mypage from './pages/Mypage';
 import Community from './pages/Community';
 import SigninSuccess from './pages/SigninSuccess';
 import PerfumeDetail from './pages/PerfumeDetail';
+import WishList from './pages/WishList';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -33,7 +34,8 @@ root.render(
         <Route path='/mypage' element={<Mypage />} />
         <Route path='/community' element={<Community />} />
         <Route path='/signin_success' element={<SigninSuccess />} />
-        <Route path="/perfume/:id" element={<PerfumeDetail />} />
+        <Route path="/perfumes/:id" element={<PerfumeDetail />} />
+        <Route path='/wishlist' element={<WishList />} />
       </Routes>
     </BrowserRouter>
 );

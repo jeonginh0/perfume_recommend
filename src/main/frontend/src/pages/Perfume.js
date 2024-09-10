@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom'; // 상세 페이지 이동을 위해 사용
 import Navbar from '../css/Navbar.js';
 import '../css/Perfume.css';
 import { IoIosHeartEmpty, IoIosHeart } from 'react-icons/io';
 import { IoSearchSharp } from 'react-icons/io5';
-import { Link } from 'react-router-dom'; // 상세 페이지 연동을 위한 Link 사용
 
 const Perfume = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false); // 브랜드 드롭다운 열림 여부
@@ -15,10 +15,10 @@ const Perfume = () => {
     const [likedPerfumes, setLikedPerfumes] = useState([]); // 좋아요한 향수 목록
     const [visibleCount, setVisibleCount] = useState(20); // 화면에 보여줄 향수 개수
     const [loading, setLoading] = useState(false); // 로딩 상태
-    const [searchCompleted, setSearchCompleted] = useState(false); // 검색 완료 여부
     const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태
 
     const loadMoreRef = useRef(null); // 더 많은 항목을 로드하기 위한 참조
+    const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate
 
     // 지속력 옵션 목록
     const durationOptions = [
@@ -33,11 +33,11 @@ const Perfume = () => {
         setLoading(true);
         try {
             // 필터된 데이터를 가져오기 위한 URL 설정
-            let url = 'http://58.235.71.202:8080/perfumes/search/all';
+            let url = 'http://localhost:8080/perfumes/search/all';
             if (brands.length > 0 || durations.length > 0) {
                 const brandParam = brands.length > 0 ? `brands=${brands.map(brand => encodeURIComponent(brand)).join(',')}` : '';
                 const durationParam = durations.length > 0 ? `durations=${durations.join(',')}` : '';
-                url = `http://58.235.71.202:8080/perfumes/search/filter?${brandParam}&${durationParam}`;
+                url = `http://localhost:8080/perfumes/search/filter?${brandParam}&${durationParam}`;
             }
 
             // 서버로부터 데이터 요청
@@ -59,15 +59,20 @@ const Perfume = () => {
         fetchPerfumes();
     }, []);
 
-    // 브랜드 드롭다운 열고 닫기
     const toggleDropdown = () => {
         setIsDropdownOpen(prev => !prev);
+        if (isDurationDropdownOpen) {
+            setIsDurationDropdownOpen(false);
+        }
     };
 
-    // 지속력 드롭다운 열고 닫기
     const toggleDurationDropdown = () => {
         setIsDurationDropdownOpen(prev => !prev);
+        if (isDropdownOpen) {
+            setIsDropdownOpen(false);
+        }
     };
+
 
     // 브랜드 선택 시 상태 업데이트
     const handleBrandSelect = (brand) => {
@@ -100,10 +105,16 @@ const Perfume = () => {
     };
 
     // 좋아요 토글 기능
-    const toggleLike = (id) => {
+    const toggleLike = (event, id) => {
+        event.stopPropagation(); // 찜 버튼 클릭 시 이벤트 전파를 막음
         setLikedPerfumes(prevLiked =>
             prevLiked.includes(id) ? prevLiked.filter(likedId => likedId !== id) : [...prevLiked, id]
         );
+    };
+
+    // 향수 항목 클릭 시 상세 페이지로 이동하고 해당 향수 데이터를 전달
+    const handlePerfumeClick = (perfume) => {
+        navigate(`/perfumes/${encodeURIComponent(perfume.perfume)}`, { state: { perfume } });
     };
 
     // 스크롤로 더 많은 향수를 로드하는 함수
@@ -139,8 +150,12 @@ const Perfume = () => {
 
     // 검색 버튼 클릭 시 향수를 필터링하여 가져오는 함수
     const handleSearch = () => {
-        setSearchCompleted(true);
-        fetchPerfumes(selectedBrands, selectedDurations); // 선택된 필터로 다시 요청
+        fetchPerfumes(selectedBrands, selectedDurations);
+    };
+
+    // 검색 버튼 클릭 시 검색 실행
+    const handleSearchClick = () => {
+        handleSearch();
     };
 
     // 검색어 입력 처리
@@ -155,18 +170,8 @@ const Perfume = () => {
         }
     };
 
-    // 검색 버튼 클릭 시 검색 실행
-    const handleSearchClick = () => {
-        handleSearch();
-    };
-
     // 브랜드 목록을 중복 없이 정렬하여 가져옴
     const uniqueBrands = [...new Set(perfumes.map(perfume => perfume.brand.trim()))].sort();
-
-    // ID 생성 함수: 브랜드와 향수명을 조합하여 고유한 ID를 생성
-    const generateId = (brand, perfume) => {
-        return `${brand}-${perfume}`.replace(/\s+/g, '-').toLowerCase();
-    };
 
     return (
         <>
@@ -208,7 +213,7 @@ const Perfume = () => {
                             </div>
                         )}
                     </div>
-
+ 
                     <div className="duration">
                         <div className="filter-item" onClick={toggleDurationDropdown}>
                             지속력 선택
@@ -270,17 +275,15 @@ const Perfume = () => {
 
                     return matchesSearchTerm && matchesBrand && matchesDuration;
                 }).slice(0, visibleCount).map(perfume => (
-                    <div key={generateId(perfume.brand, perfume.perfume)} className="perfume-item-2">
-                        <Link to={`/perfume/${generateId(perfume.brand, perfume.perfume)}`}>
-                            <img src={perfume.image} alt={perfume.perfume} />
-                            <p className="brand">{perfume.brand}</p>
-                            <div className="perfume">{perfume.perfume}</div>
-                            <p className="acode">
-                                {Array.isArray(perfume.acode) ? perfume.acode.map(ac => `#${ac}`).join(' ') : ''}
-                            </p>
-                        </Link>
-                        <div className="heart-icon" onClick={() => toggleLike(generateId(perfume.brand, perfume.perfume))}>
-                            {likedPerfumes.includes(generateId(perfume.brand, perfume.perfume)) ? <IoIosHeart size={25} color='#FC7979'/> : <IoIosHeartEmpty  size={25}/>}
+                    <div key={perfume.perfume} className="perfume-item-2" onClick={() => handlePerfumeClick(perfume)}>
+                        <img src={perfume.image} alt={perfume.perfume} />
+                        <p className="brand">{perfume.brand}</p>
+                        <div className="perfume">{perfume.perfume}</div>
+                        <p className="acode">
+                            {Array.isArray(perfume.acode) ? perfume.acode.map(ac => `#${ac}`).join(' ') : ''}
+                        </p>
+                        <div className="heart-icon" onClick={(event) => toggleLike(event, perfume.perfume)}>
+                            {likedPerfumes.includes(perfume.perfume) ? <IoIosHeart size={25} color='#FC7979'/> : <IoIosHeartEmpty  size={25}/>}
                         </div>
                     </div>
                 ))}

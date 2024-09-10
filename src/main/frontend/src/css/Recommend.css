@@ -208,6 +208,10 @@
     text-align: center;
 }
 
+.brand-p {
+    font-weight: 600;
+}
+
 .retry-button {
     width: 310px;
     height: 64px;

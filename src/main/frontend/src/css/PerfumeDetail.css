@@ -8,18 +8,41 @@
 .perfume-detail {
     display: flex;
     flex-direction: row;
-    gap: 20px;
-    border: 1px solid #ddd;
+    /* border: 1px solid #ddd; */
     padding: 20px;
     background-color: #fff;
+    margin-top: 110px;
+}
+
+.perfume-detail img {
+    width: 50%;
+}
+
+.perfume-info {
+    padding-top: 60px;
+    border-left: 1px solid #ccc;
+    padding-left: 50px;
+    width: 50%;
 }
 
 .perfume-info h1 {
-    font-size: 2rem;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 31px;
+    color: #000000;
 }
 
 .perfume-info h2 {
-    font-size: 1.5rem;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    color: #000000;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
 }
 
 .perfume-info p {
@@ -29,4 +52,94 @@
 .perfume-info a {
     color: #000;
     text-decoration: underline;
+}
+
+.acode {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18px;
+    color: #888888;
+}
+
+.heart-icon-2{
+    cursor: pointer;
+    width: 25px;
+    margin-top: 20px;
+}
+
+.post {
+    border-top: 1px solid #ddd;
+    padding: 20px;
+    margin: 0 200px 0 200px;
+}
+
+.post-p {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 31px;
+    text-align: center;
+    color: #000000;
+}
+
+.input-post {
+    border: 1px solid #8692A6;
+    border-radius: 6px;
+    width: 90%;
+    height: 45px;
+}
+
+.input-post-btn {
+    border-radius: 6px;
+    width: 10%;
+    height: 45px;
+    cursor: pointer;
+    background-color: #000;
+    color: #fff;
+}
+
+.post-input {
+    display: flex;
+    gap: 10px;
+    padding-bottom: 30px;
+}
+
+.post-container {
+    display: grid;
+}
+
+.post-id {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    gap: 10px;
+}
+
+.post-name {
+    display: flex;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 21px;
+    color: #000000;
+}
+
+.date {
+    margin-left: auto;
+}
+
+.perfume-detail-page {
+    display: flex;
+    position: absolute;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #7B7878;
 }

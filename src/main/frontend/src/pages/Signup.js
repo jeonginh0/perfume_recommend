@@ -144,18 +144,23 @@ const Signup = () => {
             phoneNumber,
           }),
         });
-
+  
         if (response.ok) {
           navigate('/signup_success');
         } else {
           const errorData = await response.json();
-          console.error('회원가입 실패:', errorData);
+          if (errorData.message === '이미 존재하는 이메일입니다.') {
+            setEmailError('이미 존재하는 이메일입니다.');
+          } else if (errorData.message === '이미 존재하는 닉네임입니다.') {
+            setNicknameError('이미 존재하는 닉네임입니다.');
+          }
         }
       } catch (error) {
         console.error('에러 발생:', error);
       }
     }
   };
+  
 
   return (
     <>

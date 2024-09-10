@@ -317,7 +317,7 @@ const submitSurveyResponses = async () => {
                 {recommendations.map((perfume, index) => (
                     <div className="perfume-item-2" key={index}>
                         <img src={perfume.image} alt={perfume.perfume} />
-                        <p>{perfume.brand}</p>
+                        <p className="brand-p">{perfume.brand}</p>
                         <p>{perfume.perfume}</p>
                         <p>{perfume.type}</p>
                     </div>
