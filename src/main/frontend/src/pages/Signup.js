@@ -90,7 +90,7 @@ const Signup = () => {
   // 인증번호 전송 함수
   const handleSendVerificationCode = async () => {
     try {
-      const response = await fetch(`http://58.235.71.202:8080/api/users/send-verification-code?email=${encodeURIComponent(email)}`, {
+      const response = await fetch(`http://localhost:8080/api/users/send-verification-code?email=${encodeURIComponent(email)}`, {
         method: 'POST',
       });
 
@@ -108,7 +108,7 @@ const Signup = () => {
   // 인증번호 확인 함수
   const handleVerifyCode = async () => {
     try {
-      const response = await fetch(`http://58.235.71.202:8080/api/users/verify-code?email=${encodeURIComponent(email)}&code=${encodeURIComponent(inputCode)}`, {
+      const response = await fetch(`http://localhost:8080/api/users/verify-code?email=${encodeURIComponent(email)}&code=${encodeURIComponent(inputCode)}`, {
         method: 'POST',
       });
 
@@ -132,7 +132,7 @@ const Signup = () => {
     e.preventDefault();
     if (isFormValid) {
       try {
-        const response = await fetch('http://58.235.71.202:8080/api/users/register', {
+        const response = await fetch('http://localhost:8080/api/users/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

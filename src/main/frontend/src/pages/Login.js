@@ -36,7 +36,7 @@ const Login = () => {
     }
   
     try {
-      const response = await axios.post('http://58.235.71.202:8080/api/users/login', {
+      const response = await axios.post('http://localhost:8080/api/users/login', {
         email,
         password,
       }, {
@@ -44,7 +44,7 @@ const Login = () => {
           'Content-Type': 'application/json', // 요청 헤더 설정
         }
       });
-  
+
       localStorage.setItem('token', response.data);
       navigate('/');
     } catch (error) {
