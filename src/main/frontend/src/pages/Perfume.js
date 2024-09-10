@@ -32,7 +32,7 @@ const Perfume = () => {
     const fetchPerfumes = async (brands = [], durations = []) => {
         setLoading(true);
         try {
-            // 필터된 데이터를 가져오기 위한 URL 설정
+            // 필터된 데이터를 가져오기 위한 URL 설정 1
             let url = 'http://localhost:8080/perfumes/search/all';
             if (brands.length > 0 || durations.length > 0) {
                 const brandParam = brands.length > 0 ? `brands=${brands.map(brand => encodeURIComponent(brand)).join(',')}` : '';
