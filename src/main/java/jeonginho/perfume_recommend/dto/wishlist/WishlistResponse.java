@@ -5,12 +5,13 @@ import jeonginho.perfume_recommend.Entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 public class WishlistResponse {
-    private String id;
     private String userId;
-    private String perfumeId;
-    private Perfume perfume;
+    private List<String> perfumeIds;
+    private List<Perfume> perfumes;
     private User user;
 }

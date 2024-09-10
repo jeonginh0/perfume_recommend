@@ -12,7 +12,5 @@ public interface WishlistRepository extends MongoRepository<Wishlist, String> {
     List<Wishlist> findByUserId(String userId);
 
     // 특정 유저가 특정 향수를 찜했는지 확인한다
-    Wishlist findByUserIdAndPerfumeId(String userId, String perfumeId);
-
-
+    Wishlist findByUserIdAndPerfumeIds(String userId, String perfumeId);
 }
