@@ -86,9 +86,11 @@ const Navbar = () => {
       </div>
       <nav>
         <ul className="nav-icons">
-          <Link to="/wishlist">
-          <li><img src={heartIcon} alt="Heart icon" /></li>
-          </Link>
+          {isLoggedIn && (
+            <Link to="/wishlist">
+              <li><img src={heartIcon} alt="Heart icon" /></li>
+            </Link>
+          )}
           <li
             onClick={handleProfileClick} // 클릭 이벤트로 변경
             className="profile-icon-container"

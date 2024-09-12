@@ -44,7 +44,7 @@ const Login = () => {
           'Content-Type': 'application/json', // 요청 헤더 설정
         }
       });
-  
+
       localStorage.setItem('token', response.data);
       navigate('/');
     } catch (error) {

@@ -1,26 +1,27 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom'; // 상세 페이지 이동을 위해 사용
+import { useNavigate } from 'react-router-dom'; 
 import Navbar from '../css/Navbar.js';
 import '../css/Perfume.css';
 import { IoIosHeartEmpty, IoIosHeart } from 'react-icons/io';
 import { IoSearchSharp } from 'react-icons/io5';
 
 const Perfume = () => {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false); // 브랜드 드롭다운 열림 여부
-    const [isDurationDropdownOpen, setIsDurationDropdownOpen] = useState(false); // 지속력 드롭다운 열림 여부
-    const [selectedBrands, setSelectedBrands] = useState([]); // 선택된 브랜드들
-    const [selectedDurations, setSelectedDurations] = useState([]); // 선택된 지속력 옵션들
-    const [perfumes, setPerfumes] = useState([]); // 전체 향수 데이터
-    const [filteredPerfumes, setFilteredPerfumes] = useState([]); // 필터된 향수 데이터
-    const [likedPerfumes, setLikedPerfumes] = useState([]); // 좋아요한 향수 목록
-    const [visibleCount, setVisibleCount] = useState(20); // 화면에 보여줄 향수 개수
-    const [loading, setLoading] = useState(false); // 로딩 상태
-    const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
+    const [isDurationDropdownOpen, setIsDurationDropdownOpen] = useState(false); 
+    const [selectedBrands, setSelectedBrands] = useState([]); 
+    const [selectedDurations, setSelectedDurations] = useState([]); 
+    const [perfumes, setPerfumes] = useState([]); 
+    const [filteredPerfumes, setFilteredPerfumes] = useState([]); 
+    const [likedPerfumes, setLikedPerfumes] = useState([]); 
+    const [visibleCount, setVisibleCount] = useState(20); 
+    const [loading, setLoading] = useState(false); 
+    const [searchTerm, setSearchTerm] = useState('');
 
-    const loadMoreRef = useRef(null); // 더 많은 항목을 로드하기 위한 참조
-    const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate
+    const loadMoreRef = useRef(null); 
+    const navigate = useNavigate(); 
+    const dropdownRef = useRef(null); // Reference for brand dropdown
+    const durationDropdownRef = useRef(null); // Reference for duration dropdown
 
-    // 지속력 옵션 목록
     const durationOptions = [
         '퍼퓸',
         '오 드 퍼퓸',
@@ -28,11 +29,9 @@ const Perfume = () => {
         '오 드 코롱'
     ];
 
-    // 향수 데이터를 서버에서 가져오는 함수
     const fetchPerfumes = async (brands = [], durations = []) => {
         setLoading(true);
         try {
-            // 필터된 데이터를 가져오기 위한 URL 설정 1
             let url = 'http://localhost:8080/perfumes/search/all';
             if (brands.length > 0 || durations.length > 0) {
                 const brandParam = brands.length > 0 ? `brands=${brands.map(brand => encodeURIComponent(brand)).join(',')}` : '';
@@ -40,23 +39,45 @@ const Perfume = () => {
                 url = `http://localhost:8080/perfumes/search/filter?${brandParam}&${durationParam}`;
             }
 
-            // 서버로부터 데이터 요청
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
-            setPerfumes(data); // 전체 향수 데이터 설정
-            setFilteredPerfumes(data); // 초기 필터된 향수 설정
+            setPerfumes(data); 
+            setFilteredPerfumes(data); 
         } catch (error) {
             console.error('향수 데이터를 가져오는 중 오류가 발생했습니다:', error);
         }
         setLoading(false);
     };
 
-    // 컴포넌트가 처음 로드될 때 향수 데이터를 가져옴
+    const fetchLikedPerfumes = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            return; // 비로그인 상태이므로 찜 목록 로드 안 함
+        }
+
+        try {
+            const response = await fetch('http://localhost:8080/api/wishlist', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error('찜 목록을 불러오는 중 오류가 발생했습니다.');
+            }
+            const data = await response.json();
+            setLikedPerfumes(data.map(item => item.perfumeId)); 
+        } catch (error) {
+            console.error('찜 목록 불러오기 실패:', error);
+        }
+    };
+
     useEffect(() => {
         fetchPerfumes();
+        fetchLikedPerfumes(); // 찜 상태 초기 로드
     }, []);
 
     const toggleDropdown = () => {
@@ -73,63 +94,111 @@ const Perfume = () => {
         }
     };
 
-
-    // 브랜드 선택 시 상태 업데이트
     const handleBrandSelect = (brand) => {
         setSelectedBrands(prevSelected => {
             if (prevSelected.includes(brand)) {
-                return prevSelected.filter(b => b !== brand); // 이미 선택된 브랜드는 제거
+                return prevSelected.filter(b => b !== brand);
             } else {
-                return [...prevSelected, brand]; // 선택된 브랜드 추가
+                return [...prevSelected, brand];
             }
         });
     };
 
-    // 지속력 선택 시 상태 업데이트
     const handleDurationSelect = (duration) => {
         setSelectedDurations(prevSelected =>
             prevSelected.includes(duration)
-                ? prevSelected.filter(d => d !== duration) // 이미 선택된 지속력은 제거
-                : [...prevSelected, duration] // 선택된 지속력 추가
+                ? prevSelected.filter(d => d !== duration)
+                : [...prevSelected, duration]
         );
     };
 
-    // 선택된 브랜드 제거
     const removeBrand = (brand) => {
         setSelectedBrands(prevSelected => prevSelected.filter(b => b !== brand));
     };
 
-    // 선택된 지속력 제거
     const removeDuration = (duration) => {
         setSelectedDurations(prevSelected => prevSelected.filter(d => d !== duration));
     };
 
-    // 좋아요 토글 기능
-    const toggleLike = (event, id) => {
-        event.stopPropagation(); // 찜 버튼 클릭 시 이벤트 전파를 막음
-        setLikedPerfumes(prevLiked =>
-            prevLiked.includes(id) ? prevLiked.filter(likedId => likedId !== id) : [...prevLiked, id]
-        );
+    const addToWishlist = async (perfumeId) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert("로그인 후 사용 가능합니다."); // 로그인 유도 메시지
+            return;
+        }
+        try {
+            const response = await fetch(`http://localhost:8080/api/wishlist?perfumeId=${perfumeId}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error('찜 추가 중 오류가 발생했습니다.');
+            }
+        } catch (error) {
+            console.error('API 호출 중 오류:', error);
+        }
     };
 
-    // 향수 항목 클릭 시 상세 페이지로 이동하고 해당 향수 데이터를 전달
+    const removeFromWishlist = async (perfumeId) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert("로그인 후 사용 가능합니다."); // 로그인 유도 메시지
+            return;
+        }
+        try {
+            const response = await fetch(`http://localhost:8080/api/wishlist/remove?perfumeId=${perfumeId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error('찜 삭제 중 오류가 발생했습니다.');
+            }
+        } catch (error) {
+            console.error('API 호출 중 오류:', error);
+        }
+    };
+
+    const toggleLike = (event, perfume) => {
+        event.stopPropagation();
+        const perfumeId = perfume.id;
+
+        if (!localStorage.getItem('token')) {
+            alert("로그인 후 사용 가능합니다."); // 로그인 유도 메시지
+            return;
+        }
+
+        setLikedPerfumes(prevLiked =>
+            prevLiked.includes(perfumeId)
+                ? prevLiked.filter(id => id !== perfumeId)
+                : [...prevLiked, perfumeId]
+        );
+
+        if (likedPerfumes.includes(perfumeId)) {
+            removeFromWishlist(perfumeId);
+        } else {
+            addToWishlist(perfumeId);
+        }
+    };
+
     const handlePerfumeClick = (perfume) => {
         navigate(`/perfumes/${encodeURIComponent(perfume.perfume)}`, { state: { perfume } });
     };
 
-    // 스크롤로 더 많은 향수를 로드하는 함수
     const loadMorePerfumes = useCallback((entries) => {
         const [entry] = entries;
         if (entry.isIntersecting && !loading) {
             setLoading(true);
             setTimeout(() => {
-                setVisibleCount(prevCount => prevCount + 20); // 20개의 향수를 추가로 로드
+                setVisibleCount(prevCount => prevCount + 20); 
                 setLoading(false);
             }, 500);
         }
     }, [loading]);
 
-    // 스크롤 감지를 위해 IntersectionObserver 사용
     useEffect(() => {
         const observer = new IntersectionObserver(loadMorePerfumes, {
             root: null,
@@ -148,41 +217,52 @@ const Perfume = () => {
         };
     }, [loadMorePerfumes]);
 
-    // 검색 버튼 클릭 시 향수를 필터링하여 가져오는 함수
+    // 외부 클릭 감지 이벤트 핸들러
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIsDropdownOpen(false);
+        }
+        if (durationDropdownRef.current && !durationDropdownRef.current.contains(event.target)) {
+            setIsDurationDropdownOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     const handleSearch = () => {
         fetchPerfumes(selectedBrands, selectedDurations);
     };
 
-    // 검색 버튼 클릭 시 검색 실행
     const handleSearchClick = () => {
         handleSearch();
     };
 
-    // 검색어 입력 처리
     const handleSearchInput = (event) => {
         setSearchTerm(event.target.value);
     };
 
-    // 검색어 입력 후 Enter 또는 스페이스바 누르면 검색 실행
     const handleKeyPress = (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
             handleSearch();
         }
     };
 
-    // 브랜드 목록을 중복 없이 정렬하여 가져옴
     const uniqueBrands = [...new Set(perfumes.map(perfume => perfume.brand.trim()))].sort();
 
     return (
         <>
             <Navbar />
-
             <div className="brand-filter-container">
                 <div className="brand-filter-header">
                     <h2>Brand</h2>
                 </div>
                 <div className="brand-filter-content">
-                    <div className="Brand">
+                    <div className="Brand" ref={dropdownRef}>
                         <div className="filter-item" onClick={toggleDropdown}>
                             브랜드 선택
                             <div className="dropdown-icon">▼</div>
@@ -213,8 +293,7 @@ const Perfume = () => {
                             </div>
                         )}
                     </div>
- 
-                    <div className="duration">
+                    <div className="duration" ref={durationDropdownRef}>
                         <div className="filter-item" onClick={toggleDurationDropdown}>
                             지속력 선택
                             <div className="dropdown-icon">▼</div>
@@ -247,7 +326,6 @@ const Perfume = () => {
                     </div>
                 </div>
             </div>
-
             <div className="sub-header">
                 <p className="perfume-number">총 {filteredPerfumes.length}개의 향수가 등록되어 있습니다.</p>
                 <p className="perfume-name">Perfume</p>
@@ -262,7 +340,6 @@ const Perfume = () => {
                     <button onClick={handleSearchClick}><IoSearchSharp /></button>
                 </div>
             </div>
-
             <div className="perfume-list">
                 {filteredPerfumes.filter(perfume => {
                     const matchesSearchTerm = searchTerm.trim() === '' ||
@@ -282,17 +359,15 @@ const Perfume = () => {
                         <p className="acode">
                             {Array.isArray(perfume.acode) ? perfume.acode.map(ac => `#${ac}`).join(' ') : ''}
                         </p>
-                        <div className="heart-icon" onClick={(event) => toggleLike(event, perfume.perfume)}>
-                            {likedPerfumes.includes(perfume.perfume) ? <IoIosHeart size={25} color='#FC7979'/> : <IoIosHeartEmpty  size={25}/>}
+                        <div className="heart-icon" onClick={(event) => toggleLike(event, perfume)}>
+                            {likedPerfumes.includes(perfume.id) ? <IoIosHeart size={25} color='#FC7979'/> : <IoIosHeartEmpty  size={25}/>}
                         </div>
                     </div>
                 ))}
             </div>
-
             {loading && (
                 <div className="loading-spinner"></div>
             )}
-
             <div ref={loadMoreRef} style={{ height: '20px', margin: '10px 0' }}></div>
         </>
     );
