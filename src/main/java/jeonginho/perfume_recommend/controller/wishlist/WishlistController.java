@@ -23,24 +23,20 @@ public class WishlistController {
     @GetMapping
     public List<WishlistResponse> getWishlist(@RequestHeader("Authorization") String token) {
         String tokenWithoutBearer = token.startsWith("Bearer ") ? token.substring(7) : token;
-        String userId = jwtUtil.extractUserId(tokenWithoutBearer);  // JWT에서 유저 ID 추출
-        return wishlistService.getWishlistByUserId(userId);
+        return wishlistService.getWishlistByUserId(tokenWithoutBearer);
     }
-
 
     // 유저의 찜 목록에 향수 추가 API
     @PostMapping
     public Wishlist addWishlist(@RequestHeader("Authorization") String token, @RequestParam String perfumeId) {
         String tokenWithoutBearer = token.startsWith("Bearer ") ? token.substring(7) : token;
-        String userId = jwtUtil.extractUserId(tokenWithoutBearer);  // JWT에서 유저 ID 추출
-        return wishlistService.addWishlist(userId, perfumeId);
+        return wishlistService.addWishlist(tokenWithoutBearer, perfumeId);
     }
 
     // 유저의 찜 목록에서 찜한 향수 삭제 API
     @DeleteMapping("/remove")
     public void removeWishlist(@RequestHeader("Authorization") String token, @RequestParam String perfumeId) {
         String tokenWithoutBearer = token.startsWith("Bearer ") ? token.substring(7) : token;
-        String userId = jwtUtil.extractUserId(tokenWithoutBearer);  // JWT에서 유저 ID 추출
-        wishlistService.removeWishlist(userId, perfumeId);
+        wishlistService.removeWishlist(tokenWithoutBearer, perfumeId);
     }
 }
