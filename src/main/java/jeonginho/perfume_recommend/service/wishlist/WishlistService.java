@@ -7,10 +7,11 @@ import jeonginho.perfume_recommend.dto.wishlist.WishlistResponse;
 import jeonginho.perfume_recommend.repository.perfume.PerfumeRepository;
 import jeonginho.perfume_recommend.repository.user.UserRepository;
 import jeonginho.perfume_recommend.repository.wishlist.WishlistRepository;
-import jeonginho.perfume_recommend.util.JwtUtil;
+import jeonginho.perfume_recommend.config.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,46 +29,62 @@ public class WishlistService {
     private UserRepository userRepository;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtTokenProvider jwtTokenProvider;
 
-    public List<WishlistResponse> getWishlistByUserId(String token) {
-        String userId = jwtUtil.extractUserId(token);
+    public WishlistResponse getWishlistByUserId(String token) {
+        String userId = jwtTokenProvider.getUserIdFromJWT(token);
 
         List<Wishlist> wishlists = wishlistRepository.findByUserId(userId);
+        List<String> perfumeIds = wishlists.stream()
+                .flatMap(wishlist -> wishlist.getPerfumeIds().stream())
+                .distinct()
+                .collect(Collectors.toList());
+        List<Perfume> perfumes = perfumeRepository.findAllById(perfumeIds);
 
-        return wishlists.stream().map(wishlist -> {
-            Optional<Perfume> perfume = perfumeRepository.findById(wishlist.getPerfumeId());
-            Optional<User> user = userRepository.findById(wishlist.getUserId());
-            return new WishlistResponse(
-                    wishlist.getId(),
-                    wishlist.getUserId(),
-                    wishlist.getPerfumeId(),
-                    perfume.orElse(null),
-                    user.orElse(null)
-            );
-        }).collect(Collectors.toList());
+        Optional<User> user = userRepository.findById(userId);
+
+        return new WishlistResponse(
+                userId,
+                perfumeIds,
+                perfumes,
+                user.orElse(null)
+        );
     }
 
     public Wishlist addWishlist(String token, String perfumeId) {
-        String userId = jwtUtil.extractUserId(token);
-        Wishlist existingWishlist = wishlistRepository.findByUserIdAndPerfumeId(userId, perfumeId);
+        String userId = jwtTokenProvider.getUserIdFromJWT(token);
+        Wishlist wishlist = wishlistRepository.findByUserId(userId)
+                .stream()
+                .findFirst()
+                .orElse(new Wishlist());
 
-        if (existingWishlist != null) {
-            return existingWishlist;
+        if (wishlist.getPerfumeIds() == null) {
+            wishlist.setPerfumeIds(new ArrayList<>());
         }
 
-        Wishlist wishlist = new Wishlist();
+        if (wishlist.getPerfumeIds().contains(perfumeId)) {
+            return wishlist;
+        }
+
+        wishlist.getPerfumeIds().add(perfumeId);
         wishlist.setUserId(userId);
-        wishlist.setPerfumeId(perfumeId);
         return wishlistRepository.save(wishlist);
     }
 
     public void removeWishlist(String token, String perfumeId) {
-        String userId = jwtUtil.extractUserId(token);
-        Wishlist wishlist = wishlistRepository.findByUserIdAndPerfumeId(userId, perfumeId);
+        String userId = jwtTokenProvider.getUserIdFromJWT(token);
+        Wishlist wishlist = wishlistRepository.findByUserId(userId)
+                .stream()
+                .findFirst()
+                .orElse(null);
 
-        if (wishlist != null) {
-            wishlistRepository.delete(wishlist);
+        if (wishlist != null && wishlist.getPerfumeIds() != null) {
+            wishlist.getPerfumeIds().remove(perfumeId);
+            if (wishlist.getPerfumeIds().isEmpty()) {
+                wishlistRepository.delete(wishlist);
+            } else {
+                wishlistRepository.save(wishlist);
+            }
         }
     }
 }

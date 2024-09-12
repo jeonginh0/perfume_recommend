@@ -30,4 +30,18 @@ public class FindUserInfoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비밀번호 재설정 중 오류가 발생했습니다.");
         }
     }
+
+    // 이메일 찾기 API
+    @PostMapping("/find-email")
+    public ResponseEntity<String> findEmailByPhoneNumber(@RequestParam String phoneNumber) {
+        try {
+            String email = findUserInfoService.findEmailByPhoneNumber(phoneNumber);
+            System.out.println("해당 휴대폰 번호로 등록된 이메일:" + email);
+            return ResponseEntity.ok("해당 휴대폰 번호로 등록된 이메일: " + email);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 휴대폰 번호로 등록된 사용자가 없습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이메일 찾기 중 오류가 발생했습니다.");
+        }
+    }
 }

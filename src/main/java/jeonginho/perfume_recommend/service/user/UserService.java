@@ -53,25 +53,23 @@ public class UserService {
         return user;
     }
 
+    public void deleteUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("유저를 찾을 수 없습니다."));
+        userRepository.delete(user);
+    }
+
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
-    public User getUserFromToken(String token) {
-        String email = jwtUtil.extractEmail(token);
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public String getEmailFromToken(String token) {
+        return jwtUtil.extractEmail(token); // jwtUtil을 통해 토큰에서 이메일 추출
     }
 
     public User getUserByEmail(String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);
         return userOptional.orElse(null);
-    }
-
-    public String getUserNicknameById(String userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다."));
-        return user.getNickname(); // 사용자 닉네임 필드가 있다고 가정
     }
 
     public String login(String email, String password) throws Exception {
@@ -136,21 +134,6 @@ public class UserService {
         String name = resultEntity2.getBody().getName();
         String phoneNumber = resultEntity2.getBody().getPhoneNumber(); // 추가 정보
 
-        Optional<User> existingUser = userRepository.findByEmail(email);
-        if (existingUser.isPresent()) {
-            return existingUser.get();
-        } else {
-            User newUser = new User();
-            newUser.setEmail(email);
-            newUser.setNickname(name);
-            newUser.setPhoneNumber(phoneNumber);
-            newUser.setCreatedAt(LocalDateTime.now());
-
-            return userRepository.save(newUser);
-        }
-    }
-
-    public User createOrGetUser(String email, String name, String phoneNumber) {
         Optional<User> existingUser = userRepository.findByEmail(email);
         if (existingUser.isPresent()) {
             return existingUser.get();

@@ -87,5 +87,40 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
+    // 로그인한 사용자의 정보 조회 (마이페이지)
+    @GetMapping("/me")
+    public ResponseEntity<User> getUserProfile(@RequestHeader("Authorization") String token) {
+        try {
+            // Authorization 헤더에서 "Bearer " 부분 제거
+            String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+
+            // JWT 토큰에서 이메일 추출
+            String email = userService.getEmailFromToken(jwtToken);
+
+            // 이메일로 유저 정보 조회
+            User user = userService.getUserByEmail(email);
+
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+    }
+
+    // 로그인 후 마이페이지에서 회원 탈퇴
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteUser(@RequestHeader("Authorization") String token) {
+        try {
+            // Authorization 헤더에서 "Bearer " 부분 제거
+            String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+            String email = userService.getEmailFromToken(jwtToken);
+
+            // 해당 이메일로 회원 탈퇴
+            userService.deleteUserByEmail(email);
+
+            return ResponseEntity.ok("회원 탈퇴가 성공적으로 처리되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("회원 탈퇴에 실패했습니다.");
+        }
+    }
 
 }

@@ -32,6 +32,13 @@ public class FindUserInfoService {
     @Value("${spring.mail.properties.mail.smtp.timeout}")
     private int smtpTimeout;
 
+    // 이메일 찾기 메서드
+    public String findEmailByPhoneNumber(String phoneNumber) {
+        User user = userRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new NoSuchElementException("해당 휴대폰 번호로 등록된 사용자가 없습니다."));
+        return user.getEmail();
+    }
+
     // 비밀번호 찾기 메서드
     public void resetPassword(String email) {
         try {
