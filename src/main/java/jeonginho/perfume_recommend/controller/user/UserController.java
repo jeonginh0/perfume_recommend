@@ -91,6 +91,8 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<User> getUserProfile(@RequestHeader("Authorization") String token) {
         try {
+            System.out.println("유저가 가지고 있는 토큰: " + token);
+
             // Authorization 헤더에서 "Bearer " 부분 제거
             String jwtToken = token.startsWith("Bearer ") ? token.substring(7) : token;
 
