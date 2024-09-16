@@ -6,11 +6,16 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 @Component
 public class JwtTokenProvider {
 
     @Value("${jwt.secret}")
     private String jwtSecret;
+
+    @Value("${jwt.expiration}")
+    private long expiration;
 
     // JWT 토큰에서 userId 추출
     public String getUserIdFromJWT(String token) {
@@ -35,22 +40,36 @@ public class JwtTokenProvider {
                 .getBody();
     }
 
-    // 토큰 검증
+    // JWT 토큰 생성
+    public String createToken(String email, String userId) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + expiration);
+
+        return Jwts.builder()
+                .setSubject(email)
+                .claim("userId", userId) // 추가 정보 (userId) 포함
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
+    }
+
+    // JWT 토큰 유효성 검사
     public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;
         } catch (Exception e) {
-            // 토큰이 유효하지 않으면 false 반환
             return false;
         }
     }
 
-    // JWT 토큰 생성 메서드 (optional)
-    public String generateToken(String userId) {
-        return Jwts.builder()
-                .setSubject(userId)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                .compact();
+    // JWT 토큰에서 사용자 ID 추출
+    public String getUserIdFromToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("userId", String.class);
     }
 }

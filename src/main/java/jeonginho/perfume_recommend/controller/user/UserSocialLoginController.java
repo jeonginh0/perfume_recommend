@@ -1,90 +1,94 @@
 package jeonginho.perfume_recommend.controller.user;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jeonginho.perfume_recommend.Entity.User;
+import jeonginho.perfume_recommend.config.jwt.JwtTokenProvider;
 import jeonginho.perfume_recommend.service.user.UserService;
-import jeonginho.perfume_recommend.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/api/v1/oauth2")
 public class UserSocialLoginController {
+
     @Autowired
     private UserService userService;
 
     @Autowired
-    private JwtUtil jwtUtil;
-
-    @Value("${spring.security.oauth2.client.registration.google.client-id}")
-    private String googleClientId;
-    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
-    private String googleClientKey;
-
-    @Value("${kakao.client-id}")
-    private String kakaoClientId;
-    @Value("${kakao.redirect-uri}")
-    private String kakaoRedirectUri;
-
-    @Value("${naver.client-id}")
-    private String naverClientId;
-    @Value("${naver.client-secret}")
-    private String naverClientSecret;
-    @Value("${naver.redirect-uri}")
-    private String naverRedirectUri;
+    private JwtTokenProvider jwtTokenProvider;
 
     /*
      * GOOGLE 소셜 로그인
      * */
-    @PostMapping(value="api/v1/oauth2/google")
-    public String loginUrlGoogle() {
-        return userService.getGoogleLoginUrl();
+    @PostMapping("/google")
+    public void loginUrlGoogle(HttpServletResponse response) throws IOException {
+        String googleLoginUrl = userService.getGoogleLoginUrl();
+        System.out.println(googleLoginUrl);
+        response.sendRedirect(googleLoginUrl);
     }
 
-    @GetMapping(value="api/v1/oauth2/google")
-    public String loginGoogle(@RequestParam(value = "code") String authCode){
-        String jwtToken = userService.getGoogleAccessToken(authCode);
-        User user = userService.createOrGetGoogleUser(jwtToken);
+    @GetMapping("/google")
+    public ResponseEntity<String> loginGoogle(@RequestParam(value = "code") String authCode) {
+        try {
+            String jwtToken = userService.getGoogleAccessToken(authCode);
+            User user = userService.createOrGetGoogleUser(jwtToken);
 
-        String token = jwtUtil.generateToken(user.getEmail());
-        return token;
+            String token = jwtTokenProvider.createToken(user.getEmail(), user.getId());
+            return new ResponseEntity<>(token, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
     }
 
     /*
      * KAKAO 소셜 로그인
      * */
-    @PostMapping(value="api/v1/oauth2/kakao")
-    public String loginUrlKakao() {
-        return userService.getKakaoLoginUrl();
+    @PostMapping("/kakao")
+    public void loginUrlKakao(HttpServletResponse response) throws IOException {
+        String kakaoLoginUrl = userService.getKakaoLoginUrl();
+        System.out.println(kakaoLoginUrl);
+        response.sendRedirect(kakaoLoginUrl);
     }
 
-    @GetMapping(value="api/v1/oauth2/kakao")
-    public String loginKakao(@RequestParam(value = "code") String authcode) {
-        String accessToken = userService.getKakaoAccessToken(authcode);
-        User user = userService.createOrGetKakaoUser(accessToken);
+    @GetMapping("/kakao")
+    public ResponseEntity<String> loginKakao(@RequestParam(value = "code") String authCode) {
+        try {
+            String accessToken = userService.getKakaoAccessToken(authCode);
+            User user = userService.createOrGetKakaoUser(accessToken);
 
-        String jwtToken = jwtUtil.generateToken(user.getEmail());
-
-        return jwtToken;
+            String jwtToken = jwtTokenProvider.createToken(user.getEmail(), user.getId());
+            return new ResponseEntity<>(jwtToken, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
     }
 
     /*
-    * NAVER 소셜 로그인
-    * */
-    @PostMapping(value="api/v1/oauth2/naver")
-    public String loginUrlNaver() {
+     * NAVER 소셜 로그인
+     * */
+    @PostMapping("/naver")
+    public void loginUrlNaver(HttpServletResponse response) throws IOException {
         String state = UUID.randomUUID().toString();
-        return userService.getNaverLoginUrl(state);
+        String naverLoginUrl = userService.getNaverLoginUrl(state);
+        System.out.println(naverLoginUrl);
+        response.sendRedirect(naverLoginUrl);
     }
 
-    @GetMapping(value="api/v1/oauth2/naver")
-    public String loginNaver(@RequestParam String code, String state) {
-        String accessToken = userService.getNaverAccessToken(code, state);
-        User user = userService.createOrGetNaverUser(accessToken);
+    @GetMapping("/naver")
+    public ResponseEntity<String> loginNaver(@RequestParam String code, @RequestParam String state) {
+        try {
+            String accessToken = userService.getNaverAccessToken(code, state);
+            User user = userService.createOrGetNaverUser(accessToken);
 
-        String jwtToken = jwtUtil.generateToken(user.getEmail());
-
-        return jwtToken;
+            String jwtToken = jwtTokenProvider.createToken(user.getEmail(), user.getId());
+            return new ResponseEntity<>(jwtToken, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
     }
 }
