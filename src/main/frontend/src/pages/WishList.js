@@ -12,19 +12,19 @@ const WishList = () => {
             alert("로그인 후 이용해주세요.");
             return;
         }
-
+    
         try {
             const response = await fetch(`http://localhost:8080/api/wishlist`, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${token}`, 
                 },
             });
-
+    
             if (!response.ok) {
                 throw new Error('찜 목록을 가져오는 중 오류가 발생했습니다.');
             }
-
+    
             const data = await response.json();
             setWishlist(data);
         } catch (error) {
@@ -41,7 +41,7 @@ const WishList = () => {
 
         try {
             const response = await fetch(`http://localhost:8080/api/wishlist/remove?perfumeId=${perfumeId}`, {
-                method: 'DELETE',
+                method: 'DELETE', // DELETE 요청으로 변경
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -52,7 +52,7 @@ const WishList = () => {
             }
 
             // 찜 목록에서 해당 향수 제거
-            setWishlist(prevWishlist => prevWishlist.filter(item => item.perfume?.id !== perfumeId));
+            setWishlist(prevWishlist => prevWishlist.filter(item => item.perfume.id !== perfumeId));
             console.log("찜 삭제 성공");
         } catch (error) {
             console.error('API 호출 중 오류:', error);
@@ -79,14 +79,14 @@ const WishList = () => {
                         <p>찜한 향수가 없습니다.</p>
                     ) : (
                         wishlist.map((item) => (
-                            item.perfume && item.perfume.id && ( // perfume과 id가 존재하는 경우에만 렌더링
-                                <div key={item.perfume.id} className="perfume-item-2">
-                                    <img src={item.perfume.image || "기본 이미지 URL"} alt={item.perfume.perfume || "향수 이미지"} />
+                            item.perfume && ( // perfume 데이터가 있는 경우에만 렌더링
+                                <div key={item.id} className="perfume-item-2">
+                                    <img src={item.perfume.image || "기본 이미지 URL"} alt={item.perfume.name || "향수 이미지"} />
                                     <p className="brand">{item.perfume.brand || "브랜드 정보 없음"}</p>
                                     <div className="perfume">{item.perfume.perfume || "향수 이름 없음"}</div>
                                     <p className="acode">
-                                        {Array.isArray(item.perfume.acode)
-                                            ? item.perfume.acode.map(ac => `#${ac}`).join(' ') // 어코드 앞에 #을 붙이고 띄어쓰기 추가
+                                        {Array.isArray(item.perfume.acode) 
+                                            ? item.perfume.acode.map(ac => `#${ac}`).join(' ') // 각 어코드 앞에 #을 붙이고 띄어쓰기 추가
                                             : "어코드 없음"}
                                     </p>
                                     <div className="heart-icon" onClick={() => toggleLike(item.perfume)}>

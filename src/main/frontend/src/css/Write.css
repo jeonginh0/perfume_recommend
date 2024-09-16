@@ -1,0 +1,90 @@
+.write-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+.write-form {
+    background-color: #fff;
+    padding: 40px;
+    margin-top: 110px;
+}
+
+.write-form h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    margin-top: 0;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-group textarea {
+    height: 200px;
+    resize: vertical;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.submit-button:hover {
+    background-color: rgb(78, 78, 78);
+}
+
+/* Quill 에디터 스타일 추가 */
+.ql-container {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+}
+
+.ql-editor {
+    min-height: 200px;
+    padding: 10px;
+    background-color: white;
+    color: #333;
+}
+
+.ql-toolbar {
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.ql-toolbar button:hover {
+    background-color: rgb(220, 220, 220);
+}
+
+.ql-container.ql-snow {
+    border: 1px solid #ccc;
+}
+
+.ql-editor.ql-blank::before {
+    color: #ccc;
+    font-style: italic;
+}

@@ -1,24 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, useLocation, Link } from 'react-router-dom';
+import { NavLink, useLocation, Link, useNavigate } from 'react-router-dom';
 import '../css/Navbar.css';
 import heartIcon from '../img/Heart_icon.png';
 import profileIcon from '../img/Profile_icon.png';
 import searchIcon from '../img/Search_icon.png';
+import axios from 'axios'; 
 
 const Navbar = () => {
   const location = useLocation(); // 현재 경로 얻기
+  const navigate = useNavigate(); // 페이지 이동을 위한 네비게이트
   const [isMenuVisible, setIsMenuVisible] = useState(false); // 말풍선 메뉴 표시 여부
   const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태
-  const [nickname, setUserName] = useState(""); // 로그인된 유저 이름
+  const [nickname, setNickname] = useState(''); // 로그인된 유저 이름
 
-  // 컴포넌트가 마운트될 때 로그인 상태 확인
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      // 가정: 토큰으로부터 유저 이름을 추출하는 로직
-      const storedUserName = "name"; // 이 부분은 실제로 서버 응답에 기반해야 함
-      setUserName(storedUserName);
-      setIsLoggedIn(true);
+      // 유저 정보를 불러오기 위한 axios 요청
+      axios.get('http://localhost:8080/api/users/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(response => {
+        if (response.data && response.data.nickname) {
+          setNickname(response.data.nickname); // 서버 응답에서 유저 이름 가져오기
+          setIsLoggedIn(true);
+        } else {
+          console.error('유저 닉네임이 응답에 포함되어 있지 않습니다.');
+          setIsLoggedIn(false);
+        }
+      })
+      .catch(error => {
+        console.error('유저 정보를 가져오는데 실패했습니다.', error);
+        handleLogout(); // 오류 발생 시 로그아웃 처리
+      });
     }
   }, []);
 
@@ -28,18 +44,12 @@ const Navbar = () => {
   };
 
   // 로그아웃 처리
-  const logoutUser = () => {
-    localStorage.removeItem('token'); // 토큰 삭제
+  const handleLogout = () => {
+    localStorage.removeItem('token');
     setIsLoggedIn(false);
-    setUserName("");
+    setNickname('');
     setIsMenuVisible(false);
-  };
-
-  // 클릭한 링크가 현재 페이지와 같으면 새로 고침
-  const handleNavLinkClick = (e, path) => {
-    if (path === location.pathname) {
-      window.location.reload();
-    }
+    navigate('/login');
   };
 
   return (
@@ -52,11 +62,8 @@ const Navbar = () => {
           <ul className="nav-links">
             <li>
               <NavLink
-                exact
                 to="/perfume"
                 className="nav-link"
-                activeClassName="active"
-                onClick={(e) => handleNavLinkClick(e, "/perfume")}
               >
                 Perfume
               </NavLink>
@@ -65,8 +72,6 @@ const Navbar = () => {
               <NavLink
                 to="/community"
                 className="nav-link"
-                activeClassName="active"
-                onClick={(e) => handleNavLinkClick(e, "/community")}
               >
                 Community
               </NavLink>
@@ -75,8 +80,6 @@ const Navbar = () => {
               <NavLink
                 to="/recommend"
                 className="nav-link"
-                activeClassName="active"
-                onClick={(e) => handleNavLinkClick(e, "/recommend")}
               >
                 Recommend
               </NavLink>
@@ -92,7 +95,7 @@ const Navbar = () => {
             </Link>
           )}
           <li
-            onClick={handleProfileClick} // 클릭 이벤트로 변경
+            onClick={handleProfileClick}
             className="profile-icon-container"
           >
             <img src={profileIcon} alt="Profile icon" />
@@ -101,8 +104,8 @@ const Navbar = () => {
               <div className="profile-menu">
                 {isLoggedIn ? (
                   <>
-                    <p>{nickname}님</p>
-                    <Link to="/" onClick={logoutUser}>로그아웃</Link>
+                    <p>{nickname ? `${nickname}님` : '유저 이름 없음'}</p>
+                    <Link to="/" onClick={handleLogout}>로그아웃</Link>
                     <Link to="/mypage">마이페이지</Link>
                   </>
                 ) : (

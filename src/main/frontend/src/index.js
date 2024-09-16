@@ -18,6 +18,12 @@ import Community from './pages/Community';
 import SigninSuccess from './pages/SigninSuccess';
 import PerfumeDetail from './pages/PerfumeDetail';
 import WishList from './pages/WishList';
+import ChangeNickname from './pages/ChangeNickname';
+import ChangeNumber from './pages/ChangeNumber';
+import ChangePassword from './pages/ChangePassword';
+import Write from './pages/Write';
+import PostDetail from './pages/PostDetail';
+import PostEdit from './pages/PostEdit';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -36,6 +42,12 @@ root.render(
         <Route path='/signin_success' element={<SigninSuccess />} />
         <Route path="/perfumes/:id" element={<PerfumeDetail />} />
         <Route path='/wishlist' element={<WishList />} />
+        <Route path='/changenickname' element={<ChangeNickname />} />
+        <Route path='/changenumber' element={<ChangeNumber />} />
+        <Route path='/changepassword' element={<ChangePassword />} />
+        <Route path='/write' element={<Write />} />
+        <Route path="/community/:postId" element={<PostDetail />}/>
+        <Route path="/edit/:postId" element={<PostEdit />} />
       </Routes>
     </BrowserRouter>
 );

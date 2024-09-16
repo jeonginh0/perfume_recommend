@@ -1,6 +1,7 @@
 .Community-container {
     width: 100%;
     margin-top: 170px;
+    font-family: 'Inter';
 }
 
 .Community-form {
@@ -43,14 +44,29 @@
 .table-header {
     display: flex;
     background-color: #EDEDED;
-    font-weight: bold;
     padding: 10px 0;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    align-items: center;
+    color: #3F3F3F;
 }
 
 .table-row {
     display: flex;
     border-bottom: 1px solid #ccc;
     padding: 20px 0;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    align-items: center;
+    color: #3F3F3F;
 }
 
 .header-number, .row-number {
@@ -91,6 +107,7 @@
 
 .post-size p {
     margin: 0;
+    color: #555555;
 }
 
 .pagination {
@@ -121,3 +138,16 @@
     color: #ccc;
   }
   
+  .write-button-container {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    color: #686868;
+    justify-content: end;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15px;
+  }

@@ -41,22 +41,45 @@ const Login = () => {
         password,
       }, {
         headers: {
-          'Content-Type': 'application/json', // 요청 헤더 설정
+          'Content-Type': 'application/json',
         }
       });
 
       localStorage.setItem('token', response.data);
       navigate('/');
     } catch (error) {
-      // 서버가 반환하는 에러 메시지와 상태 코드 출력
       console.error('로그인 에러:', error.response?.data || error.message);
       setLoginError(error.response?.data || '로그인에 실패했습니다.');
     }
   };
-  
 
   const handleSocialLogin = async (provider) => {
-   
+    try {
+      if (provider === 'google') {
+        // 구글 로그인 URL로 리디렉션
+        const postResponse = await axios.post('http://localhost:8080/api/v1/oauth2/google', {}, {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+
+        if (postResponse.data) {
+          window.location.href = postResponse.data; // 구글 로그인 URL로 이동
+        }
+
+        // 구글 인증 후 사용자 정보를 받아오는 요청 (이 단계는 리디렉션 후 진행됩니다)
+        const getResponse = await axios.get('http://localhost:8080/api/v1/oauth2/google');
+        if (getResponse.data) {
+          console.log('구글 로그인 성공:', getResponse.data);
+          localStorage.setItem('token', getResponse.data);
+
+          // 토큰 저장 후 메인 페이지로 리디렉션
+          navigate('/');
+        }
+      }
+    } catch (error) {
+      console.error(`${provider} 로그인 에러:`, error.message);
+    }
   };
 
   return (

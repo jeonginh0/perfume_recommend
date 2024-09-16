@@ -1,0 +1,85 @@
+.phone-change-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 20px;
+    margin-top: 130px;
+}
+
+.phone-change-container h2 {
+    border-bottom: 1px solid #ccc;
+    padding: 20px;
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.phone-change-container p {
+    margin: 0;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+    color: #696F79;
+}
+
+.phone-change-container input {
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    outline: none;
+}
+
+.phone-change-container .change-button {
+    margin-top: 40px;
+    padding: 15px 90px;
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.phone-change-container .change-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.error-message {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 13px;
+    color: #FF0000;    
+    margin: 0;
+}
+
+.p-input {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.p-input-label {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    color: #696F79;
+}
+
+.input-container {
+    display: flex;
+    gap: 10px;
+}
+
+.p-input input::placeholder {
+    color: #D9D9D9;
+}

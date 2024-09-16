@@ -320,6 +320,9 @@ const submitSurveyResponses = async () => {
                         <p className="brand-p">{perfume.brand}</p>
                         <p>{perfume.perfume}</p>
                         <p>{perfume.type}</p>
+                        <p className="acode">
+                            {Array.isArray(perfume.acode) ? perfume.acode.map(ac => `#${ac}`).join(' ') : ''}
+                        </p>
                     </div>
                 ))}
             </div>
