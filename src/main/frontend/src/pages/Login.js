@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/Login.css';
@@ -56,31 +56,57 @@ const Login = () => {
   const handleSocialLogin = async (provider) => {
     try {
       if (provider === 'google') {
-        // 구글 로그인 URL로 리디렉션
+        // 서버로 리디렉션 요청
         const postResponse = await axios.post('http://localhost:8080/api/v1/oauth2/google', {}, {
           headers: {
             'Content-Type': 'application/json',
           }
         });
 
-        if (postResponse.data) {
-          window.location.href = postResponse.data; // 구글 로그인 URL로 이동
-        }
-
-        // 구글 인증 후 사용자 정보를 받아오는 요청 (이 단계는 리디렉션 후 진행됩니다)
-        const getResponse = await axios.get('http://localhost:8080/api/v1/oauth2/google');
-        if (getResponse.data) {
-          console.log('구글 로그인 성공:', getResponse.data);
-          localStorage.setItem('token', getResponse.data);
-
-          // 토큰 저장 후 메인 페이지로 리디렉션
-          navigate('/');
+        if (postResponse.request.responseURL) {
+          // 서버에서 리디렉션된 URL로 이동
+          window.location.href = postResponse.request.responseURL;
+        } else {
+          console.error('리디렉션 실패');
         }
       }
     } catch (error) {
       console.error(`${provider} 로그인 에러:`, error.message);
     }
   };
+
+  const handleAuthCode = async () => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const code = queryParams.get('code');
+
+    if (code) {
+      try {
+        // 인증 코드로 JWT 요청
+        const response = await axios.get(`http://localhost:8080/api/v1/oauth2/google`, {
+          params: { code }
+        });
+
+        if (response.status === 200) {
+          const token = response.data;
+          // JWT를 로컬 스토리지에 저장
+          localStorage.setItem('token', token);
+          // 로그인 성공 후 페이지 이동
+          navigate('/');
+        } else {
+          console.error('로그인 요청 실패');
+        }
+      } catch (error) {
+        console.error('로그인 실패:', error);
+      }
+    }
+  };
+
+  // 페이지가 로드되면 인증 코드 처리
+  useEffect(() => {
+    if (window.location.search.includes('code')) {
+      handleAuthCode();
+    }
+  }, []);
 
   return (
     <>
@@ -143,13 +169,19 @@ const Login = () => {
             </Link>
           </div>
           <div className="social-login">
-            <button className="social-button" onClick={() => handleSocialLogin('google')}>
+            <button 
+              className="social-button" 
+              onClick={(e) => {
+                e.preventDefault(); // form 기본 동작을 막음
+                handleSocialLogin('google');
+              }}
+            >
               <img src={googleLogo} alt="Google" />
             </button>
-            <button className="social-button" onClick={() => handleSocialLogin('kakao')}>
+            <button className="social-button">
               <img src={kakaoLogo} alt="KakaoTalk" />
             </button>
-            <button className="social-button" onClick={() => handleSocialLogin('naver')}>
+            <button className="social-button">
               <img src={naverLogo} alt="Naver" />
             </button>
           </div>
