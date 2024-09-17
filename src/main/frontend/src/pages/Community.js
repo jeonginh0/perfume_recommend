@@ -10,6 +10,7 @@ import axios from 'axios';
 const Community = () => {
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
+    const [users, setUsers] = useState({}); // 사용자 정보를 저장할 상태
     const [currentPage, setCurrentPage] = useState(1);
     const postsPerPage = 10;
     const pageGroupSize = 10;
@@ -18,16 +19,33 @@ const Community = () => {
         const fetchPosts = async () => {
             try {
                 const response = await axios.get('http://localhost:8080/api/community/posts');
-                setPosts(response.data); // 서버에서 가져온 데이터를 posts에 저장
+                setPosts(response.data);
                 console.log('응답 데이터:', response.data);
+    
+                // 게시물에 포함된 userId 목록 추출
+                const userIds = [...new Set(response.data.map((post) => post.userId))];
+    
+                userIds.forEach(async (userId) => {
+                    if (!users[userId]) {
+                        try {
+                            const userResponse = await axios.get(`http://localhost:8080/api/users/nickname/${userId}`);
+                            setUsers((prevUsers) => ({
+                                ...prevUsers,
+                                [userId]: userResponse.data,
+                            }));
+                        } catch (error) {
+                            console.error('사용자 이름을 가져오는데 실패했습니다.', error);
+                        }
+                    }
+                });
             } catch (error) {
                 console.error('게시글 데이터를 가져오는데 실패했습니다.', error);
             }
         };
-
+    
         fetchPosts();
-    }, []);
-
+    }, [users]);
+    
     // 날짜 포맷 함수 수정
     const formatDate = (dateArray) => {
         if (!dateArray || dateArray.length < 3) return '날짜 없음'; // dateArray가 없을 때 처리
@@ -81,8 +99,15 @@ const Community = () => {
         return pageNumbers;
     };
 
+    // 로그인 여부를 확인하고, 비로그인 상태에서는 글작성 페이지로 가지 않음
     const goToWritePage = () => {
-        navigate('/write');
+        const token = localStorage.getItem('token'); // 로그인 토큰 확인
+        if (!token) {
+            alert('로그인 후 이용해주세요.'); // 비로그인 상태에서 알림 표시
+            navigate('/login'); // 로그인 페이지로 이동
+        } else {
+            navigate('/write'); // 로그인 상태에서만 글쓰기 페이지로 이동
+        }
     };
 
     return (
@@ -123,7 +148,7 @@ const Community = () => {
                             >
                                 <div className="row-number">{index + 1 + (currentPage - 1) * postsPerPage}</div>
                                 <div className="row-title">{post.title}</div>
-                                <div className="row-author">{post.author || "익명"}</div>
+                                <div className="row-author">{users[post.userId] || "익명"}</div> {/* 사용자 이름 표시 */}
                                 <div className="row-date">{formatDate(post.createdAt)}</div>
                             </div>
                         ))}

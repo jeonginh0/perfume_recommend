@@ -8,20 +8,43 @@ import { HiArrowLeft } from 'react-icons/hi';
 const PostDetail = () => {
     const { postId } = useParams(); // URL에서 postId를 가져옴
     const [post, setPost] = useState(null);
+    const [authorNickname, setAuthorNickname] = useState(''); // 작성자 닉네임 저장
     const [comments, setComments] = useState([]); // 댓글 리스트 저장
     const [newComment, setNewComment] = useState(''); // 새 댓글 저장
     const [editCommentId, setEditCommentId] = useState(null); // 수정 중인 댓글 ID
     const [editCommentContent, setEditCommentContent] = useState(''); // 수정 중인 댓글 내용
+    const [currentUserId, setCurrentUserId] = useState(null); // 현재 로그인한 사용자 ID
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchPostAndComments = async () => {
             try {
+                // 게시글 가져오기
                 const postResponse = await axios.get(`http://localhost:8080/api/community/posts/${postId}`);
                 setPost(postResponse.data);
 
+                // 작성자의 userId를 사용하여 작성자 닉네임 가져오기
+                const authorResponse = await axios.get(`http://localhost:8080/api/users/nickname/${postResponse.data.userId}`);
+                setAuthorNickname(authorResponse.data);
+
+                // 댓글 가져오기
                 const commentsResponse = await axios.get(`http://localhost:8080/api/community/comments/${postId}`);
                 setComments(commentsResponse.data); // 댓글 리스트 설정
+
+                // 로그인한 사용자 정보 가져오기
+                const token = localStorage.getItem('token');
+                if (token) {
+                    const userResponse = await axios.get('http://localhost:8080/api/users/me', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    setCurrentUserId(userResponse.data.id); // 현재 로그인한 사용자의 ID 저장
+
+                    // 현재 로그인한 사용자의 ID와 게시글 작성자의 ID를 로그로 출력
+                    console.log("현재 로그인한 사용자 ID:", userResponse.data.id);
+                    console.log("게시글 작성자 ID:", postResponse.data.userId);
+                }
             } catch (error) {
                 console.error('게시글 또는 댓글 데이터를 가져오는데 실패했습니다.', error);
             }
@@ -144,42 +167,45 @@ const PostDetail = () => {
                     style={{ cursor: 'pointer' }} 
                 />
                 <h2>{post.title}</h2>
-                <p>작성자: {post.author}</p>
+                <p>작성자: {authorNickname}</p> {/* 작성자 닉네임 표시 */}
                 <p>작성일: {formatDate(post.createdAt)}</p> {/* 날짜 포맷 함수 적용 */}
                 <div className="post-content">
                     {stripHTMLTags(post.content)}
                 </div>
                 
-                <div className="edit-delete">
-                    <button onClick={() => 
-                        navigate(`/edit/${postId}`, 
-                        { state: { previousPage: `/community/posts/${postId}` } })}>
-                        수정하기
-                    </button>
+                {/* 현재 로그인한 사용자와 작성자가 동일할 때만 수정, 삭제 버튼을 표시 */}
+                {String(currentUserId) === String(post.userId) && (
+                    <div className="edit-delete">
+                        <button onClick={() => 
+                            navigate(`/edit/${postId}`, 
+                            { state: { previousPage: `/community/posts/${postId}` } })}>
+                            수정하기
+                        </button>
 
-                    <button onClick={async () => {
-                        const token = localStorage.getItem('token');
-                        if (!token) {
-                            alert('로그인 후 이용해주세요.');
-                            return;
-                        }
-
-                        if (window.confirm('정말 삭제하시겠습니까?')) {
-                            try {
-                                await axios.delete(`http://localhost:8080/api/community/${postId}`, {
-                                    headers: {
-                                        'Authorization': `Bearer ${token}`
-                                    }
-                                });
-                                alert('게시글이 삭제되었습니다.');
-                                navigate('/community');
-                            } catch (error) {
-                                console.error('게시글 삭제 중 오류가 발생했습니다.', error);
-                                alert('게시글 삭제 중 오류가 발생했습니다.');
+                        <button onClick={async () => {
+                            const token = localStorage.getItem('token');
+                            if (!token) {
+                                alert('로그인 후 이용해주세요.');
+                                return;
                             }
-                        }
-                    }} style={{ color: 'red' }}>삭제하기</button>
-                </div>
+
+                            if (window.confirm('정말 삭제하시겠습니까?')) {
+                                try {
+                                    await axios.delete(`http://localhost:8080/api/community/${postId}`, {
+                                        headers: {
+                                            'Authorization': `Bearer ${token}`
+                                        }
+                                    });
+                                    alert('게시글이 삭제되었습니다.');
+                                    navigate('/community');
+                                } catch (error) {
+                                    console.error('게시글 삭제 중 오류가 발생했습니다.', error);
+                                    alert('게시글 삭제 중 오류가 발생했습니다.');
+                                }
+                            }
+                        }} style={{ color: 'red' }}>삭제하기</button>
+                    </div>
+                )}
 
                 {/* 댓글 리스트 */}
                 <div className="comments-section">
@@ -217,7 +243,6 @@ const PostDetail = () => {
                     ))}
                 </div>
 
-                
             </div>
         </>
     );

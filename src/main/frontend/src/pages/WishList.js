@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../css/Navbar.js';
 import '../css/WishList.css';
-import { IoIosHeartEmpty, IoIosHeart } from 'react-icons/io'; // 좋아요 아이콘 가져오기
+import { IoIosHeart } from 'react-icons/io'; // 좋아요 아이콘 가져오기
 
 const WishList = () => {
-    const [wishlist, setWishlist] = useState([]);
+    const [wishlist, setWishlist] = useState([]); // 기본값을 빈 배열로 설정
 
     const fetchWishlist = async () => {
         const token = localStorage.getItem('token');
@@ -26,7 +26,11 @@ const WishList = () => {
             }
     
             const data = await response.json();
-            setWishlist(data);
+            if (Array.isArray(data)) { // 데이터가 배열인지 확인
+                setWishlist(data);
+            } else {
+                setWishlist([]); // 배열이 아닌 경우 빈 배열로 설정
+            }
         } catch (error) {
             console.error('API 호출 중 오류:', error);
         }

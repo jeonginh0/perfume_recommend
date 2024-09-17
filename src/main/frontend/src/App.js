@@ -1,5 +1,6 @@
-import React from 'react';
-// import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './App.css';
 import main_bg from './img/main_background.png';
 import heartIcon from './img/Heart_icon.png';
@@ -9,25 +10,51 @@ import note from './img/main_note.png';
 import life from './img/main_life.png';
 import season from './img/main_season.png';
 
-import { Link } from 'react-router-dom';
-
 function App() {
-//   const [hello, setHello] = useState('');
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태
+  const [nickname, setNickname] = useState(''); // 로그인된 유저 이름
+  const [isMenuVisible, setIsMenuVisible] = useState(false); // 프로필 메뉴 표시 여부
 
-//   const api = axios.create({
-//     baseURL: 'http://localhost:8080'
-//   });
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      // 유저 정보를 불러오기 위한 axios 요청
+      axios
+        .get('http://localhost:8080/api/users/me', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          if (response.data && response.data.nickname) {
+            setNickname(response.data.nickname); // 서버 응답에서 유저 이름 가져오기
+            setIsLoggedIn(true);
+          } else {
+            console.error('유저 닉네임이 응답에 포함되어 있지 않습니다.');
+            setIsLoggedIn(false);
+          }
+        })
+        .catch((error) => {
+          console.error('유저 정보를 가져오는데 실패했습니다.', error);
+          handleLogout(); // 오류 발생 시 로그아웃 처리
+        });
+    }
+  }, []);
 
-//   useEffect(() => {
-//     console.log('API 요청 시작'); 
-//     api.get('/api/hello')
-//       .then(response => {
-//           console.log('API 응답:', response); 
-//           setHello(response.data);
-//       })
-//       .catch(error => console.log('API 에러:', error));  
-// }, []);
+  // 프로필 아이콘 클릭 시 메뉴 표시/숨기기 토글
+  const handleProfileClick = () => {
+    setIsMenuVisible(!isMenuVisible);
+  };
 
+  // 로그아웃 처리
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    setNickname('');
+    setIsMenuVisible(false);
+    navigate('/login');
+  };
 
   return (
     <div className="app">
@@ -53,19 +80,49 @@ function App() {
           </div>
           <nav>
             <ul className="nav-icons-white">
-              <li><img src={heartIcon} alt="Heart icon" /></li>
-              <Link to="/login">
-              <li><img src={profileIcon} alt="Profile icon" /></li>
-              </Link>
-              <li><img src={searchIcon} alt="Search icon" /></li>
+              {/* 찜 목록 아이콘: 로그인 상태일 때만 표시 */}
+              {isLoggedIn && (
+                <Link to="/wishlist">
+                  <li>
+                    <img src={heartIcon} alt="Heart icon" />
+                  </li>
+                </Link>
+              )}
+              <li
+                onClick={handleProfileClick}
+                className="profile-icon-container"
+              >
+                <img src={profileIcon} alt="Profile icon" />
+                {isMenuVisible && (
+                  <div className="profile-menu">
+                    {isLoggedIn ? (
+                      <>
+                        <p>{nickname ? `${nickname}님` : '유저 이름 없음'}</p>
+                        <Link to="/" onClick={handleLogout}>
+                          로그아웃
+                        </Link>
+                        <Link to="/mypage">마이페이지</Link>
+                      </>
+                    ) : (
+                      <>
+                        <Link to="/signup">회원가입</Link>
+                        <Link to="/login">로그인</Link>
+                      </>
+                    )}
+                  </div>
+                )}
+              </li>
+              <li>
+                <img src={searchIcon} alt="Search icon" />
+              </li>
             </ul>
           </nav>
         </header>
         <div className="banner-content">
-          <p className='banner-content1'>나의 라이프스타일을 담은 맞춤형 향수 추천</p>
-          <p className='banner-content2'>나만의 향수를 찾아보세요.</p>
+          <p className="banner-content1">나의 라이프스타일을 담은 맞춤형 향수 추천</p>
+          <p className="banner-content2">나만의 향수를 찾아보세요.</p>
           <Link to="/recommend">
-          <button className="recommend-btn">향수 추천받기</button>
+            <button className="recommend-btn">향수 추천받기</button>
           </Link>
         </div>
       </div>
@@ -98,11 +155,12 @@ function App() {
       </section>
       <section className="button-section">
         <p className="section2-title">
-          지금 바로 나만의 향수를 찾아보세요.<br />
+          지금 바로 나만의 향수를 찾아보세요.
+          <br />
           간단한 설문으로 몇 분 안에 맞춤형 향수를 추천받을 수 있습니다.
         </p>
         <Link to="/recommend">
-        <button className="recommend-btn">향수 추천받기</button>
+          <button className="recommend-btn">향수 추천받기</button>
         </Link>
       </section>
     </div>
