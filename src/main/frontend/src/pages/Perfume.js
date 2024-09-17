@@ -176,14 +176,20 @@ const Perfume = () => {
     
         try {
             if (likedPerfumes.includes(perfumeId)) {
+                // 찜 해제 요청
                 await removeFromWishlist(perfumeId);
+                // 요청이 성공하면 로컬 상태 업데이트 (해제)
                 setLikedPerfumes(prevLiked => prevLiked.filter(id => id !== perfumeId));
-                console.log("찜 삭제 성공!");
+                console.log("찜 삭제 성공!"); // 콘솔에 찜 삭제 성공 메시지 출력
             } else {
+                // 찜 추가 요청
                 await addToWishlist(perfumeId);
+                // 요청이 성공하면 로컬 상태 업데이트 (추가)
                 setLikedPerfumes(prevLiked => [...prevLiked, perfumeId]);
-                console.log("찜 성공!");
+                console.log("찜 성공!"); // 콘솔에 찜 성공 메시지 출력
             }
+    
+            // 찜 목록 업데이트 후, 다시 가져와 최신 상태 유지
             fetchLikedPerfumes();
         } catch (error) {
             console.error('찜 상태 변경 중 오류가 발생했습니다:', error);
