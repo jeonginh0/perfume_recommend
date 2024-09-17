@@ -129,14 +129,20 @@ public class UserService {
     }
 
     public Optional<User> createOrGetGoogleUser(GoogleInfResponse googleInfResponse) {
-        // 사용자 조회 또는 생성 로직
-        Optional<User> existingUser = userRepository.findByEmail(googleInfResponse.getEmail());
+        String email = googleInfResponse.getEmail();
+        String name = googleInfResponse.getName();
+        String phoneNumber = googleInfResponse.getPhoneNumber(); // 구글에서 전화번호를 받아올 수 있는 경우
+
+        Optional<User> existingUser = userRepository.findByEmail(email);
         if (existingUser.isPresent()) {
             return existingUser;
         } else {
-            User newUser = new User();
-            newUser.setEmail(googleInfResponse.getEmail());
-            // 구글 정보로 사용자 설정
+            User newUser = User.builder()
+                    .email(email)
+                    .nickname(name)
+                    .phoneNumber(phoneNumber)
+                    .createdAt(LocalDateTime.now()) // 생성일자 설정
+                    .build();
             userRepository.save(newUser);
             return Optional.of(newUser);
         }
@@ -176,18 +182,18 @@ public class UserService {
     }
 
     public User createOrGetKakaoUser(KakaoUserResponse kakaoUserResponse) {
-        // KakaoUserResponse에서 이메일 정보 추출
         String email = kakaoUserResponse.getKakao_account().getEmail();
+        String nickname = kakaoUserResponse.getKakao_account().getProfile().getNickname();
 
-        // 이메일로 유저를 찾기
         Optional<User> existingUser = userRepository.findByEmail(email);
         if (existingUser.isPresent()) {
             return existingUser.get();
         } else {
-            // 새 유저를 생성하여 저장
-            User newUser = new User();
-            newUser.setEmail(email);
-            // 추가적인 정보 설정이 필요하다면 여기서 설정
+            User newUser = User.builder()
+                    .email(email)
+                    .nickname(nickname)
+                    .createdAt(LocalDateTime.now()) // 생성일자 설정
+                    .build();
             userRepository.save(newUser);
             return newUser;
         }
@@ -228,18 +234,18 @@ public class UserService {
     }
 
     public User createOrGetNaverUser(NaverUserResponse naverUserResponse) {
-        // NaverUserResponse에서 이메일 정보 추출
         String email = naverUserResponse.getResponse().getEmail();
+        String nickname = naverUserResponse.getResponse().getNickname(); // 또는 naverUserResponse에서 직접 가져오는 필드명 사용
 
-        // 이메일로 유저를 찾기
         Optional<User> existingUser = userRepository.findByEmail(email);
         if (existingUser.isPresent()) {
             return existingUser.get();
         } else {
-            // 새 유저를 생성하여 저장
-            User newUser = new User();
-            newUser.setEmail(email);
-            // 추가적인 정보 설정이 필요하다면 여기서 설정
+            User newUser = User.builder()
+                    .email(email)
+                    .nickname(nickname)
+                    .createdAt(LocalDateTime.now()) // 생성일자 설정
+                    .build();
             userRepository.save(newUser);
             return newUser;
         }
