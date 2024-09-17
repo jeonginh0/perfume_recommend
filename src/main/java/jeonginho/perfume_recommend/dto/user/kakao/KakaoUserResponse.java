@@ -19,6 +19,7 @@ public class KakaoUserResponse {
         private List<String> preferenceDuration;
         private List<String> preferenceSeason;
         private List<String> preferenceSituation;
+
         @Data
         public static class KakaoProfile {
             private String nickname;
