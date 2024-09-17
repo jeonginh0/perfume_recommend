@@ -23,7 +23,7 @@ public class UserSocialLoginController {
     /*
      * GOOGLE 소셜 로그인
      * */
-    @PostMapping("/google")
+    @PostMapping("/api/v1/oauth2/google")
     public void loginUrlGoogle(HttpServletResponse response) throws IOException {
         String googleLoginUrl = userService.getGoogleLoginUrl();
         response.sendRedirect(googleLoginUrl);
@@ -47,7 +47,7 @@ public class UserSocialLoginController {
     /*
      * KAKAO 소셜 로그인
      * */
-    @PostMapping("/kakao")
+    @PostMapping("/api/v1/oauth2/kakao")
     public void loginUrlKakao(HttpServletResponse response) throws IOException {
         String kakaoLoginUrl = userService.getKakaoLoginUrl();
         response.sendRedirect(kakaoLoginUrl);
@@ -71,7 +71,7 @@ public class UserSocialLoginController {
     /*
      * NAVER 소셜 로그인
      * */
-    @PostMapping("/naver")
+    @PostMapping("/api/v1/oauth2/naver")
     public void loginUrlNaver(HttpServletResponse response) throws IOException {
         String state = UUID.randomUUID().toString();
         String naverLoginUrl = userService.getNaverLoginUrl(state);
