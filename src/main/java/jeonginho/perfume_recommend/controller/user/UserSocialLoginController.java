@@ -45,9 +45,9 @@ public class UserSocialLoginController {
 
     // Naver 로그인 처리
     @GetMapping("/naver")
-    public ResponseEntity<String> naverLogin(@RequestParam("code") String authCode, @RequestParam(value = "state", required = false) String state) {
+    public ResponseEntity<String> naverLogin(@RequestParam("code") String authCode) {
         try {
-            String token = userSocialLoginService.handleNaverLogin(authCode, state);
+            String token = userSocialLoginService.handleNaverLogin(authCode);
             String redirectUrl = "http://localhost:3000/login?token=" + token;
             return ResponseEntity.status(HttpStatus.FOUND).header(HttpHeaders.LOCATION, redirectUrl).build();
         } catch (Exception e) {

@@ -11,7 +11,13 @@ import jeonginho.perfume_recommend.dto.user.naver.NaverResponse;
 import jeonginho.perfume_recommend.dto.user.naver.NaverUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
@@ -80,42 +86,82 @@ public class UserSocialLoginService {
     public String handleKakaoLogin(String authCode) {
         RestTemplate restTemplate = new RestTemplate();
 
-        // 카카오 토큰을 받아오기 위한 요청
-        KakaoUserResponse kakaoUser = restTemplate.postForObject(
-                "https://kauth.kakao.com/oauth/token",
-                buildKakaoTokenRequest(authCode),
-                KakaoUserResponse.class
-        );
+        try {
+            // 파라미터를 MultiValueMap으로 구성
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            params.add("grant_type", "authorization_code");
+            params.add("client_id", kakaoClientId);
+            params.add("redirect_uri", kakaoRedirectUri);
+            params.add("code", authCode);
 
-        // 유저 저장 혹은 기존 유저 반환
-        User user = userService.createOrGetKakaoUser(kakaoUser);
+            // 카카오 토큰 요청
+            KakaoUserResponse kakaoUser = restTemplate.postForObject(
+                    "https://kauth.kakao.com/oauth/token",
+                    params,
+                    KakaoUserResponse.class
+            );
 
-        // JWT 생성 후 반환
-        return jwtTokenProvider.createToken(user.getEmail(), user.getId());
+            // 카카오 사용자 정보 요청
+            KakaoUserResponse kakaoUserInfo = restTemplate.getForObject(
+                    "https://kapi.kakao.com/v2/user/me?access_token=" + kakaoUser.getAccess_token(),
+                    KakaoUserResponse.class
+            );
+
+            // 유저 저장 혹은 기존 유저 반환
+            User user = userService.createOrGetKakaoUser(kakaoUserInfo);
+
+            // JWT 생성 후 반환
+            return jwtTokenProvider.createToken(user.getEmail(), user.getId());
+
+        } catch (RestClientException e) {
+            System.out.println("카카오 로그인 중 오류 발생: "+ e.getMessage());
+            throw new RuntimeException("카카오 로그인 처리 중 오류가 발생했습니다.");
+        }
     }
 
     // Naver OAuth 처리
-    public String handleNaverLogin(String authCode, String state) {
+    public String handleNaverLogin(String authCode) {
         RestTemplate restTemplate = new RestTemplate();
 
-        // 네이버 토큰을 받아오기 위한 요청
-        NaverResponse naverResponse = restTemplate.postForObject(
-                "https://nid.naver.com/oauth2.0/token",
-                buildNaverTokenRequest(authCode, state),
-                NaverResponse.class
-        );
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        // 네이버 유저 정보를 가져옴
-        NaverUserResponse naverUser = restTemplate.getForObject(
-                "https://openapi.naver.com/v1/nid/me?access_token=" + naverResponse.getAccess_token(),
-                NaverUserResponse.class
-        );
+            // 쿼리 문자열로 변환된 요청 본문
+            String body = buildNaverTokenRequest(authCode);
+            HttpEntity<String> request = new HttpEntity<>(body, headers);
 
-        // 유저 저장 혹은 기존 유저 반환
-        User user = userService.createOrGetNaverUser(naverUser);
+            // 네이버 토큰 요청
+            NaverResponse naverResponse = restTemplate.postForObject(
+                    "https://nid.naver.com/oauth2.0/token",
+                    request,
+                    NaverResponse.class
+            );
 
-        // JWT 생성 후 반환
-        return jwtTokenProvider.createToken(user.getEmail(), user.getId());
+            if (naverResponse == null || naverResponse.getAccess_token() == null) {
+                throw new RuntimeException("네이버 응답에 액세스 토큰이 없습니다.");
+            }
+
+            // 네이버 유저 정보를 가져옴
+            NaverUserResponse naverUser = restTemplate.getForObject(
+                    "https://openapi.naver.com/v1/nid/me?access_token=" + naverResponse.getAccess_token(),
+                    NaverUserResponse.class
+            );
+
+            if (naverUser == null) {
+                throw new RuntimeException("네이버 유저 정보를 가져오는 데 실패했습니다.");
+            }
+
+            // 유저 저장 혹은 기존 유저 반환
+            User user = userService.createOrGetNaverUser(naverUser);
+
+            // JWT 생성 후 반환
+            return jwtTokenProvider.createToken(user.getEmail(), user.getId());
+
+        } catch (RestClientException e) {
+            System.out.println("네이버 로그인 중 오류 발생: " + e.getMessage());
+            throw new RuntimeException("네이버 로그인 처리 중 오류가 발생했습니다.");
+        }
     }
 
     //google 로그인 창 url
@@ -131,15 +177,27 @@ public class UserSocialLoginService {
 
     //kakao 로그인 창 url
     public String getKakaoLoginUrl() {
-        return "https://kauth.kakao.com/oauth/authorize?client_id=" + kakaoClientId
-                + "&redirect_uri=" + kakaoRedirectUri + "&response_type=code";
+        try{
+            String encodedClientId = URLEncoder.encode(kakaoClientId, "UTF-8");
+            String encodedRedirectUri = URLEncoder.encode(kakaoRedirectUri, "UTF-8");
+            return "https://kauth.kakao.com/oauth/authorize?client_id=" + encodedClientId
+                    + "&redirect_uri=" + encodedRedirectUri + "&response_type=code";
+        }catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("URL 인코딩 오류 발생", e);
+        }
     }
 
     //naver 로그인 창 url
     public String getNaverLoginUrl(String state) {
-        return "https://nid.naver.com/oauth2.0/authorize?client_id=" + naverClientId
-                + "&response_type=code&redirect_uri=" + naverRedirectUri
-                + "&state=" + state;
+        try {
+            String encodedClientId = URLEncoder.encode(naverClientId, "UTF-8");
+            String encodedRedirectUri = URLEncoder.encode(naverRedirectUri, "UTF-8");
+            return "https://nid.naver.com/oauth2.0/authorize?client_id=" + encodedClientId
+                    + "&response_type=code&redirect_uri=" + encodedRedirectUri
+                    + "&state=" + state;
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("URL 인코딩 오류 발생", e);
+        }
     }
 
     // Google Access Token 요청 메서드
@@ -163,13 +221,11 @@ public class UserSocialLoginService {
     }
 
     // Naver Access Token 요청 메서드
-    public NaverRequest buildNaverTokenRequest(String authCode, String state) {
-        return NaverRequest.builder()
-                .clientId(naverClientId)
-                .clientSecret(naverClientSecret)
-                .code(authCode)
-                .grantType("authorization_code")
-                .build();
+    public String buildNaverTokenRequest(String authCode) {
+        return "client_id=" + naverClientId
+                + "&client_secret=" + naverClientSecret
+                + "&code=" + authCode
+                + "&grant_type=authorization_code";
     }
 
 }

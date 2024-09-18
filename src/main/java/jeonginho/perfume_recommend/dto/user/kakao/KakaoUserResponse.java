@@ -7,6 +7,7 @@ import java.util.List;
 @Data
 public class KakaoUserResponse {
     private Long id;
+    private String access_token;
     private KakaoAccount kakao_account;
 
     @Data

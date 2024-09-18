@@ -56,48 +56,27 @@ const Login = () => {
 
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
-    const code = queryParams.get('code');
+    const token = queryParams.get('token');
 
-    if (code) {
-      const fetchToken = async () => {
-        try {
-          const response = await axios.post(
-            'https://kauth.kakao.com/oauth/token',
-            null,
-            {
-              params: {
-                grant_type: 'authorization_code',
-                client_id: 'YOUR_CLIENT_ID', 
-                redirect_uri: 'http://localhost:3000/login',  
-                code: code,
-                client_secret: 'YOUR_CLIENT_SECRET' 
-              },
-              headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-              }
-            }
-          );
-
-          const { access_token } = response.data;
-          localStorage.setItem('token', access_token);
-          console.log('Token saved:', access_token);
-          navigate('/');
-        } catch (error) {
-          console.error('토큰 요청 실패:', error);
-        }
-      };
-      
-      fetchToken();
+    if (token) {
+      try {
+        localStorage.setItem('token', token);
+        console.log('Token saved in localStorage:', token);
+        navigate('/');
+      } catch (error) {
+        console.error('Failed to save token:', error);
+      }
     }
   }, [navigate]);
 
   const handleSocialLogin = async (provider) => {
     try {
       let loginUrl;
-      if (provider === 'kakao') {
-        loginUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=YOUR_CLIENT_ID&redirect_uri=http://localhost:3000/login`;
-      } else if (provider === 'google') {
+      if (provider === 'google') {
         const response = await axios.get('http://localhost:8080/api/v1/oauth2/google/url');
+        loginUrl = response.data;
+      } else if (provider === 'kakao') {
+        const response = await axios.get('http://localhost:8080/api/v1/oauth2/kakao/url');
         loginUrl = response.data;
       } else if (provider === 'naver') {
         const response = await axios.get('http://localhost:8080/api/v1/oauth2/naver/url');
