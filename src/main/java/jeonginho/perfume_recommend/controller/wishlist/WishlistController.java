@@ -29,7 +29,7 @@ public class WishlistController {
     }
 
     // 특정 찜 항목 삭제 API
-    @DeleteMapping
+    @DeleteMapping("/remove")
     public void removeWishlist(@RequestHeader("Authorization") String token, @RequestParam String perfumeId) {
         String jwtToken = token.substring(7);
         wishlistService.removeWishlist(jwtToken, perfumeId);
