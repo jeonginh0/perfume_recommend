@@ -3,6 +3,8 @@ import Navbar from '../css/Navbar.js';
 import '../css/Recommend.css';
 import { GoArrowLeft } from 'react-icons/go';
 import axios from 'axios';
+import { IoIosHeartEmpty, IoIosHeart } from 'react-icons/io';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Recommend = () => {
     const [currentStep, setCurrentStep] = useState(1); // 현재 설문 단계
@@ -12,6 +14,9 @@ const Recommend = () => {
     const [isResultVisible, setIsResultVisible] = useState(false); // 결과 표시 상태
     const [recommendations, setRecommendations] = useState([]); // 추천 결과 저장
     const [errorMessage, setErrorMessage] = useState(''); // 오류 메시지 관리
+    const [likedPerfumes, setLikedPerfumes] = useState([]); 
+    const navigate = useNavigate();
+    const location = useLocation();
 
     // 고정된 질문 순서 배열
     const questionOrder = ['category', 'season', 'situation', 'duration'];
@@ -193,6 +198,7 @@ const submitSurveyResponses = async () => {
                 setRecommendations(response.data);
                 setIsLoading(false);
                 setIsResultVisible(true);
+                sessionStorage.setItem('recommendations', JSON.stringify(response.data)); // 결과를 세션 스토리지에 저장
                 console.log('추천된 향수 목록:', response.data);
             } else {
                 setErrorMessage('추천 결과 조회 실패');
@@ -310,12 +316,142 @@ const submitSurveyResponses = async () => {
         </div>
     );
 
+    // 찜 토글 기능
+    const toggleLike = async (event, perfume) => {
+        event.stopPropagation();
+        const perfumeId = perfume.id;
+        
+        if (!localStorage.getItem('token')) {
+            alert("로그인 후 사용 가능합니다.");
+            return;
+        }
+    
+        // UI 즉시 업데이트
+        setLikedPerfumes((prevLiked) => {
+            if (prevLiked.includes(perfumeId)) {
+                return prevLiked.filter(id => id !== perfumeId); // 해제된 경우
+            } else {
+                return [...prevLiked, perfumeId]; // 추가된 경우
+            }
+        });
+    
+        try {
+            if (likedPerfumes.includes(perfumeId)) {
+                // 찜 해제 요청
+                await removeFromWishlist(perfumeId);
+                console.log("찜 삭제 성공!");
+            } else {
+                // 찜 추가 요청
+                await addToWishlist(perfumeId);
+                console.log("찜 성공!");
+            }
+        } catch (error) {
+            console.error('찜 상태 변경 중 오류가 발생했습니다:', error);
+    
+            // 에러 발생 시, 이전 상태로 롤백
+            setLikedPerfumes((prevLiked) => {
+                if (likedPerfumes.includes(perfumeId)) {
+                    return [...prevLiked, perfumeId]; // 에러 발생 시 다시 추가
+                } else {
+                    return prevLiked.filter(id => id !== perfumeId); // 에러 발생 시 다시 해제
+                }
+            });
+        }
+    };
+
+    // 찜 추가 기능
+    const addToWishlist = async (perfumeId) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert("로그인 후 사용 가능합니다.");
+            return;
+        }
+        try {
+            const response = await fetch(`http://localhost:8080/api/wishlist?perfumeId=${perfumeId}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error('찜 추가 중 오류가 발생했습니다.');
+            }
+            // 성공적으로 추가되면 상태 업데이트
+            setLikedPerfumes(prevLiked => [...prevLiked, perfumeId]);
+            console.log("찜이 성공적으로 추가되었습니다.");
+        } catch (error) {
+            console.error('API 호출 중 오류:', error);
+        }
+    };
+    
+    // 찜 해제 기능
+    const removeFromWishlist = async (perfumeId) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert("로그인 후 사용 가능합니다.");
+            return;
+        }
+        try {
+            const response = await fetch(`http://localhost:8080/api/wishlist?perfumeId=${perfumeId}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error('찜 삭제 중 오류가 발생했습니다.');
+            }
+            console.log("찜이 성공적으로 삭제되었습니다.");
+        } catch (error) {
+            console.error('API 호출 중 오류:', error);
+        }
+    };
+
+    // 페이지가 마운트될 때 추천 결과가 전달되었는지 확인
+    useEffect(() => {
+        if (location.state?.fromDetail) {
+            setRecommendations(location.state.recommendations);
+            setIsResultVisible(true);
+        }
+    }, [location.state]);
+
+    // 향수 상세페이지로 이동 시 추천 결과 상태를 함께 전달
+    const handlePerfumeClick = (perfume) => {
+        navigate(`/perfumes/${encodeURIComponent(perfume.perfume)}`, { 
+            state: { 
+                perfume, 
+                fromDetail: true, 
+                recommendations 
+            } 
+        });
+    };  
+
+    useEffect(() => {
+        // 세션 저장된 추천 결과가 있으면 상태를 복원
+        const savedRecommendations = sessionStorage.getItem('recommendations');
+        if (savedRecommendations) {
+            setRecommendations(JSON.parse(savedRecommendations));
+            setIsResultVisible(true);
+        }
+    }, []);
+
+    useEffect(() => {
+        // 추천 결과가 갱신될 때마다 세션 스토리지에 저장
+        if (isResultVisible) {
+            sessionStorage.setItem('recommendations', JSON.stringify(recommendations));
+        }
+    }, [recommendations, isResultVisible]);
+
     const renderResults = () => (
         <div className="results-container">
             <h2>추천 향수</h2>
             <div className="perfume-grid">
                 {recommendations.map((perfume, index) => (
-                    <div className="perfume-item-2" key={index}>
+                    <div 
+                        className="perfume-item-2" 
+                        key={index} 
+                        onClick={() => handlePerfumeClick(perfume)} 
+                    >
                         <img src={perfume.image} alt={perfume.perfume} />
                         <p className="brand-p">{perfume.brand}</p>
                         <p>{perfume.perfume}</p>
@@ -323,12 +459,16 @@ const submitSurveyResponses = async () => {
                         <p className="acode">
                             {Array.isArray(perfume.acode) ? perfume.acode.map(ac => `#${ac}`).join(' ') : ''}
                         </p>
+                        <div className="heart-icon" onClick={(event) => toggleLike(event, perfume)}>
+                            {likedPerfumes.includes(perfume.id) ? <IoIosHeart size={25} color='#FC7979'/> : <IoIosHeartEmpty  size={25}/>}
+                        </div>
                     </div>
                 ))}
             </div>
             <button className="retry-button" onClick={handleRetryClick}>다시 추천받기</button>
         </div>
     );
+    
 
     return (
         <>

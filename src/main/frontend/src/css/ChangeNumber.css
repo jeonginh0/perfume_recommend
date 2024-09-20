@@ -14,7 +14,7 @@
     margin-bottom: 10px;
 }
 
-.phone-change-container p {
+/* .phone-change-container p {
     margin: 0;
     font-family: 'Inter';
     font-style: normal;
@@ -23,7 +23,7 @@
     line-height: 19px;
     text-align: center;
     color: #696F79;
-}
+} */
 
 .phone-change-container input {
     padding: 10px;
@@ -82,4 +82,25 @@
 
 .p-input input::placeholder {
     color: #D9D9D9;
+}
+
+.ch-num {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+    color: #000000;
+    /* width: 116px; */
+    height: 46px;
+    border: 1px solid #DFDFDF;
+    border-radius: 6px;
+    background-color: #fff;
+    margin-left: auto;
+    cursor: pointer;
+}
+
+.input-err {
+    display:grid;
 }

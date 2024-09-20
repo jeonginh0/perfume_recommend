@@ -1,94 +1,73 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../css/ChangeNumber.css'; 
+import '../css/ChangePassword.css';
 import Navbar from '../css/Navbar.js';
 
-const ChangeNumber = () => {
-    const [phoneNumber, setPhoneNumber] = useState('');
+const ChangePassword = () => {
+    const [email, setEmail] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [isVerified, setIsVerified] = useState(false);
     const [error, setError] = useState('');
-    const [userId, setUserId] = useState(null);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchUserInfo = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:8080/api/users/me', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                setUserId(response.data.id); // 사용자 ID 저장
-            } catch (error) {
-                console.error('사용자 정보를 가져오는 중 오류가 발생했습니다:', error);
-            }
-        };
-        fetchUserInfo();
-    }, []);
-
-    const handleVerificationRequest = async () => {
+    // 이메일 인증 요청 함수
+    const handleEmailVerificationRequest = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`http://localhost:8080/api/verify-phone`, { phoneNumber }, {
+            await axios.post(`http://localhost:8080/api/users/send-verification-code?email=${email}`, {}, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
-            setError('');
+            setError('인증번호가 이메일로 발송되었습니다.');
         } catch (error) {
-            console.error('인증 요청 오류:', error.response ? error.response.data : error.message);
-            setError('유효하지 않은 전화번호입니다.');
+            console.error('이메일 인증 요청 오류:', error.response ? error.response.data : error.message);
+            setError('유효하지 않은 이메일 주소입니다.');
         }
     };
 
+    // 인증번호 확인 함수
     const handleVerificationCheck = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post(`http://localhost:8080/api/verify-code`, {
-                phoneNumber,
-                verificationCode
-            }, {
+            await axios.post(`http://localhost:8080/api/users/verify-code?email=${email}&code=${verificationCode}`, {}, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
-            if (response.data.verified) {
-                setIsVerified(true);
-                setError('');
-            } else {
-                setError('인증번호가 올바르지 않습니다.');
-            }
+            setIsVerified(true);
+            setError('인증이 완료되었습니다. 이제 비밀번호를 변경할 수 있습니다.');
         } catch (error) {
             console.error('인증 확인 오류:', error.response ? error.response.data : error.message);
             setError('인증번호가 올바르지 않습니다.');
         }
     };
 
-    const handlePhoneNumberChange = async () => {
+    // 비밀번호 변경 함수
+    const handlePasswordChange = async () => {
         try {
             const token = localStorage.getItem('token');
-            if (!userId) {
-                setError('사용자 정보를 불러오지 못했습니다.');
+            if (newPassword !== confirmPassword) {
+                setError('비밀번호가 일치하지 않습니다.');
                 return;
             }
 
-            await axios.post(`http://localhost:8080/api/users/${userId}/phone`, { phoneNumber }, {
+            await axios.post(`http://localhost:8080/api/users/password`, { newPassword }, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
-
-            // 성공적으로 전화번호가 변경되면 마이페이지로 이동
-            navigate('/mypage');
+            alert('비밀번호가 성공적으로 변경되었습니다.');
+            navigate('/login'); // 변경 후 로그인 페이지로 이동
         } catch (error) {
-            console.error('전화번호 변경 오류:', error.response ? error.response.data : error.message);
-            setError('전화번호 변경에 문제가 발생했습니다.');
+            console.error('비밀번호 변경 오류:', error.response ? error.response.data : error.message);
+            setError('비밀번호 변경에 문제가 발생했습니다.');
         }
     };
 
@@ -96,44 +75,80 @@ const ChangeNumber = () => {
         <>
             <Navbar />
             <div className="phone-change-container">
-                <h2>전화번호 변경</h2>
-                <p>새로 변경할 휴대폰 번호를 입력해주세요. 입력한 휴대폰 번호로 인증번호가 발송됩니다.</p>
-                <div className="p-input">
-                    <p className="p-input-label">전화번호</p>
-                    <div className="input-container">
-                        <input 
-                            type="text" 
-                            value={phoneNumber} 
-                            onChange={(e) => setPhoneNumber(e.target.value)} 
-                            placeholder="예) 010-1234-5678"
-                        />
-                        <button onClick={handleVerificationRequest}>인증</button>
+                <h2>이메일 인증</h2>
+                <p>이메일을 입력하고 인증번호를 받아주세요. 인증이 완료되면 새 비밀번호를 입력할 수 있습니다.</p>
+                
+                {!isVerified ? (
+                    <>
+                        <div className="p-input">
+                            <p className="p-input-label">이메일</p>
+                            <div className="input-container">
+                                <div className="input-err">
+                                    <input 
+                                        type="text" 
+                                        value={email} 
+                                        onChange={(e) => setEmail(e.target.value)} 
+                                        placeholder="예) fragrance@fragrance.co.kr"
+                                    />
+                                    {error && <p className="error-message">{error}</p>}
+                                    
+                                </div>
+                                <button className="ch-num" onClick={handleEmailVerificationRequest}>인증</button>
+                            </div>
+                        </div>
+                        <div className="p-input">
+                            <p className="p-input-label">인증번호</p>
+                            <div className="input-container">
+                                <div className="input-err">
+                                    <input 
+                                        type="text" 
+                                        value={verificationCode} 
+                                        onChange={(e) => setVerificationCode(e.target.value)} 
+                                        placeholder="인증번호 입력"
+                                    />
+                                </div>
+                                <button className="ch-num" onClick={handleVerificationCheck}>확인</button>
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                    <div className="p-input">
+                        <p className="p-input-label">신규 비밀번호</p>
+                        <div className="input-container">
+                            <div className="input-err">
+                                <input 
+                                    type="password" 
+                                    value={newPassword} 
+                                    onChange={(e) => setNewPassword(e.target.value)} 
+                                    placeholder="신규 비밀번호 입력"
+                                />
+                            </div>
+                        </div>
+                        <div className="p-input">
+                            <p className="p-input-label">신규 비밀번호 확인</p>
+                            <div className="input-container">
+                                <div className="input-err">
+                                    <input 
+                                        type="password" 
+                                        value={confirmPassword} 
+                                        onChange={(e) => setConfirmPassword(e.target.value)} 
+                                        placeholder="비밀번호 확인"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <button 
+                            className="ch-num" 
+                            onClick={handlePasswordChange}
+                            disabled={!newPassword || newPassword !== confirmPassword}
+                        >
+                            변경
+                        </button>
                     </div>
-                    {error && <p className="error-message">{error}</p>}
-                </div>
-                <div className="p-input">
-                    <p className="p-input-label">인증번호</p>
-                    <div className="input-container">
-                        <input 
-                            type="text" 
-                            value={verificationCode} 
-                            onChange={(e) => setVerificationCode(e.target.value)} 
-                            placeholder="인증번호 입력"
-                        />
-                        <button onClick={handleVerificationCheck}>확인</button>
-                    </div>
-                    {error && <p className="error-message">{error}</p>}
-                </div>
-                <button 
-                    className="change-button" 
-                    onClick={handlePhoneNumberChange}
-                    disabled={!phoneNumber || !isVerified} // 인증 완료 후에만 버튼 활성화
-                >
-                    전화번호 변경하기
-                </button>
+                )}
             </div>
         </>
     );
 };
 
-export default ChangeNumber;
+export default ChangePassword;

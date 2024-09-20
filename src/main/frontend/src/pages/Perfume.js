@@ -29,6 +29,7 @@ const Perfume = () => {
         '오 드 코롱'
     ];
 
+    // 향수 데이터 가져오기
     const fetchPerfumes = async (brands = [], durations = []) => {
         setLoading(true);
         try {
@@ -52,6 +53,7 @@ const Perfume = () => {
         setLoading(false);
     };
 
+    // 찜한 향수 목록 가져오기
     const fetchLikedPerfumes = async () => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -69,58 +71,23 @@ const Perfume = () => {
                 throw new Error('찜 목록을 불러오는 중 오류가 발생했습니다.');
             }
             const data = await response.json();
-            const wishlistItems = Array.isArray(data) ? data : [];
-            setLikedPerfumes(wishlistItems.map(item => item.perfumeId)); 
+            
+            // 응답 데이터가 객체 형태이므로, 원하는 값들을 추출
+            if (data && Array.isArray(data.perfumes)) {
+                const perfumeIds = data.perfumes.map(item => item.id); // perfumeId가 아니라 id로 수정
+                setLikedPerfumes(perfumeIds); 
+            }
         } catch (error) {
             console.error('찜 목록 불러오기 실패:', error);
         }
-    };    
+    };  
 
     useEffect(() => {
         fetchPerfumes();
         fetchLikedPerfumes();
     }, []);
 
-    const toggleDropdown = () => {
-        setIsDropdownOpen(prev => !prev);
-        if (isDurationDropdownOpen) {
-            setIsDurationDropdownOpen(false);
-        }
-    };
-
-    const toggleDurationDropdown = () => {
-        setIsDurationDropdownOpen(prev => !prev);
-        if (isDropdownOpen) {
-            setIsDropdownOpen(false);
-        }
-    };
-
-    const handleBrandSelect = (brand) => {
-        setSelectedBrands(prevSelected => {
-            if (prevSelected.includes(brand)) {
-                return prevSelected.filter(b => b !== brand);
-            } else {
-                return [...prevSelected, brand];
-            }
-        });
-    };
-
-    const handleDurationSelect = (duration) => {
-        setSelectedDurations(prevSelected =>
-            prevSelected.includes(duration)
-                ? prevSelected.filter(d => d !== duration)
-                : [...prevSelected, duration]
-        );
-    };
-
-    const removeBrand = (brand) => {
-        setSelectedBrands(prevSelected => prevSelected.filter(b => b !== brand));
-    };
-
-    const removeDuration = (duration) => {
-        setSelectedDurations(prevSelected => prevSelected.filter(d => d !== duration));
-    };
-
+    // 찜 추가 기능
     const addToWishlist = async (perfumeId) => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -137,12 +104,15 @@ const Perfume = () => {
             if (!response.ok) {
                 throw new Error('찜 추가 중 오류가 발생했습니다.');
             }
+            // 성공적으로 추가되면 상태 업데이트
+            setLikedPerfumes(prevLiked => [...prevLiked, perfumeId]);
             console.log("찜이 성공적으로 추가되었습니다.");
         } catch (error) {
             console.error('API 호출 중 오류:', error);
         }
     };
     
+    // 찜 해제 기능
     const removeFromWishlist = async (perfumeId) => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -150,8 +120,8 @@ const Perfume = () => {
             return;
         }
         try {
-            const response = await fetch(`http://localhost:8080/api/wishlist/remove?perfumeId=${perfumeId}`, {
-                method: 'DELETE',
+            const response = await fetch(`http://localhost:8080/api/wishlist?perfumeId=${perfumeId}`, {
+                method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -163,43 +133,86 @@ const Perfume = () => {
         } catch (error) {
             console.error('API 호출 중 오류:', error);
         }
-    };    
-
-    const toggleLike = async (event, perfume) => {
-        event.stopPropagation();
-        const perfumeId = perfume.id;
+    };
         
-        if (!localStorage.getItem('token')) {
-            alert("로그인 후 사용 가능합니다.");
-            return;
-        }
+
+    // 찜 토글 기능
+    const toggleLike = async (event, perfume) => {
+    event.stopPropagation();
+    const perfumeId = perfume.id;
     
-        try {
+    if (!localStorage.getItem('token')) {
+        alert("로그인 후 사용 가능합니다.");
+        return;
+    }
+
+    // UI 즉시 업데이트
+    setLikedPerfumes((prevLiked) => {
+        if (prevLiked.includes(perfumeId)) {
+            return prevLiked.filter(id => id !== perfumeId); // 해제된 경우
+        } else {
+            return [...prevLiked, perfumeId]; // 추가된 경우
+        }
+    });
+
+    try {
+        if (likedPerfumes.includes(perfumeId)) {
+            // 찜 해제 요청
+            await removeFromWishlist(perfumeId);
+            console.log("찜 삭제 성공!");
+        } else {
+            // 찜 추가 요청
+            await addToWishlist(perfumeId);
+            console.log("찜 성공!");
+        }
+    } catch (error) {
+        console.error('찜 상태 변경 중 오류가 발생했습니다:', error);
+
+        // 에러 발생 시, 이전 상태로 롤백
+        setLikedPerfumes((prevLiked) => {
             if (likedPerfumes.includes(perfumeId)) {
-                // 찜 해제 요청
-                await removeFromWishlist(perfumeId);
-                // 요청이 성공하면 로컬 상태 업데이트 (해제)
-                setLikedPerfumes(prevLiked => prevLiked.filter(id => id !== perfumeId));
-                console.log("찜 삭제 성공!"); // 콘솔에 찜 삭제 성공 메시지 출력
+                return [...prevLiked, perfumeId]; // 에러 발생 시 다시 추가
             } else {
-                // 찜 추가 요청
-                await addToWishlist(perfumeId);
-                // 요청이 성공하면 로컬 상태 업데이트 (추가)
-                setLikedPerfumes(prevLiked => [...prevLiked, perfumeId]);
-                console.log("찜 성공!"); // 콘솔에 찜 성공 메시지 출력
+                return prevLiked.filter(id => id !== perfumeId); // 에러 발생 시 다시 해제
             }
-    
-            // 찜 목록 업데이트 후, 다시 가져와 최신 상태 유지
-            fetchLikedPerfumes();
-        } catch (error) {
-            console.error('찜 상태 변경 중 오류가 발생했습니다:', error);
-        }
-    };    
+        });
+    }
+};
+
+
+    // 선택한 브랜드 추가/제거
+    const handleBrandSelect = (brand) => {
+        setSelectedBrands(prevSelected => {
+            if (prevSelected.includes(brand)) {
+                return prevSelected.filter(b => b !== brand);
+            } else {
+                return [...prevSelected, brand];
+            }
+        });
+    };
+
+    // 선택한 지속력 추가/제거
+    const handleDurationSelect = (duration) => {
+        setSelectedDurations(prevSelected =>
+            prevSelected.includes(duration)
+                ? prevSelected.filter(d => d !== duration)
+                : [...prevSelected, duration]
+        );
+    };
+
+    const removeBrand = (brand) => {
+        setSelectedBrands(prevSelected => prevSelected.filter(b => b !== brand));
+    };
+
+    const removeDuration = (duration) => {
+        setSelectedDurations(prevSelected => prevSelected.filter(d => d !== duration));
+    };
 
     const handlePerfumeClick = (perfume) => {
         navigate(`/perfumes/${encodeURIComponent(perfume.perfume)}`, { state: { perfume } });
     };
 
+    // 무한 스크롤 로드 기능
     const loadMorePerfumes = useCallback((entries) => {
         const [entry] = entries;
         if (entry.isIntersecting && !loading) {
@@ -263,6 +276,15 @@ const Perfume = () => {
         }
     };
 
+    const toggleDropdown = () => {
+        setIsDropdownOpen(prevState => !prevState); 
+    };
+    
+    const toggleDurationDropdown = () => {
+        setIsDurationDropdownOpen(prevState => !prevState); 
+    };
+
+    // 브랜드 리스트를 중복 없이 정렬하여 가져오기
     const uniqueBrands = [...new Set(perfumes.map(perfume => perfume.brand.trim()))].sort();
 
     return (

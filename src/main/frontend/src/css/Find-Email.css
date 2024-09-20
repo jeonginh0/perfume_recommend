@@ -35,8 +35,28 @@
     padding-top: 80px;
     text-align: center;
   }
+
+  .find-email-container-2 {
+    width: 100%;
+    max-width: 447px;
+    margin: 90px auto;
+    padding-top: 80px;
+    text-align: center;
+  }
     
   .find-email-container h2 {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 36px;
+    align-items: center;
+    color: #000000;
+    border-bottom: 1px solid #F5F5F5;
+    padding-bottom: 26px;
+  }
+
+  .find-email-container-2 h2 {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
@@ -56,6 +76,17 @@
     font-size: 16px;
     line-height: 19px;
     display: flex;
+    align-items: center;
+    color: #696F79;
+  }
+
+  .find-email-container-2 p {
+    margin-bottom: 62px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
     align-items: center;
     color: #696F79;
   }
@@ -120,3 +151,28 @@
     color: #FF0000;
     margin-bottom: 0;
   }
+
+  .login {
+    width: 40%;
+    height: 64px;
+    padding: 10px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.find-password-button {
+    width: 40%;
+    height: 64px;
+    padding: 10px;
+    background-color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    border: 1px solid #d9d9d9;
+    cursor: pointer;
+}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // 페이지 이동을 위한 useNavigate
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../css/Navbar.js';
 import '../css/Mypage.css';
 import { CgProfile } from "react-icons/cg";
@@ -50,6 +50,10 @@ const Mypage = () => {
         navigate('/changenumber'); // 전화번호 변경 페이지로 이동
     };
 
+    const goToPasswordChange = () => {
+        navigate('/changepassword'); // 비밀번호 변경 페이지로 이동
+    };
+
     return (
         <>
             <Navbar />
@@ -72,7 +76,7 @@ const Mypage = () => {
                     </div>
                     <div className="mypage-password">
                         <p className="password-p">비밀번호</p>
-                        <button className="ch-name-button">비밀번호 변경</button>
+                        <button className="ch-name-button" onClick={goToPasswordChange}>비밀번호 변경</button>
                     </div>
                     <div className="ses">
                         <p className="ses-p">회원 탈퇴</p>

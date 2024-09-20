@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../css/ChangeNickname.css'; 
+import '../css/ChangeNickname.css';
 import Navbar from '../css/Navbar.js';
 
 const ChangeNickname = () => {
     const [newNickname, setNewNickname] = useState('');
     const [error, setError] = useState('');
     const [userId, setUserId] = useState(null);
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     useEffect(() => {
         // 사용자 정보를 가져와 ID를 설정
@@ -23,6 +23,7 @@ const ChangeNickname = () => {
                 setUserId(response.data.id); // 사용자 ID 저장
             } catch (error) {
                 console.error('사용자 정보를 가져오는 중 오류가 발생했습니다:', error);
+                setError('사용자 정보를 가져오는데 실패했습니다.');
             }
         };
 
@@ -36,25 +37,34 @@ const ChangeNickname = () => {
                 setError('사용자 정보를 불러오지 못했습니다.');
                 return;
             }
-    
-            // 쿼리 파라미터로 newNickname을 추가
-            const response = await axios.post(`http://localhost:8080/api/users/${userId}/nickname?newNickname=${newNickname}`, {}, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+
+            // URL 쿼리 파라미터로 newNickname 전달
+            const response = await axios.post(
+                `http://localhost:8080/api/users/nickname?newNickname=${newNickname}`,
+                {},
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
                 }
-            });
-    
+            );
+
             console.log(response.data);
 
             // 성공적으로 닉네임이 변경되면 마이페이지로 이동
             navigate('/mypage');
         } catch (error) {
             console.error('닉네임 변경 오류:', error.response ? error.response.data : error.message);
-            setError('중복된 닉네임이 있거나 요청에 문제가 있습니다.');
+
+            // 중복된 닉네임 오류 처리
+            if (error.response && error.response.status === 500) {
+                alert('이미 존재하는 닉네임입니다. 다른 닉네임을 입력해주세요.');
+            } else {
+                setError('중복된 닉네임이 있거나 요청에 문제가 있습니다.');
+            }
         }
     };
-    
 
     return (
         <>

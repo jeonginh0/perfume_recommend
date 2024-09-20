@@ -70,7 +70,7 @@ const Write = () => {
             console.log('요청 데이터:', { title, content });
             console.log('응답 데이터:', response.data);
         
-            if (response.status === 201) {
+            if (response.status === 200) {
                 alert('글이 성공적으로 작성되었습니다.');
                 navigate('/community');
             } else {
