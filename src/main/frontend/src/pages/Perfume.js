@@ -120,7 +120,7 @@ const Perfume = () => {
             return;
         }
         try {
-            const response = await fetch(`http://localhost:8080/api/wishlist?perfumeId=${perfumeId}`, {
+            const response = await fetch(`http://localhost:8080/api/wishlist/remove?perfumeId=${perfumeId}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -134,50 +134,49 @@ const Perfume = () => {
             console.error('API 호출 중 오류:', error);
         }
     };
-        
 
     // 찜 토글 기능
     const toggleLike = async (event, perfume) => {
-    event.stopPropagation();
-    const perfumeId = perfume.id;
-    
-    if (!localStorage.getItem('token')) {
-        alert("로그인 후 사용 가능합니다.");
-        return;
-    }
+        event.stopPropagation()
+        const perfumeId = perfume.id
 
-    // UI 즉시 업데이트
-    setLikedPerfumes((prevLiked) => {
-        if (prevLiked.includes(perfumeId)) {
-            return prevLiked.filter(id => id !== perfumeId); // 해제된 경우
-        } else {
-            return [...prevLiked, perfumeId]; // 추가된 경우
+        if (!localStorage.getItem('token')) {
+            alert("로그인 후 사용 가능합니다.")
+            return
         }
-    });
 
-    try {
-        if (likedPerfumes.includes(perfumeId)) {
-            // 찜 해제 요청
-            await removeFromWishlist(perfumeId);
-            console.log("찜 삭제 성공!");
-        } else {
-            // 찜 추가 요청
-            await addToWishlist(perfumeId);
-            console.log("찜 성공!");
-        }
-    } catch (error) {
-        console.error('찜 상태 변경 중 오류가 발생했습니다:', error);
-
-        // 에러 발생 시, 이전 상태로 롤백
+        // UI 즉시 업데이트
         setLikedPerfumes((prevLiked) => {
-            if (likedPerfumes.includes(perfumeId)) {
-                return [...prevLiked, perfumeId]; // 에러 발생 시 다시 추가
+            if (prevLiked.includes(perfumeId)) {
+                return prevLiked.filter(id => id !== perfumeId) // 해제된 경우
             } else {
-                return prevLiked.filter(id => id !== perfumeId); // 에러 발생 시 다시 해제
+                return [...prevLiked, perfumeId] // 추가된 경우
             }
-        });
+        })
+
+        try {
+            if (likedPerfumes.includes(perfumeId)) {
+                // 찜 해제 요청
+                await removeFromWishlist(perfumeId) // 수정된 부분
+                console.log("찜 삭제 성공!")
+            } else {
+                // 찜 추가 요청
+                await addToWishlist(perfumeId)
+                console.log("찜 성공!")
+            }
+        } catch (error) {
+            console.error('찜 상태 변경 중 오류가 발생했습니다:', error)
+
+            // 에러 발생 시, 이전 상태로 롤백
+            setLikedPerfumes((prevLiked) => {
+                if (likedPerfumes.includes(perfumeId)) {
+                    return [...prevLiked, perfumeId] // 에러 발생 시 다시 추가
+                } else {
+                    return prevLiked.filter(id => id !== perfumeId) // 에러 발생 시 다시 해제
+                }
+            })
+        }
     }
-};
 
 
     // 선택한 브랜드 추가/제거

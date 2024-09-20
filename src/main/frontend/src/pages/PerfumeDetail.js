@@ -72,7 +72,7 @@ const PerfumeDetail = () => {
             return;
         }
         try {
-            const response = await fetch(`http://localhost:8080/api/wishlist?perfumeId=${perfumeId}`, {
+            const response = await fetch(`http://localhost:8080/api/wishlist/remove?perfumeId=${perfumeId}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
