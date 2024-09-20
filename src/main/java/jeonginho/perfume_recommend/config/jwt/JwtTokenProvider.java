@@ -24,7 +24,7 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
 
-        return claims.getSubject();  // 토큰의 subject에서 userId 추출
+        return claims.get("userId", String.class);  // 토큰의 claims에서 userId 추출
     }
 
     // 토큰에서 이메일 추출
@@ -47,7 +47,7 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setSubject(email)
-                .claim("userId", userId)
+                .claim("userId", userId)  // 사용자 ID를 클레임에 추가
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS256, jwtSecret)
@@ -62,14 +62,5 @@ public class JwtTokenProvider {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    // JWT 토큰에서 사용자 ID 추출
-    public String getUserIdFromToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody()
-                .get("userId", String.class);
     }
 }

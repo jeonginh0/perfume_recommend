@@ -80,6 +80,7 @@ public class WishlistService {
 
         if (wishlist != null && wishlist.getPerfumeIds() != null) {
             wishlist.getPerfumeIds().remove(perfumeId);
+            System.out.println("삭제된 후 향수 ID 목록: " + wishlist.getPerfumeIds());
             if (wishlist.getPerfumeIds().isEmpty()) {
                 wishlistRepository.delete(wishlist);
             } else {

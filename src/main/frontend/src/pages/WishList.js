@@ -48,7 +48,7 @@ const WishList = () => {
     
         try {
             const response = await fetch(`http://localhost:8080/api/wishlist/remove?perfumeId=${perfumeId}`, {
-                method: 'DELETE', 
+                method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },

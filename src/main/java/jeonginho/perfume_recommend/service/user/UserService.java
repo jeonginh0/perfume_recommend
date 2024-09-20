@@ -32,7 +32,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
+    private final JwtTokenProvider jwtTokenProvider;
     private final Environment env;
     private final RestTemplate restTemplate;
 
@@ -66,7 +66,7 @@ public class UserService {
     }
 
     public String getEmailFromToken(String token) {
-        return jwtUtil.extractEmail(token);
+        return jwtTokenProvider.getEmailFromToken(token); // JwtTokenProvider 사용
     }
 
     public User getUserByEmail(String email) {
@@ -79,7 +79,7 @@ public class UserService {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             if (passwordEncoder.matches(password, user.getPassword())) {
-                return jwtUtil.generateToken(user.getEmail());
+                return jwtTokenProvider.createToken(email, user.getId()); // ID 추가
             } else {
                 throw new Exception("Invalid credentials");
             }
@@ -89,7 +89,7 @@ public class UserService {
     }
 
     public User updateUserPreferences(String email, UserPreferencesDto preferencesDto, String token) {
-        String tokenEmail = jwtUtil.extractEmail(token);
+        String tokenEmail = jwtTokenProvider.getEmailFromToken(token);
 
         if (!email.equals(tokenEmail)) {
             throw new SecurityException("Invalid token for the provided email");
@@ -97,6 +97,7 @@ public class UserService {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
+
 
         return userRepository.save(user);
     }
