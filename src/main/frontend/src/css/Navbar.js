@@ -26,6 +26,7 @@ const Navbar = () => {
         if (response.data && response.data.nickname) {
           setNickname(response.data.nickname); // 서버 응답에서 유저 이름 가져오기
           setIsLoggedIn(true);
+          console.log(response.data);
         } else {
           console.error('유저 닉네임이 응답에 포함되어 있지 않습니다.');
           setIsLoggedIn(false);

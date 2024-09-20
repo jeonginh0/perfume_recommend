@@ -3,35 +3,65 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../css/Navbar.js';
 import '../css/PostDetail.css';
-import { HiArrowLeft } from 'react-icons/hi'; 
+import { HiArrowLeft } from 'react-icons/hi';
+import { CgProfile } from 'react-icons/cg'; // User icon for comments
 
 const PostDetail = () => {
-    const { postId } = useParams(); // URL에서 postId를 가져옴
-    const [post, setPost] = useState(null);
-    const [authorNickname, setAuthorNickname] = useState(''); // 작성자 닉네임 저장
-    const [comments, setComments] = useState([]); // 댓글 리스트 저장
-    const [newComment, setNewComment] = useState(''); // 새 댓글 저장
-    const [editCommentId, setEditCommentId] = useState(null); // 수정 중인 댓글 ID
-    const [editCommentContent, setEditCommentContent] = useState(''); // 수정 중인 댓글 내용
-    const [currentUserId, setCurrentUserId] = useState(null); // 현재 로그인한 사용자 ID
+    const { postId } = useParams(); 
+    const [post, setPost] = useState(null); // Post data
+    const [comments, setComments] = useState([]); // List of comments
+    const [newComment, setNewComment] = useState(''); // New comment input
+    const [editCommentId, setEditCommentId] = useState(null); // ID of the comment being edited
+    const [editCommentContent, setEditCommentContent] = useState(''); // Content of the comment being edited
+    const [currentUserId, setCurrentUserId] = useState(null); // ID of the current logged-in user
+    const [currentUserNickname, setCurrentUserNickname] = useState(''); // Nickname of the current user
+    const [authorNickname, setAuthorNickname] = useState(''); // Author's nickname
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // Login status
+    const [nickname, setNickname] = useState(''); // Logged-in user's nickname
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            axios.get('http://localhost:8080/api/users/me', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (response.data && response.data.nickname) {
+                    setNickname(response.data.nickname); 
+                    setIsLoggedIn(true);
+                } else {
+                    console.error('유저 닉네임이 응답에 포함되어 있지 않습니다.');
+                    setIsLoggedIn(false);
+                }
+            })
+            .catch(error => {
+                console.error('유저 정보를 가져오는데 실패했습니다.', error);
+            });
+        }
+    }, []);
 
     useEffect(() => {
         const fetchPostAndComments = async () => {
             try {
-                // 게시글 가져오기
                 const postResponse = await axios.get(`http://localhost:8080/api/community/posts/${postId}`);
                 setPost(postResponse.data);
-
-                // 작성자의 userId를 사용하여 작성자 닉네임 가져오기
+                
                 const authorResponse = await axios.get(`http://localhost:8080/api/users/nickname/${postResponse.data.userId}`);
-                setAuthorNickname(authorResponse.data);
+                setAuthorNickname(authorResponse.data); 
+                
+                const storedComments = localStorage.getItem(`comments_${postId}`);
+                if (storedComments) {
+                    setComments(JSON.parse(storedComments));
+                } else {
+                    const commentsResponse = await axios.get(`http://localhost:8080/api/community/comments/${postId}`);
+                    setComments(commentsResponse.data); 
+                    localStorage.setItem(`comments_${postId}`, JSON.stringify(commentsResponse.data)); 
+                }
 
-                // 댓글 가져오기
-                const commentsResponse = await axios.get(`http://localhost:8080/api/community/comments/${postId}`);
-                setComments(commentsResponse.data); // 댓글 리스트 설정
-
-                // 로그인한 사용자 정보 가져오기
                 const token = localStorage.getItem('token');
                 if (token) {
                     const userResponse = await axios.get('http://localhost:8080/api/users/me', {
@@ -39,19 +69,22 @@ const PostDetail = () => {
                             'Authorization': `Bearer ${token}`
                         }
                     });
-                    setCurrentUserId(userResponse.data.id); // 현재 로그인한 사용자의 ID 저장
-
-                    // 현재 로그인한 사용자의 ID와 게시글 작성자의 ID를 로그로 출력
-                    console.log("현재 로그인한 사용자 ID:", userResponse.data.id);
-                    console.log("게시글 작성자 ID:", postResponse.data.userId);
+                    setCurrentUserId(userResponse.data.id); 
+                    setCurrentUserNickname(userResponse.data.nickname);
                 }
             } catch (error) {
                 console.error('게시글 또는 댓글 데이터를 가져오는데 실패했습니다.', error);
             }
         };
-
+    
         fetchPostAndComments();
     }, [postId]);
+
+    useEffect(() => {
+        if (comments.length > 0) {
+            localStorage.setItem(`comments_${postId}`, JSON.stringify(comments));
+        }
+    }, [comments, postId]);
 
     const handleCommentSubmit = async () => {
         const token = localStorage.getItem('token');
@@ -74,10 +107,13 @@ const PostDetail = () => {
                     'Content-Type': 'application/json'
                 }
             });
-            setComments([response.data, ...comments]); // 새로운 댓글을 배열의 앞쪽에 추가
+
+            const updatedComments = [{ ...response.data, nickname: currentUserNickname }, ...comments];
+            setComments(updatedComments);
+            localStorage.setItem(`comments_${postId}`, JSON.stringify(updatedComments));
             setNewComment('');
         } catch (error) {
-            console.error('댓글 작성 중 오류가 발생했습니다.', error);
+            console.error('Error submitting comment:', error);
             alert('댓글 작성 중 오류가 발생했습니다.');
         }
     };
@@ -96,9 +132,11 @@ const PostDetail = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                setComments(comments.filter(comment => comment.id !== commentId)); // 댓글 삭제
+                const updatedComments = comments.filter(comment => comment.id !== commentId);
+                setComments(updatedComments);
+                localStorage.setItem(`comments_${postId}`, JSON.stringify(updatedComments));
             } catch (error) {
-                console.error('댓글 삭제 중 오류가 발생했습니다.', error);
+                console.error('Error deleting comment:', error);
                 alert('댓글 삭제 중 오류가 발생했습니다.');
             }
         }
@@ -125,13 +163,16 @@ const PostDetail = () => {
                     'Content-Type': 'application/json'
                 }
             });
-            setComments(comments.map(comment => 
+
+            const updatedComments = comments.map(comment => 
                 comment.id === editCommentId ? { ...comment, content: editCommentContent } : comment
-            ));
+            );
+            setComments(updatedComments);
+            localStorage.setItem(`comments_${postId}`, JSON.stringify(updatedComments));
             setEditCommentId(null);
             setEditCommentContent('');
         } catch (error) {
-            console.error('댓글 수정 중 오류가 발생했습니다.', error);
+            console.error('Error updating comment:', error);
             alert('댓글 수정 중 오류가 발생했습니다.');
         }
     };
@@ -140,21 +181,19 @@ const PostDetail = () => {
         return <div>Loading...</div>;
     }
 
-    // HTML 태그 제거하고 순수 텍스트만 추출
+    // Function to remove HTML tags and return plain text
     const stripHTMLTags = (htmlString) => {
         const doc = new DOMParser().parseFromString(htmlString, 'text/html');
         return doc.body.textContent || "";
     };
 
-    // 날짜 포맷 함수 (community.js에서 사용한 것과 동일)
+    // Function to format date from array to 'yyyy. mm. dd.' format
     const formatDate = (dateArray) => {
-        if (!dateArray || dateArray.length < 3) return '날짜 없음'; // dateArray가 없을 때 처리
-        
-        const year = dateArray[0]; // 연도
-        const month = dateArray[1] + 1; // 월 (0부터 시작하므로 +1 필요)
-        const day = dateArray[2]; // 일
-        
-        return `${year}. ${month}. ${day}.`; // 'yyyy. mm. dd.' 형식으로 변환
+        if (!dateArray || dateArray.length < 3) return '날짜 없음';
+        const year = dateArray[0];
+        const month = dateArray[1];
+        const day = dateArray[2];
+        return `${year}. ${month}. ${day}.`;
     };
 
     return (
@@ -167,14 +206,13 @@ const PostDetail = () => {
                     style={{ cursor: 'pointer' }} 
                 />
                 <h2>{post.title}</h2>
-                <p>작성자: {authorNickname}</p> {/* 작성자 닉네임 표시 */}
-                <p>작성일: {formatDate(post.createdAt)}</p> {/* 날짜 포맷 함수 적용 */}
+                <p>작성자: {authorNickname}</p>
+                <p>작성일: {formatDate(post.createdAt)}</p> 
                 <div className="post-content">
                     {stripHTMLTags(post.content)}
                 </div>
                 
-                {/* 현재 로그인한 사용자와 작성자가 동일할 때만 수정, 삭제 버튼을 표시 */}
-                {String(currentUserId) === String(post.userId) && (
+                {currentUserId && post && String(currentUserId) === String(post.userId) && (
                     <div className="edit-delete">
                         <button onClick={() => 
                             navigate(`/edit/${postId}`, 
@@ -207,42 +245,46 @@ const PostDetail = () => {
                     </div>
                 )}
 
-                {/* 댓글 리스트 */}
                 <div className="comments-section">
                     <h3>댓글</h3>
                     <div className="new-comment-section">
-                    <input 
-                        type="text" 
-                        value={newComment} 
-                        onChange={(e) => setNewComment(e.target.value)} 
-                        placeholder="댓글을 입력하세요" 
-                    />
-                    <button onClick={handleCommentSubmit}>작성하기</button>
-                </div>
+                        <input 
+                            type="text" 
+                            value={newComment} 
+                            onChange={(e) => setNewComment(e.target.value)} 
+                            placeholder="댓글을 입력하세요" 
+                        />
+                        <button onClick={handleCommentSubmit}>작성하기</button>
+                    </div>
                     {comments.map(comment => (
                         <div key={comment.id} className="comment">
-                            {editCommentId === comment.id ? (
-                                <>
-                                    <input 
-                                        type="text" 
-                                        value={editCommentContent} 
-                                        onChange={(e) => setEditCommentContent(e.target.value)}
-                                    />
-                                    <button onClick={handleCommentUpdate}>수정 완료</button>
-                                </>
-                            ) : (
-                                <>
+                            <div className="comment-content">
+                                <div className="comment-au-con">
+                                <CgProfile size={40} className="comment-icon" />
+                                    <p className="comment-author">{comment.nickname || '사용자'}</p>
                                     <p>{comment.content}</p>
-                                    <div className="comment-e-d">
-                                        <button className="comment-e" onClick={() => handleCommentEdit(comment)}>수정</button>
-                                        <button className="comment-d"onClick={() => handleCommentDelete(comment.id)}>삭제</button>
-                                    </div>
-                                </>
-                            )}
+                                </div>
+                                {editCommentId === comment.id ? (
+                                    <>
+                                        <input 
+                                            type="text" 
+                                            value={editCommentContent} 
+                                            onChange={(e) => setEditCommentContent(e.target.value)}
+                                        />
+                                        <button onClick={handleCommentUpdate}>수정 완료</button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="comment-e-d">
+                                            <button className="comment-e" onClick={() => handleCommentEdit(comment)}>수정</button>
+                                            <button className="comment-d" onClick={() => handleCommentDelete(comment.id)}>삭제</button>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
                         </div>
                     ))}
                 </div>
-
             </div>
         </>
     );

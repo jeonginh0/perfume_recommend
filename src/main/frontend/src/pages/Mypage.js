@@ -63,7 +63,7 @@ const Mypage = () => {
                     <div className="mypage-username">
                         <CgProfile size={45} />
                         <p className="username">{userInfo.nickname}</p>
-                        <button className="ch-name-button" onClick={goToNicknameChange}>닉네임 변경</button> {/* 클릭 시 페이지 이동 */}
+                        <button className="ch-name-button" onClick={goToNicknameChange}>닉네임 변경</button> 
                     </div>
                     <div className="mypage-email">
                         <p className="email-p">이메일</p>
@@ -72,7 +72,7 @@ const Mypage = () => {
                     <div className="mypage-number">
                         <p className="number-p">전화번호</p>
                         <p className="number">{userInfo.phoneNumber}</p>
-                        <button className="ch-name-button" onClick={goToPhoneNumberChange}>전화번호 변경</button> {/* 클릭 시 페이지 이동 */}
+                        <button className="ch-name-button" onClick={goToPhoneNumberChange}>전화번호 변경</button> 
                     </div>
                     <div className="mypage-password">
                         <p className="password-p">비밀번호</p>
