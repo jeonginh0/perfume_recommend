@@ -74,7 +74,7 @@ const Perfume = () => {
             
             // 응답 데이터가 객체 형태이므로, 원하는 값들을 추출
             if (data && Array.isArray(data.perfumes)) {
-                const perfumeIds = data.perfumes.map(item => item.id); // perfumeId가 아니라 id로 수정
+                const perfumeIds = data.perfumes.map(item => item.id);
                 setLikedPerfumes(perfumeIds); 
             }
         } catch (error) {
@@ -121,7 +121,7 @@ const Perfume = () => {
         }
         try {
             const response = await fetch(`http://localhost:8080/api/wishlist/remove?perfumeId=${perfumeId}`, {
-                method: 'POST',
+                method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -157,7 +157,7 @@ const Perfume = () => {
         try {
             if (likedPerfumes.includes(perfumeId)) {
                 // 찜 해제 요청
-                await removeFromWishlist(perfumeId) // 수정된 부분
+                await removeFromWishlist(perfumeId) 
                 console.log("찜 삭제 성공!")
             } else {
                 // 찜 추가 요청

@@ -148,7 +148,7 @@ const submitSurveyResponses = async () => {
                     'Content-Type': 'application/json'
                 },
                 withCredentials: true
-            }  // withCredentials는 본문이 아니라 옵션으로 추가
+            }  
         );
         if (response.status === 200) {
             const surveyResponseId = response.data; // 서버에서 반환된 ID
@@ -393,7 +393,7 @@ const submitSurveyResponses = async () => {
         }
         try {
             const response = await fetch(`http://localhost:8080/api/wishlist?perfumeId=${perfumeId}`, {
-                method: 'POST',
+                method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },

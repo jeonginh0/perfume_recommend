@@ -5,11 +5,16 @@ import '../css/PerfumeDetail.css';
 import { IoIosHeartEmpty, IoIosHeart } from 'react-icons/io';
 import { CgProfile } from "react-icons/cg"; // CgProfile import 추가
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const PerfumeDetail = () => {
     const location = useLocation(); // useLocation을 통해 state를 받아옴
     const perfume = location.state?.perfume; // 전달된 perfume 데이터를 받음
     const [likedPerfumes, setLikedPerfumes] = useState([]); 
+    const [comments, setComments] = useState([]); // 댓글 목록
+    const [newComment, setNewComment] = useState(''); // 새 댓글 입력
+    const [userNickname, setUserNickname] = useState('');
+    const [commentText, setCommentText] = useState('');
 
     // 로그인 상태 확인 후 찜한 향수 목록 가져오기
     useEffect(() => {
@@ -17,6 +22,30 @@ const PerfumeDetail = () => {
         if (token) {
             fetchLikedPerfumes();
         }
+    }, []);
+
+    useEffect(() => {
+        fetchComments(); // 컴포넌트 마운트 시 댓글 목록 가져오기
+    }, []);
+
+    // 닉네임 가져오기 useEffect
+    useEffect(() => {
+        const fetchNickname = async () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                try {
+                    const response = await axios.get('http://localhost:8080/api/users/me', { // 닉네임 가져오는 API 엔드포인트 확인
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    });
+                    setUserNickname(response.data.nickname);
+                } catch (error) {
+                    console.error('닉네임을 불러오는 중 오류가 발생했습니다:', error);
+                }
+            }
+        };
+        fetchNickname();
     }, []);
 
     // 찜한 향수 목록 가져오기
@@ -73,7 +102,7 @@ const PerfumeDetail = () => {
         }
         try {
             const response = await fetch(`http://localhost:8080/api/wishlist/remove?perfumeId=${perfumeId}`, {
-                method: 'POST',
+                method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -108,6 +137,83 @@ const PerfumeDetail = () => {
         return <div>해당 향수를 찾을 수 없습니다.</div>;
     }
 
+    const fetchComments = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/perfume-comments/detail/${perfume.id}`);
+            if (!response.ok) {
+                throw new Error('댓글을 불러오는 중 오류가 발생했습니다.');
+            }
+            const data = await response.json();
+    
+            // createdAt을 Date 객체로 변환
+            const formattedComments = data.map(comment => ({
+                ...comment,
+                createdAt: new Date(comment.createdAt[0], comment.createdAt[1] - 1, comment.createdAt[2], 
+                                    comment.createdAt[3], comment.createdAt[4], comment.createdAt[5]),
+                userNickname: 'anonymousUser' // 기본값을 anonymousUser로 설정
+            }));
+    
+            // 각 comment의 userId를 사용해 사용자 닉네임을 가져옴
+            for (let comment of formattedComments) {
+                const userNickname = await fetchUserNickname(comment.userId);
+                comment.userNickname = userNickname;
+            }
+    
+            setComments(formattedComments);
+            console.log("전체 댓글 데이터:", formattedComments);
+        } catch (error) {
+            console.error('API 호출 중 오류:', error);
+        }
+    };
+    
+    const fetchUserNickname = async (userId) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/users/nickname/${userId}`);
+            return response.data.nickname || 'anonymousUser';
+        } catch (error) {
+            console.error('닉네임을 불러오는 중 오류가 발생했습니다:', error);
+            return 'anonymousUser';
+        }
+    };    
+
+    const postComment = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert("로그인 후 사용 가능합니다.");
+            return;
+        }
+    
+        if (newComment.trim() === "") {
+            alert("댓글 내용을 입력해주세요.");
+            return;
+        }
+    
+        try {
+            const response = await axios.post('http://localhost:8080/api/perfume-comments', {
+                perfumeId: perfume.id,
+                comment: newComment
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+    
+            const newCommentData = {
+                ...response.data,
+                userNickname: userNickname, // 작성한 댓글에 현재 유저 닉네임 추가
+                createdAt: new Date() // 작성 시점을 현재 시간으로 설정
+            };
+    
+            // 작성 후 댓글 리스트에 새 댓글 추가
+            setComments([...comments, newCommentData]);
+            setNewComment(""); // 댓글 입력 필드 초기화
+            console.log('댓글 작성 성공');
+        } catch (error) {
+            console.error('댓글 작성 중 오류가 발생했습니다:', error);
+            alert('댓글 작성 중 오류가 발생했습니다.');
+        }
+    };    
+
     return (
         <>
             <Navbar />
@@ -141,16 +247,23 @@ const PerfumeDetail = () => {
             <div className="post">
                 <p className="post-p">댓글</p>
                 <div className="post-input">
-                    <input className="input-post"></input>
-                    <button className="input-post-btn">등록하기</button>
+                    <input 
+                        className="input-post" 
+                        value={newComment} 
+                        onChange={(e) => setNewComment(e.target.value)} 
+                        placeholder="댓글을 입력하세요."
+                    />
+                    <button className="input-post-btn" onClick={postComment}>등록하기</button>
                 </div>
                 <div className="post-container">
-                    <div className="post-id">
-                        <CgProfile size={30} />
-                        <p className="post-name">닉네임</p>
-                        <p className="comment">이 향수 강추합니다!</p>
-                        <p className="date">2024.09.09</p>
-                    </div>
+                    {comments.map((comment) => (
+                        <div key={comment.id} className="post-id">
+                            <CgProfile size={30} />
+                            <p className="post-name">{comment.userNickname || "anonymousUser"}</p>
+                            <p className="comment">{comment.comment}</p>
+                            <p className="date">{new Date(comment.createdAt).toLocaleDateString()}</p> {/* 날짜 포맷팅 */}
+                        </div>
+                    ))}
                 </div>
             </div>
         </>
