@@ -79,7 +79,7 @@ public class UserService {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             if (passwordEncoder.matches(password, user.getPassword())) {
-                return jwtTokenProvider.createToken(email, user.getId()); // ID 추가
+                return jwtTokenProvider.createToken(email, user.getId(), user.getNickname()); // ID 추가
             } else {
                 throw new Exception("Invalid credentials");
             }

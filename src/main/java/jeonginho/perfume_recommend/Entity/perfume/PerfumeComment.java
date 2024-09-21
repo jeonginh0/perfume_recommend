@@ -23,6 +23,7 @@ public class PerfumeComment {
     private String perfumeId; // 퍼퓸테이블에 있는 향수 아이디
 
     private String userId; // 작성자 Id
+    private String nickname; // 작성자 닉네임
 
     private String comment; // 댓글 내용
 

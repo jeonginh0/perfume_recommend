@@ -6,7 +6,6 @@ import jeonginho.perfume_recommend.dto.user.google.GoogleInfResponse;
 import jeonginho.perfume_recommend.dto.user.google.GoogleRequest;
 import jeonginho.perfume_recommend.dto.user.google.GoogleResponse;
 import jeonginho.perfume_recommend.dto.user.kakao.KakaoUserResponse;
-import jeonginho.perfume_recommend.dto.user.naver.NaverRequest;
 import jeonginho.perfume_recommend.dto.user.naver.NaverResponse;
 import jeonginho.perfume_recommend.dto.user.naver.NaverUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +77,7 @@ public class UserSocialLoginService {
         Optional<User> user = userService.createOrGetGoogleUser(googleInfResponse);
 
         // Optional 값 검증
-        return user.map(u -> jwtTokenProvider.createToken(u.getEmail(), u.getId()))
+        return user.map(u -> jwtTokenProvider.createToken(u.getEmail(), u.getId(), u.getNickname()))
                 .orElseThrow(() -> new RuntimeException("유저 정보를 저장하지 못했습니다."));
     }
 
@@ -111,7 +110,7 @@ public class UserSocialLoginService {
             User user = userService.createOrGetKakaoUser(kakaoUserInfo);
 
             // JWT 생성 후 반환
-            return jwtTokenProvider.createToken(user.getEmail(), user.getId());
+            return jwtTokenProvider.createToken(user.getEmail(), user.getId(), user.getNickname());
 
         } catch (RestClientException e) {
             System.out.println("카카오 로그인 중 오류 발생: "+ e.getMessage());
@@ -156,7 +155,7 @@ public class UserSocialLoginService {
             User user = userService.createOrGetNaverUser(naverUser);
 
             // JWT 생성 후 반환
-            return jwtTokenProvider.createToken(user.getEmail(), user.getId());
+            return jwtTokenProvider.createToken(user.getEmail(), user.getId(), user.getNickname());
 
         } catch (RestClientException e) {
             System.out.println("네이버 로그인 중 오류 발생: " + e.getMessage());

@@ -1,6 +1,7 @@
 package jeonginho.perfume_recommend.controller.perfume;
 
 import jeonginho.perfume_recommend.Entity.perfume.PerfumeComment;
+import jeonginho.perfume_recommend.dto.perfume.PerfumeCommentRequest; // DTO 추가
 import jeonginho.perfume_recommend.service.perfume.PerfumeCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,8 @@ public class PerfumeCommentController {
 
     // 작성
     @PostMapping
-    public PerfumeComment addComment(@RequestHeader("Authorization") String token, @RequestBody PerfumeComment comment) {
-        return perfumeCommentService.addComment(token, comment);
+    public PerfumeComment addComment(@RequestHeader("Authorization") String token, @RequestBody PerfumeCommentRequest request) {
+        return perfumeCommentService.addComment(token, request);
     }
 
     // 테스트용 댓글 조회
@@ -43,8 +44,8 @@ public class PerfumeCommentController {
 
     // 수정
     @PutMapping("/{commentId}")
-    public PerfumeComment updateComment(@RequestHeader("Authorization") String token, @PathVariable String commentId, @RequestBody PerfumeComment comment) {
+    public PerfumeComment updateComment(@RequestHeader("Authorization") String token, @PathVariable String commentId, @RequestBody PerfumeCommentRequest request) {
         System.out.println("댓글 수정 완료");
-        return perfumeCommentService.updateComment(token, commentId, comment);
+        return perfumeCommentService.updateComment(token, commentId, request);
     }
 }

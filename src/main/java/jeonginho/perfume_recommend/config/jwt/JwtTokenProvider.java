@@ -41,13 +41,14 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰 생성
-    public String createToken(String email, String userId) {
+    public String createToken(String email, String userId, String nickname) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expiration);
 
         return Jwts.builder()
                 .setSubject(email)
                 .claim("userId", userId)  // 사용자 ID를 클레임에 추가
+                .claim("nickname", nickname)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS256, jwtSecret)

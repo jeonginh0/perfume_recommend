@@ -10,7 +10,7 @@ import axios from 'axios';
 const PerfumeDetail = () => {
     const location = useLocation(); // useLocation을 통해 state를 받아옴
     const perfume = location.state?.perfume; // 전달된 perfume 데이터를 받음
-    const [likedPerfumes, setLikedPerfumes] = useState([]); 
+    const [likedPerfumes, setLikedPerfumes] = useState([]);
     const [comments, setComments] = useState([]); // 댓글 목록
     const [newComment, setNewComment] = useState(''); // 새 댓글 입력
     const [userNickname, setUserNickname] = useState('');
@@ -92,7 +92,7 @@ const PerfumeDetail = () => {
             console.error('API 호출 중 오류:', error);
         }
     };
-    
+
     // 찜 해제 기능
     const removeFromWishlist = async (perfumeId) => {
         const token = localStorage.getItem('token');
@@ -144,37 +144,30 @@ const PerfumeDetail = () => {
                 throw new Error('댓글을 불러오는 중 오류가 발생했습니다.');
             }
             const data = await response.json();
-    
+
             // createdAt을 Date 객체로 변환
             const formattedComments = data.map(comment => ({
                 ...comment,
-                createdAt: new Date(comment.createdAt[0], comment.createdAt[1] - 1, comment.createdAt[2], 
-                                    comment.createdAt[3], comment.createdAt[4], comment.createdAt[5]),
-                userNickname: 'anonymousUser' // 기본값을 anonymousUser로 설정
+                createdAt: new Date(comment.createdAt[0], comment.createdAt[1] - 1, comment.createdAt[2],
+                    comment.createdAt[3], comment.createdAt[4], comment.createdAt[5])
             }));
-    
-            // 각 comment의 userId를 사용해 사용자 닉네임을 가져옴
-            for (let comment of formattedComments) {
-                const userNickname = await fetchUserNickname(comment.userId);
-                comment.userNickname = userNickname;
-            }
-    
+
             setComments(formattedComments);
             console.log("전체 댓글 데이터:", formattedComments);
         } catch (error) {
             console.error('API 호출 중 오류:', error);
         }
     };
-    
-    const fetchUserNickname = async (userId) => {
-        try {
-            const response = await axios.get(`http://localhost:8080/api/users/nickname/${userId}`);
-            return response.data.nickname || 'anonymousUser';
-        } catch (error) {
-            console.error('닉네임을 불러오는 중 오류가 발생했습니다:', error);
-            return 'anonymousUser';
-        }
-    };    
+
+    // const fetchUserNickname = async (userId) => {
+    //     try {
+    //         const response = await axios.get(`http://localhost:8080/api/users/nickname/${userId}`);
+    //         return response.data.nickname || 'anonymousUser';
+    //     } catch (error) {
+    //         console.error('닉네임을 불러오는 중 오류가 발생했습니다:', error);
+    //         return 'anonymousUser';
+    //     }
+    // };
 
     const postComment = async () => {
         const token = localStorage.getItem('token');
@@ -182,12 +175,12 @@ const PerfumeDetail = () => {
             alert("로그인 후 사용 가능합니다.");
             return;
         }
-    
+
         if (newComment.trim() === "") {
             alert("댓글 내용을 입력해주세요.");
             return;
         }
-    
+
         try {
             const response = await axios.post('http://localhost:8080/api/perfume-comments', {
                 perfumeId: perfume.id,
@@ -197,13 +190,13 @@ const PerfumeDetail = () => {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-    
+
             const newCommentData = {
                 ...response.data,
                 userNickname: userNickname, // 작성한 댓글에 현재 유저 닉네임 추가
                 createdAt: new Date() // 작성 시점을 현재 시간으로 설정
             };
-    
+
             // 작성 후 댓글 리스트에 새 댓글 추가
             setComments([...comments, newCommentData]);
             setNewComment(""); // 댓글 입력 필드 초기화
@@ -212,7 +205,7 @@ const PerfumeDetail = () => {
             console.error('댓글 작성 중 오류가 발생했습니다:', error);
             alert('댓글 작성 중 오류가 발생했습니다.');
         }
-    };    
+    };
 
     return (
         <>
@@ -230,8 +223,8 @@ const PerfumeDetail = () => {
                         <h2>{perfume.perfume}</h2>
                         <p>[부항률]<br/> - {perfume.duration}</p>
                         <p>[메인 어코드]<br/> - 탑 노트: {perfume.topnote}<br/>
-                         - 미들 노트: {perfume.middlenote}<br/>
-                         - 베이스 노트: {perfume.basenote}</p>
+                            - 미들 노트: {perfume.middlenote}<br/>
+                            - 베이스 노트: {perfume.basenote}</p>
                         <p>[향 설명]<br/> - {perfume.description}</p>
                         <p>[용량]<br/> - {perfume.ml.join(', ')}</p>
                         <a href={perfume.pageurl} target="_blank" rel="noopener noreferrer">구매하러 가기</a>
@@ -247,10 +240,10 @@ const PerfumeDetail = () => {
             <div className="post">
                 <p className="post-p">댓글</p>
                 <div className="post-input">
-                    <input 
-                        className="input-post" 
-                        value={newComment} 
-                        onChange={(e) => setNewComment(e.target.value)} 
+                    <input
+                        className="input-post"
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
                         placeholder="댓글을 입력하세요."
                     />
                     <button className="input-post-btn" onClick={postComment}>등록하기</button>
@@ -259,9 +252,9 @@ const PerfumeDetail = () => {
                     {comments.map((comment) => (
                         <div key={comment.id} className="post-id">
                             <CgProfile size={30} />
-                            <p className="post-name">{comment.userNickname || "anonymousUser"}</p>
+                            <p className="post-name">{comment.nickname || "anonymousUser"}</p> {/* nickname 사용 */}
                             <p className="comment">{comment.comment}</p>
-                            <p className="date">{new Date(comment.createdAt).toLocaleDateString()}</p> {/* 날짜 포맷팅 */}
+                            <p className="date">{new Date(comment.createdAt).toLocaleDateString()}</p>
                         </div>
                     ))}
                 </div>
