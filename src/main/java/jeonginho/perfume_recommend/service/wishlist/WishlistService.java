@@ -1,6 +1,6 @@
 package jeonginho.perfume_recommend.service.wishlist;
 
-import jeonginho.perfume_recommend.Entity.Perfume;
+import jeonginho.perfume_recommend.Entity.perfume.Perfume;
 import jeonginho.perfume_recommend.Entity.User;
 import jeonginho.perfume_recommend.Entity.Wishlist;
 import jeonginho.perfume_recommend.dto.wishlist.WishlistResponse;

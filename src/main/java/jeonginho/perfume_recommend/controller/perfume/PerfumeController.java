@@ -2,16 +2,13 @@ package jeonginho.perfume_recommend.controller.perfume;
 
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import jeonginho.perfume_recommend.Entity.Perfume;
+import jeonginho.perfume_recommend.Entity.perfume.Perfume;
 import jeonginho.perfume_recommend.Entity.recommend.RecommendGuestPerfumes;
-import jeonginho.perfume_recommend.Entity.recommend.RecommendPerfumes;
 import jeonginho.perfume_recommend.Entity.survey.SurveyResponse;
 import jeonginho.perfume_recommend.config.jwt.JwtTokenProvider;
 import jeonginho.perfume_recommend.repository.Survey.SurveyResponseRepository;
 import jeonginho.perfume_recommend.repository.perfume.PerfumeRepository;
 import jeonginho.perfume_recommend.repository.recommend.RecommendGuestPerfumeRepository;
-import jeonginho.perfume_recommend.repository.recommend.RecommendPerfumesRepository;
 import jeonginho.perfume_recommend.service.recommend.RecommendGuestPerfumeService;
 import jeonginho.perfume_recommend.service.recommend.RecommendPerfumesService;
 import jeonginho.perfume_recommend.service.survey.SurveyService;

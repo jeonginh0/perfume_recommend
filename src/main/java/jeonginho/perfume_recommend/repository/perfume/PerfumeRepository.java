@@ -1,6 +1,6 @@
 package jeonginho.perfume_recommend.repository.perfume;
 
-import jeonginho.perfume_recommend.Entity.Perfume;
+import jeonginho.perfume_recommend.Entity.perfume.Perfume;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 

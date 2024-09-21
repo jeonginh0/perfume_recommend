@@ -1,8 +1,7 @@
 package jeonginho.perfume_recommend.service.perfume;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jeonginho.perfume_recommend.Entity.Perfume;
-import jeonginho.perfume_recommend.Entity.User;
+import jeonginho.perfume_recommend.Entity.perfume.Perfume;
 import jeonginho.perfume_recommend.Entity.note.CategoryNote;
 import jeonginho.perfume_recommend.Entity.note.SeasonNote;
 import jeonginho.perfume_recommend.Entity.note.SituationNote;

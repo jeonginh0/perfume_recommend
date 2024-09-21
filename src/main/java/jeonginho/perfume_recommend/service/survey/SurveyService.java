@@ -1,7 +1,7 @@
 package jeonginho.perfume_recommend.service.survey;
 
 import jeonginho.perfume_recommend.Entity.survey.SurveyResponse;
-import jeonginho.perfume_recommend.Entity.Perfume;
+import jeonginho.perfume_recommend.Entity.perfume.Perfume;
 import jeonginho.perfume_recommend.repository.Survey.SurveyResponseRepository;
 import jeonginho.perfume_recommend.service.perfume.PerfumeService;
 import org.springframework.beans.factory.annotation.Autowired;

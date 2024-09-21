@@ -1,7 +1,7 @@
 package jeonginho.perfume_recommend.service.recommend;
 
 import jakarta.servlet.http.HttpSession;
-import jeonginho.perfume_recommend.Entity.Perfume;
+import jeonginho.perfume_recommend.Entity.perfume.Perfume;
 import jeonginho.perfume_recommend.Entity.recommend.RecommendPerfumes;
 import jeonginho.perfume_recommend.Entity.survey.SurveyResponse;
 import jeonginho.perfume_recommend.repository.perfume.PerfumeRepository;
