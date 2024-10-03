@@ -198,7 +198,7 @@ const submitSurveyResponses = async () => {
                 setRecommendations(response.data);
                 setIsLoading(false);
                 setIsResultVisible(true);
-                sessionStorage.setItem('recommendations', JSON.stringify(response.data)); // 결과를 세션 스토리지에 저장
+                //sessionStorage.setItem('recommendations', JSON.stringify(response.data)); // 결과를 세션 스토리지에 저장
                 console.log('추천된 향수 목록:', response.data);
             } else {
                 setErrorMessage('추천 결과 조회 실패');

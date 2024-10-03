@@ -21,28 +21,28 @@ const PostDetail = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            axios.get('http://localhost:8080/api/users/me', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            .then(response => {
-                if (response.data && response.data.nickname) {
-                    setNickname(response.data.nickname); 
-                    setIsLoggedIn(true);
-                } else {
-                    console.error('유저 닉네임이 응답에 포함되어 있지 않습니다.');
-                    setIsLoggedIn(false);
-                }
-            })
-            .catch(error => {
-                console.error('유저 정보를 가져오는데 실패했습니다.', error);
-            });
-        }
-    }, []);
+    // useEffect(() => {
+    //     const token = localStorage.getItem('token');
+    //     if (token) {
+    //         axios.get('http://localhost:8080/api/users/me', {
+    //             headers: {
+    //                 'Authorization': `Bearer ${token}`
+    //             }
+    //         })
+    //         .then(response => {
+    //             if (response.data && response.data.nickname) {
+    //                 setNickname(response.data.nickname); 
+    //                 setIsLoggedIn(true);
+    //             } else {
+    //                 console.error('유저 닉네임이 응답에 포함되어 있지 않습니다.');
+    //                 setIsLoggedIn(false);
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('유저 정보를 가져오는데 실패했습니다.', error);
+    //         });
+    //     }
+    // }, []);
 
     useEffect(() => {
         const fetchPostAndComments = async () => {
@@ -51,7 +51,9 @@ const PostDetail = () => {
                 setPost(postResponse.data);
                 
                 const authorResponse = await axios.get(`http://localhost:8080/api/users/nickname/${postResponse.data.userId}`);
-                setAuthorNickname(authorResponse.data); 
+                setAuthorNickname(authorResponse.data);
+                console.log(postResponse.data);
+                console.log(authorResponse);
                 
                 const storedComments = localStorage.getItem(`comments_${postId}`);
                 if (storedComments) {
@@ -112,6 +114,7 @@ const PostDetail = () => {
             setComments(updatedComments);
             localStorage.setItem(`comments_${postId}`, JSON.stringify(updatedComments));
             setNewComment('');
+            console.log(updatedComments)
         } catch (error) {
             console.error('Error submitting comment:', error);
             alert('댓글 작성 중 오류가 발생했습니다.');
@@ -196,6 +199,7 @@ const PostDetail = () => {
         return `${year}. ${month}. ${day}.`;
     };
 
+    console.log(post)
     return (
         <>
             <Navbar />
@@ -229,7 +233,7 @@ const PostDetail = () => {
 
                             if (window.confirm('정말 삭제하시겠습니까?')) {
                                 try {
-                                    await axios.delete(`http://localhost:8080/api/community/${postId}`, {
+                                    await axios.delete(`http://localhost:8080/api/community/posts/${postId}`, {
                                         headers: {
                                             'Authorization': `Bearer ${token}`
                                         }

@@ -24,9 +24,12 @@ const Community = () => {
                 setPosts(response.data);
                 setFilteredPosts(response.data); // 필터링된 게시글 초기화
                 console.log('응답 데이터:', response.data);
+                console.log(response)
     
                 // 게시물에 포함된 userId 목록 추출
                 const userIds = [...new Set(response.data.map((post) => post.userId))];
+
+                console.log(userIds)
     
                 userIds.forEach(async (userId) => {
                     if (!users[userId]) {
@@ -36,6 +39,7 @@ const Community = () => {
                                 ...prevUsers,
                                 [userId]: userResponse.data,
                             }));
+                            console.log(userResponse.data)
                         } catch (error) {
                             console.error('사용자 이름을 가져오는데 실패했습니다.', error);
                         }
@@ -95,9 +99,13 @@ const Community = () => {
             post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
             (users[post.userId] && users[post.userId].toLowerCase().includes(searchTerm.toLowerCase())) // 작성자 이름으로도 필터링
         );
+        console.log(filtered)
+        console.log(users)
         setFilteredPosts(filtered);
         setCurrentPage(1); // 검색 결과에 따라 첫 페이지로 이동
     };
+
+    console.log(posts)
 
     // 검색 입력 핸들러
     const handleSearchInput = (event) => {
