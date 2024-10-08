@@ -14,8 +14,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
+import java.util.Arrays;
 import java.util.List;
 
 /*
@@ -39,7 +42,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers("/google/callback").permitAll() // 이 부분 추가
+                        .requestMatchers("/google/callback").permitAll()
+                        .requestMatchers("/user/login", "/", "/resources/**", "/css/**", "/js/**").permitAll()
                         .requestMatchers("/**").permitAll()
                 )
                 .headers(headers -> headers

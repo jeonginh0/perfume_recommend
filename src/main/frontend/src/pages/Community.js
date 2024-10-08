@@ -24,10 +24,10 @@ const Community = () => {
                 setPosts(response.data);
                 setFilteredPosts(response.data); // 필터링된 게시글 초기화
                 console.log('응답 데이터:', response.data);
-    
+
                 // 게시물에 포함된 userId 목록 추출
                 const userIds = [...new Set(response.data.map((post) => post.userId))];
-    
+
                 userIds.forEach(async (userId) => {
                     if (!users[userId]) {
                         try {
@@ -45,18 +45,18 @@ const Community = () => {
                 console.error('게시글 데이터를 가져오는데 실패했습니다.', error);
             }
         };
-    
+
         fetchPosts();
     }, [users]);
-    
+
     // 날짜 포맷 함수 수정
     const formatDate = (dateArray) => {
         if (!dateArray || dateArray.length < 3) return '날짜 없음'; // dateArray가 없을 때 처리
-        
+
         const year = dateArray[0]; // 연도
         const month = dateArray[1]; // 월 (0부터 시작하므로 +1 필요)
         const day = dateArray[2]; // 일
-        
+
         return `${year}. ${month}. ${day}.`; // 'yyyy. mm. dd.' 형식으로 변환
     };
 
@@ -91,8 +91,8 @@ const Community = () => {
 
     // 검색어에 따라 게시글 필터링
     const handleSearch = () => {
-        const filtered = posts.filter(post => 
-            post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        const filtered = posts.filter(post =>
+            post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             (users[post.userId] && users[post.userId].toLowerCase().includes(searchTerm.toLowerCase())) // 작성자 이름으로도 필터링
         );
         setFilteredPosts(filtered);
@@ -177,15 +177,15 @@ const Community = () => {
 
                         {currentPosts.length > 0 ? (
                             currentPosts.map((post, index) => (
-                                <div 
-                                    className="table-row" 
-                                    key={post.id} 
+                                <div
+                                    className="table-row"
+                                    key={post.id}
                                     onClick={() => handlePostClick(post.id)} // 게시글 클릭 시 상세 페이지로 이동
                                     style={{ cursor: 'pointer' }} // 커서를 포인터로 변경
                                 >
                                     <div className="row-number">{index + 1 + (currentPage - 1) * postsPerPage}</div>
                                     <div className="row-title">{post.title}</div>
-                                    <div className="row-author">{users[post.userId] || "익명"}</div> 
+                                    <div className="row-author">{users[post.userId] || "익명"}</div>
                                     <div className="row-date">{formatDate(post.createdAt)}</div>
                                 </div>
                             ))

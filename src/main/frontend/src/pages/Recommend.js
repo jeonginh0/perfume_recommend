@@ -392,8 +392,8 @@ const submitSurveyResponses = async () => {
             return;
         }
         try {
-            const response = await fetch(`http://localhost:8080/api/wishlist?perfumeId=${perfumeId}`, {
-                method: 'DELETE',
+            const response = await fetch(`http://localhost:8080/api/wishlist/remove?perfumeId=${perfumeId}`, {
+                method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },

@@ -44,9 +44,11 @@ public class PerfumeController {
     @Autowired
     private RecommendGuestPerfumeRepository recommendGuestPerfumeRepository;
 
-    private final PerfumeRepository perfumeRepository;
+    @Autowired
+    private PerfumeRepository perfumeRepository;
 
-    private final PerfumeService perfumeService;
+    @Autowired
+    private PerfumeService perfumeService;
 
     public PerfumeController(PerfumeRepository perfumeRepository, PerfumeService perfumeService) {
         this.perfumeRepository = perfumeRepository;

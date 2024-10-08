@@ -28,7 +28,7 @@ const WishList = () => {
             if (!response.ok || !Array.isArray(data.perfumes)) {
                 throw new Error('찜 목록을 가져오는 중 오류가 발생했습니다.');
             }
-    
+
             setWishlist(data.perfumes); 
             setLikedPerfumes(data.perfumes.map(item => item.id)); // 향수 아이디 리스트를 업데이트
         } catch (error) {
@@ -48,7 +48,7 @@ const WishList = () => {
     
         try {
             const response = await fetch(`http://localhost:8080/api/wishlist/remove?perfumeId=${perfumeId}`, {
-                method: 'DELETE',
+                method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },

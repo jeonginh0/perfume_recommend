@@ -1,6 +1,5 @@
 package jeonginho.perfume_recommend.controller.community;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jeonginho.perfume_recommend.Entity.community.Post;
 import jeonginho.perfume_recommend.dto.community.post.PostRequest;
 import jeonginho.perfume_recommend.service.community.PostService;
