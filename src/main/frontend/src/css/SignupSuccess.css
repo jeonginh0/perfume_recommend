@@ -36,6 +36,7 @@
     justify-content: center;
     height: 80vh;
     text-align: center;
+    margin-top: 50px;
   }
   
   .signup-complete-container h2 {
@@ -83,4 +84,162 @@
     align-items: center;
     text-align: center;
     color: #FFFFFF;
+  }
+
+  @media screen and (max-width: 1400px) {
+
+    .signsuccess-header {
+      padding: 20px;
+      top: 0;
+      width: 100%;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 40px;
+      margin-left: 50px;
+      margin-right: 50px;
+    }
+
+    .success-icon img {
+      width: 130px;
+      height: 130px;
+    }
+
+    .signup-complete-container {
+      height: 80vh;
+      margin-top: 50px;
+    }
+    
+    .signup-complete-container h2 {
+      font-size: 28px;
+      margin: 0 0 61px;
+    }
+    
+    .go-login-button {
+      font-size: 16px;
+      width: 200px;
+      height: 60px;
+    }
+
+    .go-login-button p {
+      font-size: 16px;
+    } 
+  }
+
+  @media screen and (max-width: 1024px) {
+
+    .signsuccess-header {
+      padding: 15px;
+      top: 0;
+      width: 100%;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 30px;
+      margin-left: 20px;
+    }
+
+    .success-icon img {
+      width: 100px;
+      height: 100px;
+    }
+
+    .signup-complete-container {
+      height: 80vh;
+      margin-top: 50px;
+    }
+    
+    .signup-complete-container h2 {
+      font-size: 24px;
+      margin: 0 0 61px;
+    }
+    
+    .go-login-button {
+      width: 180px;
+      height: 50px;
+    }
+
+    .go-login-button p {
+      font-size: 14px;
+    } 
+  }
+
+  @media screen and (max-width: 768px) {
+
+    .signsuccess-header {
+      padding: 10px;
+      top: 0;
+      width: 100%;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 27px;
+      margin-left: 20px;
+    }
+
+    .success-icon img {
+      width: 80px;
+      height: 80px;
+    }
+
+    .signup-complete-container {
+      height: 80vh;
+      margin-top: 50px;
+    }
+    
+    .signup-complete-container h2 {
+      font-size: 20px;
+      margin: 0 0 61px;
+    }
+    
+    .go-login-button {
+      width: 160px;
+      height: 45px;
+    }
+
+    .go-login-button p {
+      font-size: 12px;
+    } 
+  }
+
+  @media screen and (max-width: 480px) {
+
+    .signsuccess-header {
+      padding: 10px;
+      top: 0;
+      width: 100%;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 27px;
+      margin-left: 20px;
+    }
+
+    .success-icon img {
+      width: 70px;
+      height: 70px;
+    }
+
+    .signup-complete-container {
+      height: 80vh;
+      margin-top: 50px;
+    }
+    
+    .signup-complete-container h2 {
+      font-size: 16px;
+      margin: 0 0 61px;
+    }
+    
+    .go-login-button {
+      width: 140px;
+      height: 40px;
+    }
+
+    .go-login-button p {
+      font-size: 10px;
+    } 
   }

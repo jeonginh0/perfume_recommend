@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // useNavigate import 추가
 import Navbar from '../css/Navbar.js';
 import '../css/WishList.css';
+import '../css/Perfume.css';
 import { IoIosHeart } from 'react-icons/io';
 
 const WishList = () => {

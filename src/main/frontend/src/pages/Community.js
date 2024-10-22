@@ -16,6 +16,7 @@ const Community = () => {
     const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 추가
     const postsPerPage = 10;
     const pageGroupSize = 10;
+    const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -151,6 +152,10 @@ const Community = () => {
         return pageNumbers;
     };
 
+    const handleSearchBarToggle = () => {
+        setIsSearchBarVisible(prevState => !prevState);
+    };
+
     return (
         <>
             <Navbar />
@@ -163,7 +168,7 @@ const Community = () => {
                         <div className="post-size">
                             <p>총 {filteredPosts.length}개의 글이 있습니다.</p>
                         </div>
-                        <div className="search-bar">
+                        <div className={`search-bar ${isSearchBarVisible ? 'visible' : ''}`}>
                             <input
                                 type="text"
                                 placeholder="Search"
@@ -171,7 +176,7 @@ const Community = () => {
                                 onChange={handleSearchInput} // 검색어 입력 시 상태 업데이트
                                 onKeyPress={handleKeyPress} // 엔터키 입력 시 검색 실행
                             />
-                            <button onClick={handleSearchClick}><IoSearchSharp /></button>
+                            <button onClick={handleSearchBarToggle}><IoSearchSharp /></button>
                         </div>
                     </div>
 

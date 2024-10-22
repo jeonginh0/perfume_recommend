@@ -1,3 +1,4 @@
+/* 기본 스타일 */
 .app {
   font-family: 'Noto Sans KR', sans-serif;
   overflow-x: hidden;
@@ -15,9 +16,9 @@
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Average&display=swap');
-@import url('https://webfontworld.github.io/naver/NanumMyeongjo.css');
+@import url('//fonts.googleapis.com/earlyaccess/nanummyeongjo.css');
 @import url('https://fonts.googleapis.com/css2?family=Average&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Average&family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Average&family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 .App-header {
@@ -48,6 +49,11 @@
   font-family: 'Noto Sans KR', sans-serif;
 }
 
+.section {
+  height: 100vh;
+  width: 100vw;
+}
+
 .main-header {
   display: flex;
   justify-content: space-between;
@@ -58,7 +64,7 @@
   top: 0;
   width: 100%;
   z-index: 10;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
 .logo-nav-container {
@@ -116,8 +122,8 @@
 }
 
 .main-banner {
-  height: 700px;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
   background-size: cover;
   background-position: center;
   position: relative;
@@ -125,6 +131,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  overflow: hidden;
 }
 
 .banner-content {
@@ -165,12 +172,13 @@
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-
 .recommendation-section {
+  width: 100vw;
+  height: 100vh;
   text-align: center;
-  padding: 50px 20px;
   background-color: #f9f9f9;
-  border-bottom: 1px solid #DADADA
+  overflow: hidden;
+  position: relative;
 }
 
 .section-title {
@@ -181,10 +189,10 @@
   font-weight: 500;
   font-size: 27px;
   line-height: 37px;
-
+  padding-top: 50px;
 }
 
-.section-title::after {
+/* .section-title::after {
   content: "";
   width: 220px;
   height: 1px;
@@ -193,6 +201,17 @@
   bottom: -10px;
   left: 50%;
   transform: translateX(-50%);
+} */
+
+.section-title {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.section-title.active {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .recommendation-cards {
@@ -205,6 +224,26 @@
   padding: 20px;
   max-width: 300px;
   text-align: center;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card:nth-child(1) {
+  transition-delay: 0.3s;
+}
+
+.card:nth-child(2) {
+  transition-delay: 0.5s;
+}
+
+.card:nth-child(3) {
+  transition-delay: 0.7s;
 }
 
 .card-image {
@@ -235,8 +274,15 @@
 
 .button-section {
   text-align: center;
-  padding: 90px 20px;
   background-color: #f9f9f9;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
 }
 
 .section2-title {
@@ -247,4 +293,505 @@
   line-height: 27px;
   text-align: center;
   color: #000000;
+}
+
+.sec-3-div {
+  justify-content: center;
+}
+
+.hamburger-menu {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.fp-auto-height {
+  height: auto !important;
+}
+
+.footer-section {
+  background-color: #2b2b2b;
+  color: #fff;
+  padding: 20px 0;
+  text-align: center;
+  width: 100%;
+  height: auto;
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer-logo {
+  font-size: 24px;
+  font-family: 'Average', serif;
+  margin-bottom: 20px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+
+.footer-links a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.footer-info {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.footer-info p {
+  margin: 0;
+  padding: 3px 0;
+}
+
+.particles-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.top-button {
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.top-button:hover {
+  background-color: #555;
+}
+
+.footer-m {
+      padding: 20px 120px;
+      z-index: 20000000;
+      background-color: #2b2b2b;
+      z-index: 10000000;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+}
+
+@media screen and (max-width: 1024px) {
+  .main-header {
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .logo-white {
+    font-size: 35px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  
+  .nav-links-white li {
+    margin-left: 20px;
+    font-size: 18px;
+  }
+  
+  .nav-icons-white {
+    display: flex;
+    list-style: none;
+  }
+  
+  .nav-icons-white li {
+    margin-left: 20px;
+    cursor: pointer;
+  }
+  
+  .main-banner {
+    height: 500px;
+  }
+  
+  .banner-content1 {
+    font-size: 18px;
+  }
+  
+  .banner-content2 {
+    font-size: 35px;
+  }
+  
+  .recommend-btn {
+    padding: 15px 80px;
+    cursor: pointer;
+    background-color: #0F0F0F;
+    color: white;
+    border: none;
+    box-shadow: 0 0 0 5px rgb(0 0 0 / 24%);
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    margin-top: 30px;
+  }
+  
+  .section-title {
+    font-size: 23px;
+  }
+  
+  .card {
+    max-width: 180px;
+  }
+  
+  .card img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    margin-bottom: 20px;
+  }
+  
+  .card-title {
+    font-size: 20px;
+  }
+  
+  .card-description {
+    font-size: 13px;
+  }
+  
+  .button-section {
+    text-align: center;
+    padding: 90px 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .section2-title {
+    font-size: 17px;
+  }
+}
+
+/* 모바일 사이즈 대응 */
+@media screen and (max-width: 768px) {
+  .main-header {
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .logo-white {
+    font-size: 30px;
+    margin-left: 20px;
+    margin-right: 0px;
+  }
+  
+  /* .nav-links-white li {
+    margin-left: 20px;
+    font-size: 13px;
+  } */
+
+  .nav-links-white {
+    display: none;
+  }
+
+  .nav-icons-white {
+      display: none;
+  }
+
+  .hamburger-menu {
+    display: block;
+    padding: 10px;
+  }
+
+  .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 60%;
+      height: 100%;
+      background-color: #fff;
+      z-index: 25;
+      display: flex;
+      flex-direction: column;
+  }
+
+  .mobile-menu-header {
+      padding: 10px;
+      position: absolute;
+      right: 0;
+  }
+
+  .close-menu-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+  }
+
+  .mobile-name {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      padding: 20px;
+      gap: 4px;
+  }
+
+  .mobile-name p {
+      margin-left: 16px;
+      font-weight: 600;
+      color: #555555;
+  }
+
+  .mobile-login {
+      display: contents;
+  }
+
+  .mobile-menu-top {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: #000000;
+  }
+
+  .search-bar {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .mobile-menu-links {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      list-style: none;
+      padding-bottom: 50px;
+      border-bottom: 4px solid #eeeeee;
+      margin: 0;
+  }
+
+  .mobile-menu-links a {
+    text-decoration: none;
+    font-size: 18px;
+    color: #333;
+  }
+
+  .mobile-menu-links li {
+      align-items: center;
+  }
+
+  .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 24;
+  }
+
+  .mobile-menu-icons {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      width: 90%;
+      gap: 40px;
+      border-bottom: 4px solid #eeeeee;
+  }
+
+  .icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+  }
+
+  .icon-item p {
+      margin-top: 5px;
+      font-size: 14px;
+      color: #555;
+  }
+
+  .logout-section {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 20px;
+      margin-top: 10px;
+  }
+
+  .logout-section a {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      text-decoration: none;
+      color: #333;
+  }
+
+  .logout-section a span {
+      font-size: 14px;
+      color: #adadad;
+  }
+  
+  .nav-icons-white img {
+    height: 24px;
+  }
+  
+  .main-banner {
+    height: 450px;
+  }
+  
+  .banner-content1 {
+    font-size: 14px;
+  }
+  
+  .banner-content2 {
+    font-size: 30px;
+  }
+  
+  .recommend-btn {
+    padding: 0;
+    width: 200px;
+    height: 40px;
+    font-size: 10px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+  }
+
+  .recommendation-cards {
+    display: grid;
+    gap: 0;
+  }
+  
+  .card {
+    max-width: 190px;
+  }
+  
+  .card img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    margin-bottom: 20px;
+  }
+  
+  .card-title {
+    font-size: 18px;
+    margin: 0;
+  }
+  
+  .card-description {
+    font-size: 11px;
+  }
+  
+  .button-section {
+    text-align: center;
+    padding: 90px 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .section2-title {
+    font-size: 15px;
+  }
+}
+
+/* 작은 모바일 화면 대응 */
+@media screen and (max-width: 480px) {
+  .main-header {
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .logo-white {
+    font-size: 20px;
+    margin-left: 10px;
+    margin-right: 0px;
+  }
+
+  .nav-links-white {
+    padding-left: 3px;
+  }
+  
+  .nav-links-white li {
+    margin-left: 12px;
+    font-size: 10px;
+  }
+  
+  .nav-icons-white {
+    padding-left: 0px;
+  }
+  
+  .nav-icons-white img {
+    height: 20px;
+  }
+  
+  .main-banner {
+    height: 400px;
+  }
+  
+  .banner-content1 {
+    font-size: 10px;
+  }
+  
+  .banner-content2 {
+    font-size: 22px;
+  }
+  
+  .recommend-btn {
+    padding: 0;
+    width: 150px;
+    height: 30px;
+    font-size: 10px;
+  }
+  
+  .section-title {
+    font-size: 15px;
+  }
+
+  .recommendation-cards {
+    display: grid;
+    gap: 0;
+  }
+  
+  .card {
+    max-width: 190px;
+  }
+  
+  .card img {
+    width: 80%;
+    height: auto;
+    border-radius: 50%;
+    margin-bottom: 20px;
+  }
+  
+  .card-title {
+    font-size: 15px;
+    margin: 0;
+  }
+  
+  .card-description {
+    font-size: 9px;
+  }
+  
+  .button-section {
+    text-align: center;
+    padding: 10px;
+    background-color: #f9f9f9;
+    padding-bottom: 100px;
+  }
+  
+  .section2-title {
+    font-size: 10px;
+  }
 }

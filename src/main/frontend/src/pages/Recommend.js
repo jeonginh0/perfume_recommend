@@ -454,7 +454,7 @@ const submitSurveyResponses = async () => {
                     >
                         <img src={perfume.image} alt={perfume.perfume} />
                         <p className="brand-p">{perfume.brand}</p>
-                        <p>{perfume.perfume}</p>
+                        <p className="perfume-name-p">{perfume.perfume}</p>
                         <p>{perfume.type}</p>
                         <p className="acode">
                             {Array.isArray(perfume.acode) ? perfume.acode.map(ac => `#${ac}`).join(' ') : ''}

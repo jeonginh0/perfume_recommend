@@ -14,11 +14,21 @@
     margin-bottom: 10px;
 }
 
-/* .phone-change-container p {
-    margin: 0;
+.phone-p {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    align-items: center;
+    text-align: center;
+    color: #696F79;
+}
+
+/* .phone-change-container-p {
+    margin: 0;
+    font-family: 'Inter';
+    font-style: normal;
     font-size: 16px;
     line-height: 19px;
     text-align: center;
@@ -103,4 +113,123 @@
 
 .input-err {
     display:grid;
+}
+
+@media screen and (max-width: 1024px) {
+    .phone-change-container {
+        max-width: 500px;
+    }
+    
+    .phone-change-container h2 {
+        font-size: 22px;
+    }
+
+    .phone-p {
+        font-size: 14px;
+    }
+    
+    .phone-change-container .change-button {
+        margin-top: 40px;
+        padding: 15px 90px;
+        background-color: #000;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    .phone-change-container .change-button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+    
+    .error-message {
+        font-size: 11px;
+    }
+    
+    .p-input-label {
+        font-size: 16px;
+        line-height: 19px;
+    }
+    
+    .ch-num {
+        font-size: 14px;
+        height: 46px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .phone-change-container {
+        max-width: 400px;
+    }
+    
+    .phone-change-container h2 {
+        font-size: 20px;
+    }
+
+    .phone-p {
+        font-size: 12px;
+    }
+    
+    .phone-change-container .change-button {
+        margin-top: 40px;
+        padding: 15px 90px;
+    }
+    
+    .phone-change-container .change-button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+    
+    .error-message {
+        font-size: 10px;
+    }
+    
+    .p-input-label {
+        font-size: 14px;
+        line-height: 19px;
+    }
+    
+    .ch-num {
+        font-size: 14px;
+        height: 46px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .phone-change-container {
+        max-width: 300px;
+    }
+    
+    .phone-change-container h2 {
+        font-size: 18px;
+    }
+
+    .phone-p {
+        font-size: 10px;
+    }
+    
+    .phone-change-container .change-button {
+        margin-top: 40px;
+        padding: 15px 90px;
+    }
+    
+    .phone-change-container .change-button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+    
+    .error-message {
+        font-size: 9px;
+    }
+    
+    .p-input-label {
+        font-size: 11px;
+        line-height: 19px;
+    }
+    
+    .ch-num {
+        font-size: 12px;
+        height: 46px;
+    }
 }

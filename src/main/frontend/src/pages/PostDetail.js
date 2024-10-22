@@ -258,7 +258,7 @@ const PostDetail = () => {
                             onChange={(e) => setNewComment(e.target.value)} 
                             placeholder="댓글을 입력하세요" 
                         />
-                        <button onClick={handleCommentSubmit}>작성하기</button>
+                        <button onClick={handleCommentSubmit}>작성</button>
                     </div>
                     {comments.map(comment => (
                         <div key={comment.id} className="comment">

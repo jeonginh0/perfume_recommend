@@ -80,7 +80,7 @@ const ChangePassword = () => {
             <Navbar />
             <div className="password-change-container">
                 <h2>비밀번호 변경</h2>
-                <p>이메일을 입력하고 인증번호를 받아주세요. 인증이 완료되면 비밀번호를 변경할 수 있습니다.</p>
+                <p className="pass-p">이메일을 입력하고 인증번호를 받아주세요. 인증이 완료되면 비밀번호를 변경할 수 있습니다.</p>
                 {!isVerified ? (
                     <div className="password-change-form">
                         <div className="p-input">

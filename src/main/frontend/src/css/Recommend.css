@@ -222,3 +222,331 @@
     margin-top: 20px;
     cursor: pointer;
 }
+
+@media screen and (max-width: 1024px) {
+    .recommend-container {
+        width: 100%;
+        max-width: 682px;
+        margin: 110px auto;
+        padding-top: 50px;
+    }
+    
+    .recommend-p {
+        font-size: 18px;
+        padding-bottom: 10px;
+        justify-content: center;
+    }
+    
+    .progress-container {
+        margin-bottom: 14px;
+    }
+    
+    .progress-step {
+        padding-inline: 10px;
+        width: 56px;
+    }
+    
+    .progress-step p {
+        font-size: 14px;
+        padding-bottom: 10px;
+        margin-top: 5px;
+    }
+    
+    .circle {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
+    
+    .progress-line {
+        width: 85px;
+        height: 2px;
+        margin-top: 15px;
+    }
+    
+    .progress-line::after {
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+    }
+    
+    .step-title {
+        margin: 20px 0;
+        font-size: 18px;
+    }
+    
+    .button-option {
+        width: 426px;
+        height: 52px;
+        margin-top: 14px;
+        padding-left: 20px;
+    }
+    
+    .next-button {
+        width: 426px;
+        height: 64px;
+        margin-top: 58px;
+    }
+    
+    .back-button {
+        top: 20px;
+        left: 20px;
+        font-size: 30px;
+    }
+    
+    
+    .loading-container {
+        height: 70vh;
+    }
+    
+    .spinner {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 20px;
+    }
+    
+    .perfume-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 20px;
+    }
+    
+    .perfume-item {
+        width: 150px;
+        margin: 10px;
+    }
+    
+    .retry-button {
+        width: 310px;
+        height: 64px;
+        margin-top: 20px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .recommend-container {
+        width: 80%;
+        /* max-width: 682px; */
+        margin: 110px auto;
+        padding-top: 10px;
+    }
+    
+    .recommend-p {
+        font-size: 13px;
+        padding-bottom: 10px;
+        justify-content: center;
+    }
+    
+    .progress-container {
+        margin-bottom: 14px;
+    }
+    
+    .progress-step {
+        padding-inline: 10px;
+        width: 56px;
+    }
+    
+    .progress-step p {
+        font-size: 8px;
+        padding-bottom: 10px;
+        margin-top: 5px;
+    }
+    
+    .circle {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
+    
+    .progress-line {
+        width: 85px;
+        height: 2px;
+        margin-top: 15px;
+    }
+    
+    .progress-line::after {
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+    }
+    
+    .step-title {
+        margin: 20px 0;
+        font-size: 13px;
+    }
+    
+    .button-option {
+        width: 300px;
+        height: 45px;
+        margin-top: 14px;
+        padding-left: 20px;
+        font-size: 11px;
+    }
+    
+    .next-button {
+        width: 300px;
+        height: 50px;
+        margin-top: 50px;
+    }
+    
+    .back-button {
+        top: -12px;
+        left: -12px;
+        font-size: 30px;
+    }
+    
+    
+    .loading-container {
+        height: 70vh;
+    }
+    
+    .spinner {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 20px;
+    }
+    
+    .perfume-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 20px;
+    }
+    
+    .perfume-item {
+        width: 150px;
+        margin: 10px;
+    }
+    
+    .retry-button {
+        width: 310px;
+        height: 64px;
+        margin-top: 20px;
+    }
+
+    .results-container h2 {
+        font-size: 20px
+    }
+
+    .brand-p {
+        font-size: 14px;
+    }
+
+    .perfume-name-p {
+        font-size: 12px;
+        line-height: 20px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .recommend-container {
+        width: 90%;
+        /* max-width: 682px; */
+        margin: 90px auto;
+        padding-top: 10px;
+    }
+    
+    .recommend-p {
+        font-size: 11px;
+        padding-bottom: 10px;
+        justify-content: center;
+    }
+    
+    .progress-container {
+        margin-bottom: 14px;
+    }
+    
+    .progress-step {
+        padding-inline: 10px;
+        width: 56px;
+    }
+    
+    .progress-step p {
+        font-size: 7px;
+        padding-bottom: 10px;
+        margin-top: 5px;
+    }
+    
+    .circle {
+        width: 25px;
+        height: 25px;
+        font-size: 10px;
+    }
+    
+    .progress-line {
+        width: 85px;
+        height: 2px;
+        margin-top: 15px;
+    }
+    
+    .progress-line::after {
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+    }
+    
+    .step-title {
+        margin: 0;
+        font-size: 11px;
+    }
+    
+    .button-option {
+        width: 280px;
+        height: 40px;
+        margin-top: 14px;
+        padding-left: 20px;
+        font-size: 10px;
+    }
+    
+    .next-button {
+        width: 280px;
+        height: 45px;
+        margin-top: 40px;
+    }
+    
+    .back-button {
+        top: -12px;
+        left: -12px;
+        font-size: 30px;
+    }
+    
+    
+    .loading-container {
+        height: 70vh;
+    }
+    
+    .spinner {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 20px;
+    }
+    
+    .perfume-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 20px;
+    }
+    
+    .perfume-item {
+        width: 150px;
+        margin: 10px;
+    }
+    
+    .retry-button {
+        width: 310px;
+        height: 64px;
+        margin-top: 20px;
+    }
+
+    .results-container h2 {
+        font-size: 20px
+    }
+
+    .brand-p {
+        font-size: 14px;
+    }
+
+    .perfume-name-p {
+        font-size: 12px;
+        line-height: 20px;
+    }
+}

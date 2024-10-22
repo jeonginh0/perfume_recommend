@@ -212,3 +212,245 @@
     background-color: #000000;
     cursor: pointer;
   }
+
+  @media screen and (max-width: 1024px) {
+    .login-header {
+      padding: 20px;
+      top: 0;
+      width: 100%;
+    }
+  
+    .login-container {
+      width: 100%;
+      max-width: 428px;
+      margin: 90px auto;
+      padding-top: 80px;
+    }
+  
+    .login-form h2 {
+      font-size: 28px;
+      padding-bottom: 26px;
+    }
+    
+    .input-group label {
+      margin-top: 25px;
+      margin-bottom: 13px;
+      font-size: 14px;
+    }
+    
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      height: 64px;
+    }
+  
+    input:-webkit-autofill { -webkit-box-shadow: 0 0 0 30px #fff inset ; -webkit-text-fill-color: #000; }
+    input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active { transition: background-color 5000s ease-in-out 0s; }
+  
+    .input-group ::placeholder {
+      font-size: 14px;
+    }
+    
+    .checkbox-group {
+      margin-bottom: 20px;
+    }
+  
+    .checkbox-group label {
+      font-size: 14px;
+    }
+    
+    .login-button {
+      width: 100%;
+      height: 64px;
+      padding: 10px;
+      font-size: 14px;
+    }
+    
+    .login-options {
+      margin: 20px 0;
+      padding-bottom: 20px;
+      font-size: 14px;
+    }
+    
+    .social-login {
+      gap: 65px;
+    }
+    
+    .social-button {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .social-button img {
+      height: 100%;
+    }
+    
+    .login-button {
+      width: 100%;
+      height: 64px;
+      padding: 10px;
+      font-size: 16px;
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .login-header {
+      padding: 20px;
+      top: 0;
+      width: 100%;
+    }
+  
+    .login-container {
+      width: 100%;
+      max-width: 328px;
+      margin: 90px auto;
+      padding-top: 40px;
+    }
+  
+    .login-form h2 {
+      font-size: 26px;
+      padding-bottom: 26px;
+    }
+    
+    .input-group label {
+      margin-top: 25px;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+    
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      height: 64px;
+      height: 55px;
+    }
+  
+    .input-group ::placeholder {
+      font-size: 14px;
+    }
+    
+    .checkbox-group {
+      margin-bottom: 20px;
+    }
+  
+    .checkbox-group label {
+      font-size: 14px;
+    }
+    
+    .login-button {
+      width: 100%;
+      height: 54px;
+      padding: 10px;
+      font-size: 14px;
+    }
+    
+    .login-options {
+      margin: 20px 0;
+      padding-bottom: 20px;
+      font-size: 14px;
+    }
+    
+    .social-login {
+      gap: 65px;
+    }
+    
+    .social-button {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .social-button img {
+      height: 100%;
+    }
+
+    .login-options p {
+      width: 80px;
+      margin: 0 20px;
+      font-size: 12px;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .login-header {
+      padding: 10px;
+      top: 0;
+      width: 100%;
+    }
+  
+    .login-container {
+      width: 80%;
+      max-width: 328px;
+      margin: 90px auto;
+      padding-top: 40px;
+    }
+
+    .logo {
+      font-size: 24px;
+      margin-left: 10px;
+      margin-right: 50px;
+    }
+  
+    .login-form h2 {
+      font-size: 20px;
+      padding-bottom: 26px;
+    }
+    
+    .input-group label {
+      margin-top: 25px;
+      margin-bottom: 6px;
+      font-size: 12px;
+    }
+    
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      height: 40px;
+    }
+  
+    .input-group ::placeholder {
+      font-size: 14px;
+    }
+    
+    .checkbox-group {
+      margin-bottom: 20px;
+    }
+  
+    .checkbox-group label {
+      font-size: 14px;
+    }
+    
+    .login-button {
+      width: 100%;
+      height: 54px;
+      padding: 10px;
+      font-size: 14px;
+    }
+    
+    .login-options {
+      margin: 20px 0;
+      padding-bottom: 20px;
+      font-size: 14px;
+    }
+    
+    .social-login {
+      gap: 40px;
+    }
+    
+    .social-button {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .social-button img {
+      height: 100%;
+    }
+
+    .login-options p {
+      width: 80px;
+      margin: 0 10px;
+      font-size: 12px;
+    }
+  }

@@ -184,3 +184,300 @@
 .change_nickname {
   display: flex;
 }
+
+
+@media screen and (max-width: 1024px) {
+
+  .mypage-container {
+    width: 80%;
+    max-width: 700px;
+    margin: 90px auto;
+    padding-top: 80px;
+  }
+
+  .mypage-form h2 {
+    font-size: 28px;
+    margin: 0;
+    padding-bottom: 24px;
+  }
+
+  .mypage-username {
+    margin-top: 63px;
+    padding-bottom: 20px;
+  }
+
+  .username {
+    font-size: 23px;
+    margin-left: 23px;
+  }
+
+  .ch-name-button {
+    font-size: 16px;
+    width: 116px;
+    height: 46px;
+  }
+
+  .mypage-email {
+    margin-top: 25px;
+  }
+
+  .email-p {
+    font-size: 16px;
+    margin-left: 68px;
+    width: 64px;
+
+  }
+
+  .email {
+    font-size: 16px;
+    margin-left: 70px;
+  }
+
+  .mypage-number {
+    margin-top: 25px;
+  }
+
+  .number-p {
+    font-size: 16px;
+    margin-left: 68px;
+  }
+
+  .number {
+    font-size: 16px;
+    margin-left: 70px;
+  }
+
+  .mypage-password {
+    margin-top: 25px;
+    padding-bottom: 25px;
+  }
+
+  .password-p {
+    font-size: 16px;
+    margin-left: 68px;
+  }
+
+  .ses-p {
+    font-size: 16px;
+    line-height: 19px;
+    margin-left: auto;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.modal-content {
+    padding: 20px;
+    width: 30%;
+}
+
+.modal-content input{
+  margin-right: 10px;
+  padding: 10px;
+}
+}
+
+
+@media screen and (max-width: 768px) {
+
+  .mypage-container {
+    width: 80%;
+    max-width: 700px;
+    margin: 90px auto;
+    padding-top: 80px;
+  }
+
+  .mypage-form h2 {
+    font-size: 26px;
+    margin: 0;
+    padding-bottom: 24px;
+  }
+
+  .mypage-username svg {
+    height: 40px;
+  }
+
+  .mypage-username {
+    margin-top: 63px;
+    padding-bottom: 20px;
+  }
+
+  .username {
+    font-size: 21px;
+    margin-left: 23px;
+  }
+
+  .ch-name-button {
+    font-size: 13px;
+    width: 100px;
+    height: 40px;
+  }
+
+  .mypage-email {
+    margin-top: 25px;
+  }
+
+  .email-p {
+    font-size: 14px;
+    margin-left: 50px;
+    width: 64px;
+  }
+
+  .email {
+    font-size: 14px;
+    margin-left: 35px;
+  }
+
+  .mypage-number {
+    margin-top: 25px;
+  }
+
+  .number-p {
+    font-size: 14px;
+    margin-left: 50px;
+  }
+
+  .number {
+    font-size: 14px;
+    margin-left: 43px;
+  }
+
+  .mypage-password {
+    margin-top: 25px;
+    padding-bottom: 25px;
+  }
+
+  .password-p {
+    font-size: 14px;
+    margin-left: 50px;
+  }
+
+  .ses-p {
+    font-size: 14px;
+    line-height: 19px;
+    margin-left: auto;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.modal-content {
+    padding: 20px;
+    width: 30%;
+}
+
+.modal-content input{
+  margin-right: 10px;
+  padding: 10px;
+}
+}
+
+
+@media screen and (max-width: 480px) {
+
+  .mypage-container {
+    width: 90%;
+    max-width: 700px;
+    margin: 90px auto;
+    padding-top: 80px;
+  }
+
+  .mypage-form h2 {
+    font-size: 24px;
+    margin: 0;
+    padding-bottom: 24px;
+  }
+
+  .mypage-username svg {
+    height: 34px;
+  }
+
+  .mypage-username {
+    margin-top: 63px;
+    padding-bottom: 20px;
+  }
+
+  .username {
+    font-size: 19px;
+    margin-left: 23px;
+  }
+
+  .ch-name-button {
+    font-size: 10px;
+    width: 80px;
+    height: 38px;
+  }
+
+  .mypage-email {
+    margin-top: 25px;
+  }
+
+  .email-p {
+    font-size: 12px;
+    margin-left: 50px;
+    width: 64px;
+  }
+
+  .email {
+    font-size: 12px;
+    margin-left: 14px;
+  }
+
+  .mypage-number {
+    margin-top: 25px;
+  }
+
+  .number-p {
+    font-size: 12px;
+    margin-left: 50px;
+  }
+
+  .number {
+    font-size: 12px;
+    margin-left: 30px;
+  }
+
+  .mypage-password {
+    margin-top: 25px;
+    padding-bottom: 25px;
+  }
+
+  .password-p {
+    font-size: 12px;
+    margin-left: 50px;
+  }
+
+  .ses-p {
+    font-size: 12px;
+    line-height: 19px;
+    margin-left: auto;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.modal-content {
+    padding: 20px;
+    width: 30%;
+}
+
+.modal-content input{
+  margin-right: 10px;
+  padding: 10px;
+}
+}

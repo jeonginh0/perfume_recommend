@@ -1,4 +1,4 @@
-HELP.md
+npm HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
@@ -37,3 +37,4 @@ out/
 
 ### VS Code ###
 .vscode/
+node_modules

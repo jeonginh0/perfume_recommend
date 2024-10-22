@@ -104,7 +104,6 @@
 .comment {
     display: flex;
     align-items: center;
-    padding: 10px 0;
 }
 
 .comment-icon {
@@ -170,4 +169,314 @@
     display: flex;
     gap: 10px;
     align-items: center;
+}
+
+@media screen and (max-width: 1024px) {
+    .post-detail-container {
+        max-width: 600px;
+        margin: 110px auto;
+        padding: 40px;
+    }
+
+    .post-detail-container svg {
+        height: 28px;
+    }
+    
+    .post-detail-container h2 {
+        font-size: 25px;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+    
+    .post-detail-container p {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    
+    .post-detail-container .post-content {
+        font-size: 1.1rem;
+        padding: 20px;
+    }
+    
+    .post-detail-container button {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+    
+    .edit-delete {
+        margin-top: 20px;
+        gap: 10px;
+    }
+    
+    .comments-section {
+        margin-top: 40px;
+        padding-top: 20px;
+    }
+    
+    .comments-section h3 {
+        margin-bottom: 20px;
+        font-size: 22px;
+    }
+    
+    .new-comment-section {
+        margin-bottom: 20px;
+        gap: 10px;
+    }
+    
+    .new-comment-section input {
+        width: 80%;
+        padding: 10px;
+    }
+    
+    .new-comment-section button {
+        padding: 10px 10px;
+    }
+    
+    .comment-content {
+        width: 100%;
+    }
+    
+    .comment-author {
+        margin-right: 20px;
+    }
+    
+    .comment-actions {
+        gap: 10px;
+        margin-top: 5px;
+    }
+    
+    .comment img {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+    
+    .comment-details p {
+        font-size: 16px;
+        margin-left: 10px;
+        margin-bottom: 0;
+    }
+    
+    .comment-details span {
+        margin-right: 5px;
+    }
+    
+    .comment-date {
+        font-size: 14px;
+    }
+    
+    .comment-e-d button{
+        padding: 6px;
+    }
+    
+    .comment-au-con {
+        gap: 10px;
+    }
+}
+
+@media screen and (max-width: 786px) {
+    .post-detail-container {
+        max-width: 500px;
+        margin: 110px auto;
+        padding: 40px;
+    }
+
+    .post-detail-container svg {
+        height: 26px;
+    }
+    
+    .post-detail-container h2 {
+        font-size: 23px;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+    
+    .post-detail-container p {
+        font-size: 13px;
+        margin-bottom: 20px;
+    }
+    
+    .post-detail-container .post-content {
+        font-size: 14px;
+        padding: 20px;
+    }
+    
+    .post-detail-container button {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+    
+    .edit-delete {
+        margin-top: 20px;
+        gap: 10px;
+    }
+    
+    .comments-section {
+        margin-top: 40px;
+        padding-top: 20px;
+    }
+    
+    .comments-section h3 {
+        margin-bottom: 20px;
+        font-size: 19px;
+    }
+    
+    .new-comment-section {
+        margin-bottom: 20px;
+        gap: 10px;
+    }
+    
+    .new-comment-section input {
+        width: 80%;
+        padding: 8px;
+    }
+    
+    .new-comment-section button {
+        padding: 9px 10px;
+    }
+    
+    .comment-content {
+        width: 100%;
+    }
+    
+    .comment-author {
+        margin-right: 20px;
+    }
+    
+    .comment-actions {
+        gap: 10px;
+        margin-top: 5px;
+    }
+    
+    .comment img {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+    
+    .comment-details p {
+        font-size: 16px;
+        margin-left: 10px;
+        margin-bottom: 0;
+    }
+    
+    .comment-details span {
+        margin-right: 5px;
+    }
+    
+    .comment-date {
+        font-size: 14px;
+    }
+    
+    .comment-e-d button{
+        padding: 6px;
+    }
+    
+    .comment-au-con {
+        gap: 0px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .post-detail-container {
+        max-width: 400px;
+        margin: 110px auto;
+        padding: 40px;
+    }
+
+    .post-detail-container svg {
+        height: 20px;
+    }
+    
+    .post-detail-container h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+    
+    .post-detail-container p {
+        font-size: 11px;
+        margin-bottom: 12px;
+    }
+    
+    .post-detail-container .post-content {
+        font-size: 12px;
+        padding: 20px;
+    }
+    
+    .post-detail-container button {
+        padding: 8px 10px;
+        font-size: 10px;
+    }
+    
+    .edit-delete {
+        margin-top: 20px;
+        gap: 10px;
+    }
+    
+    .comments-section {
+        margin-top: 40px;
+        padding-top: 20px;
+    }
+    
+    .comments-section h3 {
+        margin-bottom: 20px;
+        font-size: 16px;
+    }
+    
+    .new-comment-section {
+        margin-bottom: 20px;
+        gap: 10px;
+    }
+    
+    .new-comment-section input {
+        width: 80%;
+        padding: 5px;
+    }
+    
+    .new-comment-section button {
+        padding: 7px 7px;
+        width: 40px;
+    }
+    
+    .comment-content {
+        width: 100%;
+    }
+    
+    .comment-author {
+        margin-right: 20px;
+    }
+    
+    .comment-actions {
+        gap: 10px;
+        margin-top: 5px;
+    }
+    
+    .comment img {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+    
+    .comment-details p {
+        font-size: 16px;
+        margin-left: 10px;
+        margin-bottom: 0;
+    }
+    
+    .comment-details span {
+        margin-right: 5px;
+    }
+    
+    .comment-date {
+        font-size: 14px;
+    }
+    
+    .comment-e-d button{
+        padding: 6px;
+    }
+    
+    .comment-au-con {
+        gap: 0px;
+    }
 }

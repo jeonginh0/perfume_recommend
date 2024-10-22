@@ -85,3 +85,230 @@
 .input-error {
     display: grid;
 }
+
+
+@media screen and (max-width: 1024px) {
+    .nickname-change-container {
+        max-width: 500px;
+    }
+    
+    .nickname-change-container h2{
+        padding: 20px;
+        font-size: 20px;
+    }
+    
+    .nick-ch-p {
+        font-size: 14px;
+    }
+    
+    .nickname-change-container input {
+        padding: 10px;
+        margin-top: 10px;
+    }
+    
+    .nickname-change-container .change-button {
+        padding: 14px 85px;
+    }
+    
+    .nickname-change-container .change-button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+    
+    .error-message {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 11px;
+        line-height: 13px;
+        display: flex;
+        align-items: center;
+        color: #FF0000;    
+        margin: 0;
+    }
+    
+    .p-input {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 50px;
+    }
+    
+    .p-input-nick {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 15px;
+        line-height: 19px;
+        align-items: center;
+        color: #696F79;
+    }
+    
+    .p-input input::placeholder {
+        color: #D9D9D9;
+    }
+    
+    .input-error {
+        display: grid;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    
+    .nickname-change-container {
+        max-width: 400px;
+    }
+    
+    .nickname-change-container h2{
+        padding: 20px;
+        margin: 0;
+        margin-bottom: 10px;
+        font-size: 19px;
+    }
+    
+    .nick-ch-p {
+        margin: 0;
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 19px;
+        text-align: center;
+        color: #696F79;
+    }
+    
+    .nickname-change-container input {
+        padding: 10px;
+        margin-top: 10px;
+        border: none;
+        border-bottom: 1px solid #ccc;
+        outline: none;
+    }
+    
+    .nickname-change-container .change-button {
+        padding: 13px 80px;
+    }
+    
+    .nickname-change-container .change-button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+    
+    .error-message {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 11px;
+        line-height: 13px;
+        display: flex;
+        align-items: center;
+        color: #FF0000;    
+        margin: 0;
+    }
+    
+    .p-input {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 50px;
+    }
+    
+    .p-input-nick {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 19px;
+        align-items: center;
+        color: #696F79;
+    }
+    
+    .p-input input::placeholder {
+        color: #D9D9D9;
+    }
+    
+    .input-error {
+        display: grid;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .nickname-change-container {
+        max-width: 300px;
+    }
+    
+    .nickname-change-container h2{
+        padding: 20px;
+        margin: 0;
+        margin-bottom: 10px;
+        font-size: 19px;
+    }
+    
+    .nick-ch-p {
+        margin: 0;
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 19px;
+        text-align: center;
+        color: #696F79;
+    }
+    
+    .nickname-change-container input {
+        padding: 10px;
+        margin-top: 10px;
+        border: none;
+        border-bottom: 1px solid #ccc;
+        outline: none;
+    }
+    
+    .nickname-change-container .change-button {
+        padding: 13px 80px;
+    }
+    
+    .nickname-change-container .change-button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+    
+    .error-message {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 11px;
+        line-height: 13px;
+        display: flex;
+        align-items: center;
+        color: #FF0000;    
+        margin: 0;
+    }
+    
+    .p-input {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 50px;
+    }
+    
+    .p-input-nick {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 19px;
+        align-items: center;
+        color: #696F79;
+    }
+    
+    .p-input input::placeholder {
+        color: #D9D9D9;
+    }
+    
+    .input-error {
+        display: grid;
+    }
+}

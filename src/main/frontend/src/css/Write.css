@@ -88,3 +88,179 @@
     color: #ccc;
     font-style: italic;
 }
+
+@media screen and (max-width: 1024px) {
+    .write-container {
+        width: 100%;
+        max-width: 700px;
+        margin: 0 auto;
+        margin-top: 50px;
+    }
+    
+    .write-form {
+        padding: 40px;
+        margin-top: 110px;
+    }
+    
+    .write-form h2 {
+        margin-bottom: 20px;
+        margin-top: 0;
+        font-size: 22px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        margin-bottom: 10px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 10px 0;
+        font-size: 16px;
+    }
+    
+    .form-group textarea {
+        height: 200px;
+    }
+    
+    .submit-button {
+        width: 100%;
+        padding: 13px;
+        color: white;
+        font-size: 14px;
+    }
+    
+    /* Quill 에디터 스타일 추가 */
+    .ql-container {
+        font-size: 16px;
+    }
+    
+    .ql-editor {
+        min-height: 200px;
+        padding: 10px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .write-container {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        margin-top: 50px;
+    }
+    
+    .write-form {
+        padding: 40px;
+        margin-top: 110px;
+    }
+
+    .write-form svg {
+        height: 25px;
+        width: 25px;
+    }
+    
+    .write-form h2 {
+        margin-bottom: 20px;
+        margin-top: 0;
+        font-size: 20px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        margin-bottom: 10px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 10px 0;
+        font-size: 14px;
+    }
+    
+    .form-group textarea {
+        height: 200px;
+    }
+    
+    .submit-button {
+        width: 100%;
+        padding: 13px;
+        color: white;
+        font-size: 14px;
+    }
+    
+    .ql-container {
+        font-size: 16px;
+    }
+    
+    .ql-editor {
+        min-height: 200px;
+        padding: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .write-container {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        margin-top: 50px;
+    }
+    
+    .write-form {
+        padding: 40px;
+        margin-top: 110px;
+    }
+
+    .write-form svg {
+        height: 25px;
+        width: 25px;
+    }
+    
+    .write-form h2 {
+        margin-bottom: 20px;
+        margin-top: 0;
+        font-size: 20px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        margin-bottom: 10px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 10px 0;
+        font-size: 14px;
+    }
+    
+    .form-group textarea {
+        height: 200px;
+    }
+    
+    .submit-button {
+        width: 100%;
+        padding: 13px;
+        color: white;
+        font-size: 14px;
+    }
+    
+    .ql-container {
+        font-size: 16px;
+    }
+    
+    .ql-editor {
+        min-height: 200px;
+        padding: 10px;
+    }
+}

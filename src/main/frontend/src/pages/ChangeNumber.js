@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../css/ChangePassword.css';
+import '../css/ChangeNumber.css';
 import Navbar from '../css/Navbar.js';
 
 const ChangePassword = () => {
@@ -76,7 +76,7 @@ const ChangePassword = () => {
             <Navbar />
             <div className="phone-change-container">
                 <h2>이메일 인증</h2>
-                <p>이메일을 입력하고 인증번호를 받아주세요. 인증이 완료되면 새 비밀번호를 입력할 수 있습니다.</p>
+                <p className="phone-p">이메일을 입력하고 인증번호를 받아주세요. 인증이 완료되면 새 비밀번호를 입력할 수 있습니다.</p>
                 
                 {!isVerified ? (
                     <>

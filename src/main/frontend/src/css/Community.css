@@ -155,3 +155,393 @@
   .no-posts-message {
     text-align: center;
   }
+
+  .search-bar input {
+    padding: 5px;
+    width: 150px;
+    font-size: 12px;
+  }
+  
+  .search-bar button {
+    margin-left: -35px;
+  }
+  
+  .no-perfumes-message {
+    margin-top: 70px;
+  }
+
+
+  @media screen and (max-width: 1024px) {
+
+    .Community-header {
+        font-size: 28px;
+    }
+
+    .post-size {
+        display: flex;
+        align-items: end;
+        font-size: 1rem;
+    }
+    
+    .post-size p {
+        font-size: 14px;
+    }
+
+    .search-bar input {
+        padding: 8px;
+        width: 200px;
+    }
+    
+    .table-header {
+        display: flex;
+        background-color: #EDEDED;
+        padding: 10px 0;
+    
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 16px;
+        align-items: center;
+        color: #3F3F3F;
+    }
+    
+    .table-row {
+        display: flex;
+        border-bottom: 1px solid #ccc;
+        padding: 20px 0;
+    
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 16px;
+        align-items: center;
+        color: #3F3F3F;
+    }
+    
+    .header-number, .row-number {
+        flex: 1;
+        text-align: center;
+        width: 5%;
+    }
+    
+    .header-title {
+        flex: 15;
+        padding-left: 10px;
+        width: 50%; 
+        text-align: center;
+    }
+    
+    .row-title {
+        flex: 15;
+        padding-left: 40px;
+        width: 50%; 
+    }
+    
+    .header-author, .row-author {
+        flex: 3;
+        text-align: center;
+        width: 10%; 
+    }
+    
+    .header-date, .row-date {
+        flex: 4;
+        text-align: center;
+        width: 15%;
+    }
+    
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 40px;
+        margin-bottom: 40px;
+      }
+    
+      .pagination-button.active {
+        background-color: #888;
+        color: white;
+      }
+      
+      .pagination button {
+        margin: 0 5px;
+        border: none;
+        background-color: transparent;
+        font-size: 1rem;
+        cursor: pointer;
+        color: #666;
+        border-radius: 50%;
+      }
+      
+      .pagination button:disabled {
+        cursor: not-allowed;
+        color: #ccc;
+      }
+      
+      .write-button-container {
+        display: flex;
+        cursor: pointer;
+        align-items: center;
+        color: #686868;
+        justify-content: end;
+    
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 15px;
+      }
+    
+      .no-posts-message {
+        font-size: 14px
+      }
+  }
+
+  @media screen and (max-width: 768px) {
+
+    .Community-header {
+        font-size: 26px;
+    }
+
+    .post-size {
+        font-size: 1rem;
+    }
+    
+    .post-size p {
+        font-size: 13px;
+    }
+
+    .search-bar input {
+        padding: 6px;
+        width: 180px;
+    }
+    
+    .table-header {
+        padding: 5px 0;
+        font-size: 10px;
+        line-height: 16px;
+    }
+    
+    .table-row {
+        padding: 15px 0;
+        font-size: 11px;
+    }
+    
+    .header-number, .row-number {
+        flex: 2 1;
+        text-align: center;
+        width: 5%;
+    }
+    
+    .header-title {
+        flex: 15;
+        padding-left: 10px;
+        width: 50%; 
+        text-align: center;
+    }
+    
+    .row-title {
+        flex: 15;
+        padding-left: 40px;
+        width: 50%; 
+    }
+    
+    .header-author, .row-author {
+        flex: 3;
+        text-align: center;
+        width: 10%; 
+    }
+    
+    .header-date, .row-date {
+        flex: 4;
+        text-align: center;
+        width: 15%;
+    }
+    
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 40px;
+        margin-bottom: 40px;
+      }
+    
+      .pagination-button.active {
+        background-color: #888;
+        color: white;
+      }
+      
+      .pagination button {
+        margin: 0 5px;
+        border: none;
+        background-color: transparent;
+        font-size: 1rem;
+        cursor: pointer;
+        color: #666;
+        border-radius: 50%;
+      }
+      
+      .pagination button:disabled {
+        cursor: not-allowed;
+        color: #ccc;
+      }
+      
+      .write-button-container {
+        display: flex;
+        cursor: pointer;
+        align-items: center;
+        color: #686868;
+        justify-content: end;
+    
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 15px;
+      }
+    
+      .no-posts-message {
+        font-size: 12px
+      }
+  }
+
+  @media screen and (max-width: 480px) {
+
+    .Community-header {
+        font-size: 24px;
+    }
+
+    .post-size {
+        font-size: 1rem;
+    }
+    
+    .post-size p {
+        font-size: 11px;
+    }
+
+    .search-bar input {
+        padding: 5px;
+        width: 120px;
+        font-size: 10px;
+    }
+    
+    .table-header {
+        padding: 5px 0;
+        font-size: 9px;
+        line-height: 16px;
+    }
+    
+    .table-row {
+        padding: 10px 0;
+        font-size: 10px;
+    }
+    
+    .header-number, .row-number {
+        flex: 2 1;
+        text-align: center;
+        width: 5%;
+    }
+    
+    .header-title {
+        flex: 15;
+        padding-left: 10px;
+        width: 50%; 
+        text-align: center;
+    }
+    
+    .row-title {
+        flex: 15;
+        padding-left: 40px;
+        width: 50%; 
+    }
+    
+    .header-author, .row-author {
+        flex: 3;
+        text-align: center;
+        width: 10%; 
+    }
+    
+    .header-date, .row-date {
+        flex: 4;
+        text-align: center;
+        width: 15%;
+    }
+    
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 40px;
+        margin-bottom: 40px;
+      }
+    
+      .pagination-button.active {
+        background-color: #888;
+        color: white;
+      }
+      
+      .pagination button {
+        margin: 0 5px;
+        border: none;
+        background-color: transparent;
+        font-size: 1rem;
+        cursor: pointer;
+        color: #666;
+        border-radius: 50%;
+      }
+      
+      .pagination button:disabled {
+        cursor: not-allowed;
+        color: #ccc;
+      }
+      
+      .write-button-container {
+        display: flex;
+        cursor: pointer;
+        align-items: center;
+        color: #686868;
+        justify-content: end;
+    
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 15px;
+      }
+    
+      .no-posts-message {
+        font-size: 12px
+      }
+
+      .search-bar {
+        display: flex;
+        align-items: center;
+        transition: width 0.3s ease; 
+        width: 150px;
+        position: relative;
+      }
+    
+      .search-bar input {
+        width: 0;
+        opacity: 0;
+        padding: 5px;
+        font-size: 12px;
+        transition: width 0.3s ease, opacity 0.3s ease;
+        visibility: hidden; 
+      }
+    
+      .search-bar.visible input {
+        width: 150px;
+        opacity: 1;
+        visibility: visible;
+        position: relative;
+        right: 10px;
+      }
+    
+      .search-bar button {
+        margin-left: -35px;
+        top: 6px;
+        right: 0px;
+      }
+  }

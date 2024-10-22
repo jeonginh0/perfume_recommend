@@ -18,7 +18,7 @@
 }
 
 .form-group input {
-    width: 100%;
+    width: 97%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -36,4 +36,127 @@
 
 .submit-button:hover {
     background-color: rgb(78, 78, 78);
+}
+
+
+@media screen and (max-width: 1024px) {
+    .post-edit-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 40px;
+        margin-top: 110px;
+    }
+
+    .post-edit-container svg {
+        height: 30px;
+        width: 30px;
+    }
+
+    .post-edit-container h2 {
+        font-size: 20px;
+        padding-bottom: 10px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
+    
+    .form-group input {
+        width: 97%;
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    .submit-button {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+
+}
+
+@media screen and (max-width: 768px) {
+    .post-edit-container {
+        max-width: 350px;
+        margin: 0 auto;
+        padding: 40px;
+        margin-top: 110px;
+    }
+
+    .post-edit-container svg {
+        height: 25px;
+        width: 25px;
+    }
+
+    .post-edit-container h2 {
+        font-size: 18px;
+        padding-bottom: 10px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+    
+    .form-group input {
+        width: 94%;
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    .submit-button {
+        padding: 10px 20px;
+        font-size: 12px;
+        height: 50px;
+    }
+
+}
+
+@media screen and (max-width: 768px) {
+    .post-edit-container {
+        max-width: 350px;
+        margin: 0 auto;
+        padding: 40px;
+        margin-top: 110px;
+    }
+
+    .post-edit-container svg {
+        height: 20px;
+        width: 20px;
+    }
+
+    .post-edit-container h2 {
+        font-size: 16px;
+        padding-bottom: 10px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        margin-bottom: 8px;
+        font-size: 13px;
+    }
+    
+    .form-group input {
+        width: 94%;
+        padding: 7px;
+        font-size: 14px;
+    }
+    
+    .submit-button {
+        padding: 10px 20px;
+        font-size: 12px;
+        height: 40px;
+    }
+
 }

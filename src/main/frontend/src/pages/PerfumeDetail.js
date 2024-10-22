@@ -220,7 +220,12 @@ const PerfumeDetail = () => {
                     <img src={perfume.image} alt={perfume.perfume} />
                     <div className="perfume-info">
                         <h1>{perfume.brand}</h1>
-                        <h2>{perfume.perfume}</h2>
+                        <div className="perfume-heart">
+                            <h2>{perfume.perfume}</h2>
+                            <div className="heart-icon-2" onClick={() => toggleLike(perfume.id)}>
+                                {likedPerfumes.includes(perfume.id) ? <IoIosHeart size={25} color='#FC7979'/> : <IoIosHeartEmpty size={25}/>}
+                            </div>
+                        </div>
                         <p>[부항률]<br/> - {perfume.duration}</p>
                         <p>[메인 어코드]<br/> - 탑 노트: {perfume.topnote}<br/>
                             - 미들 노트: {perfume.middlenote}<br/>
@@ -231,9 +236,6 @@ const PerfumeDetail = () => {
                         <p className="acode">
                             {Array.isArray(perfume.acode) ? perfume.acode.map(ac => `#${ac}`).join(' ') : ''}
                         </p>
-                        <div className="heart-icon-2" onClick={() => toggleLike(perfume.id)}>
-                            {likedPerfumes.includes(perfume.id) ? <IoIosHeart size={25} color='#FC7979'/> : <IoIosHeartEmpty size={25}/>}
-                        </div>
                     </div>
                 </div>
             </div>
@@ -246,7 +248,7 @@ const PerfumeDetail = () => {
                         onChange={(e) => setNewComment(e.target.value)}
                         placeholder="댓글을 입력하세요."
                     />
-                    <button className="input-post-btn" onClick={postComment}>등록하기</button>
+                    <button className="input-post-btn" onClick={postComment}>등록</button>
                 </div>
                 <div className="post-container">
                     {comments.map((comment) => (

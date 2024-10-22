@@ -16,7 +16,8 @@ const Perfume = () => {
     const [visibleCount, setVisibleCount] = useState(20); 
     const [loading, setLoading] = useState(false); 
     const [searchTerm, setSearchTerm] = useState('');
-    const [hasMore, setHasMore] = useState(true); 
+    const [hasMore, setHasMore] = useState(true);
+    const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
 
     const loadMoreRef = useRef(null); 
     const navigate = useNavigate(); 
@@ -313,6 +314,10 @@ const Perfume = () => {
 
     const uniqueBrands = [...new Set(perfumes.map(perfume => perfume.brand.trim()))].sort();
 
+    const handleSearchBarToggle = () => {
+        setIsSearchBarVisible(prevState => !prevState);
+    };
+
     return (
         <>
             <Navbar />
@@ -388,7 +393,7 @@ const Perfume = () => {
             <div className="sub-header">
                 <p className="perfume-number">총 {filteredPerfumes.length}개의 향수가 등록되어 있습니다.</p>
                 <p className="perfume-name">Perfume</p>
-                <div className="search-bar">
+                {/* <div className="search-bar">
                     <input
                         type="text"
                         placeholder="Search"
@@ -397,6 +402,16 @@ const Perfume = () => {
                         onKeyPress={handleKeyPress}
                     />
                     <button onClick={handleSearchClick}><IoSearchSharp /></button>
+                </div> */}
+                <div className={`search-bar ${isSearchBarVisible ? 'visible' : ''}`}>
+                    <input
+                        type="text"
+                        placeholder="Search"
+                        value={searchTerm}
+                        onChange={handleSearchInput}
+                        onKeyPress={handleKeyPress}
+                    />
+                    <button onClick={handleSearchBarToggle}><IoSearchSharp /></button>
                 </div>
             </div>
 
