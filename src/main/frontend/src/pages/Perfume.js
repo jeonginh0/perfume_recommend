@@ -18,6 +18,8 @@ const Perfume = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [hasMore, setHasMore] = useState(true);
     const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
+    const [isAcodeDropdownOpen, setIsAcodeDropdownOpen] = useState(false); // 어코드 드롭다운 상태
+    const [selectedAcodes, setSelectedAcodes] = useState([]); // 선택된 어코드 상태
 
     const loadMoreRef = useRef(null); 
     const navigate = useNavigate(); 
@@ -25,12 +27,17 @@ const Perfume = () => {
     const durationDropdownRef = useRef(null); 
     const loadingRef = useRef(loading); 
     const hasMoreRef = useRef(hasMore); 
+    const acodeDropdownRef = useRef(null); // 어코드 드롭다운 참조
 
     const durationOptions = [
         '퍼퓸',
         '오 드 퍼퓸',
         '오 드 뚜왈렛',
         '오 드 코롱'
+    ];
+
+    const acodeOptions = [
+        '시트러스', '플로럴', '우디', '스파이시', '그린', '프루티', '머스크', '스위트'
     ];
 
     useEffect(() => {
@@ -76,8 +83,10 @@ const Perfume = () => {
 
             const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(perfume.brand.trim());
             const matchesDuration = selectedDurations.length === 0 || selectedDurations.some(duration => perfume.duration === duration);
+            const matchesAcode = selectedAcodes.length === 0 || (Array.isArray(perfume.acode) && selectedAcodes.every(ac => perfume.acode.includes(ac)));
 
-            return matchesSearchTerm && matchesBrand && matchesDuration;
+
+            return matchesSearchTerm && matchesBrand && matchesDuration && matchesAcode;
         });
         setFilteredPerfumes(filtered);
     }, [perfumes, searchTerm, selectedBrands, selectedDurations]);
@@ -206,6 +215,18 @@ const Perfume = () => {
                 return [...prevSelected, brand];
             }
         });
+    };
+
+    const handleAcodeSelect = (acode) => {
+        setSelectedAcodes(prevSelected =>
+            prevSelected.includes(acode)
+                ? prevSelected.filter(a => a !== acode)
+                : [...prevSelected, acode]
+        );
+    };
+    
+    const removeAcode = (acode) => {
+        setSelectedAcodes(prevSelected => prevSelected.filter(a => a !== acode));
     };
 
     // 선택한 지속력 추가/제거
@@ -388,10 +409,41 @@ const Perfume = () => {
                             </div>
                         )}
                     </div>
+                    <div className="accord" ref={acodeDropdownRef}>
+                        <div className="filter-item" onClick={() => setIsAcodeDropdownOpen(prev => !prev)}>
+                            어코드 선택
+                            <div className="dropdown-icon">▼</div>
+                        </div>
+                        <div className="selected-brands-container">
+                            <div className="selected-brands">
+                                {selectedAcodes.map(acode => (
+                                    <div key={acode} className="selected-brand-item">
+                                        {acode} <span className="remove-brand" onClick={() => removeAcode(acode)}>x</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        {isAcodeDropdownOpen && (
+                            <div className="dropdown-menu-a">
+                                {acodeOptions.map(acode => (
+                                    <div key={acode} className="dropdown-item">
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedAcodes.includes(acode)}
+                                                onChange={() => handleAcodeSelect(acode)}
+                                            />
+                                            {acode}
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
             <div className="sub-header">
-                <p className="perfume-number">총 {filteredPerfumes.length}개의 향수가 등록되어 있습니다.</p>
+                <p className="perfume-number">총 {filteredPerfumes.length}개의 향수가 있습니다.</p>
                 <p className="perfume-name">Perfume</p>
                 {/* <div className="search-bar">
                     <input
@@ -421,12 +473,39 @@ const Perfume = () => {
                     <p>해당하는 향수가 없습니다.</p>
                 </div>
             ) : (
+                // <div className="perfume-list">
+                //     {filteredPerfumes.slice(0, visibleCount).map(perfume => (
+                //         <div key={perfume.id} className="perfume-item-2" onClick={() => handlePerfumeClick(perfume)}>
+                //             <img src={perfume.image} alt={perfume.perfume} />
+                //             {/* <div className="perfume">{perfume.perfume}</div> */}
+                //             <div className="perfume">
+                //                 {perfume.perfume.replace(/\s?(오 드 뚜왈렛|오 드 퍼퓸|퍼퓸|오 드 코롱|코롱 인텐스|오 드 빠르펭)$/, '')}
+                //             </div>
+                //             <p className="perfume-list-duration">
+                //                 {(perfume.perfume.match(/(오 드 뚜왈렛|오 드 퍼퓸|퍼퓸|오 드 코롱|코롱 인텐스|오 드 빠르펭)$/) || [])[0] || ''}
+                //             </p>
+
+                //             <p className="brand">{perfume.brand}</p>
+                //             <p className="acode">
+                //                 {Array.isArray(perfume.acode) ? perfume.acode.map(ac => `#${ac}`).join(' ') : ''}
+                //             </p>
+                //             <div className="heart-icon" onClick={(event) => toggleLike(event, perfume)}>
+                //                 {likedPerfumes.includes(perfume.id) ? <IoIosHeart size={25} color='#FC7979'/> : <IoIosHeartEmpty  size={25}/>}
+                //             </div>
+                //         </div>
+                //     ))}
+                // </div>
                 <div className="perfume-list">
                     {filteredPerfumes.slice(0, visibleCount).map(perfume => (
                         <div key={perfume.id} className="perfume-item-2" onClick={() => handlePerfumeClick(perfume)}>
                             <img src={perfume.image} alt={perfume.perfume} />
+                            <div className="perfume">
+                                {perfume.perfume} {/* 수정된 부분: 부향률 제거하지 않고 그대로 출력 */}
+                            </div>
+                            <p className="perfume-list-duration">
+                                {perfume.duration}
+                            </p>
                             <p className="brand">{perfume.brand}</p>
-                            <div className="perfume">{perfume.perfume}</div>
                             <p className="acode">
                                 {Array.isArray(perfume.acode) ? perfume.acode.map(ac => `#${ac}`).join(' ') : ''}
                             </p>

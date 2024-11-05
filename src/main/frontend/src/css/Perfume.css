@@ -67,6 +67,7 @@
 .duration {
   display: flex;
   position: relative;
+  border-bottom: 1px solid #ccc;
 }
 
 .dropdown-icon {
@@ -76,6 +77,26 @@
 }
 
 .dropdown-menu, .dropdown-menu-d {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 10px;
+  width: 100%;
+  top: 100%;
+  z-index: 100;
+}
+
+.accord {
+  display: flex;
+  position: relative;
+}
+
+.dropdown-menu-a {
   position: absolute;
   background-color: white;
   border: 1px solid #ccc;
@@ -108,7 +129,7 @@
   display: flex;
   align-items: center;
   font-size: 0.9em;
-  margin: 0 0 0 10px;
+  margin: 0 0 9px 10px;
 }
 
 .remove-brand {
@@ -136,7 +157,7 @@
   text-align: center;
   position: relative;
   width: auto;
-  height: 350px;
+  height: 400px;
   cursor: pointer;
 }
 
@@ -149,17 +170,6 @@
   margin: 10px 0 0 0;
 }
 
-.perfume-item-2 .brand {
-  font-family: 'Basic';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 23px;
-  line-height: 29px;
-  text-align: center;
-  color: #000000;
-  margin-bottom: 10px;
-}
-
 .perfume-item-2 .acode {
   font-family: 'Inter';
   font-style: normal;
@@ -170,19 +180,36 @@
   color: #888888;
 }
 
+.perfume-item-2 .brand {
+  font-family: 'Basic';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 21px;
+  text-align: center;
+  color: #000000;
+  text-decoration-line: underline;
+}
+
 .perfume-item-2 .perfume {
   font-family: 'Basic';
   font-style: normal;
   font-weight: 400;
-  font-size: 17px;
-  line-height: 21px;
+  font-size: 16px;
+  line-height: 29px;
   text-align: center;
   color: #000000;
+  margin-bottom: 10px;
+}
+
+.perfume-item-2 .perfume-list-duration {
+  font-size: 14px;
+  color: #616161;
 }
 
 .heart-icon {
   position: absolute;
-  bottom: 105px;
+  bottom: 160px;
   right: 10px;
   cursor: pointer;
 }
@@ -390,12 +417,11 @@
   }
   
   .perfume-item-2 p {
-    margin: 10px 0 0 0;
+    margin: 0;
   }
   
   .perfume-item-2 .brand {
-    font-size: 17px;
-    margin-bottom: 10px;
+    font-size: 13px;
   }
   
   .perfume-item-2 .acode {
@@ -404,11 +430,16 @@
   }
   
   .perfume-item-2 .perfume {
+    font-size: 15px;
+    margin-bottom: 0px;
+  }
+
+  .perfume-item-2 .perfume-list-duration {
     font-size: 13px;
   }
   
   .heart-icon {
-    bottom: 107px;
+    bottom: 120px;
     right: 3px;
   }
   
@@ -550,7 +581,7 @@
   }
   
   .perfume-item-2 .brand {
-    font-size: 14px;
+    font-size: 12px;
     margin-bottom: 10px;
   }
   
@@ -560,11 +591,15 @@
   }
   
   .perfume-item-2 .perfume {
+    font-size: 12px;
+  }
+
+  .perfume-item-2 .perfume-list-duration {
     font-size: 11px;
   }
   
   .heart-icon {
-    bottom: 140px;
+    bottom: 145px;
     right: 0px;
   }
 
@@ -726,11 +761,11 @@
   }
   
   .perfume-item-2 p {
-    margin: 10px 0 0 0;
+    margin: 0;
   }
   
   .perfume-item-2 .brand {
-    font-size: 12px;
+    font-size: 11px;
     margin-bottom: 0px;
   }
   
@@ -740,11 +775,15 @@
   }
   
   .perfume-item-2 .perfume {
-    font-size: 9px;
+    font-size: 11px;
+  }
+
+  .perfume-item-2 .perfume-list-duration {
+    font-size: 10px;
   }
   
   .heart-icon {
-    bottom: 100px;
+    bottom: 105px;
     right: 0px;
   }
 
