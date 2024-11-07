@@ -2,7 +2,10 @@ package jeonginho.perfume_recommend.repository.perfume;
 
 import jeonginho.perfume_recommend.Entity.perfume.Perfume;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
+
 import java.util.List;
+import java.util.Optional;
 
 public interface PerfumeRepository extends MongoRepository<Perfume, String> {
     List<Perfume> findByTopnoteContaining(String note);
@@ -11,7 +14,8 @@ public interface PerfumeRepository extends MongoRepository<Perfume, String> {
     List<Perfume> findBySinglenoteContaining(String note);
 
     List<Perfume> findByDurationContaining(String duration);
-    List<Perfume> findByBrandContaining(String brand);
+
+    List<Perfume> findByPrice(String price);
 
     // 특정 브랜드 목록과 지속시간 목록에 해당하는 향수들을 조회하는 메서드
     List<Perfume> findByBrandInIgnoreCaseAndDurationInIgnoreCase(List<String> brands, List<String> durations);
@@ -22,4 +26,6 @@ public interface PerfumeRepository extends MongoRepository<Perfume, String> {
     // 지속시간 목록에 해당하는 향수 조회 (대소문자 구분하지 않음)
     List<Perfume> findByDurationInIgnoreCase(List<String> durations);
 
+    @Query("{ 'perfume': { $regex: ?0, $options: 'i' } }")
+    List<Perfume> findAllByPerfumeIgnoreCase(String perfume);
 }
