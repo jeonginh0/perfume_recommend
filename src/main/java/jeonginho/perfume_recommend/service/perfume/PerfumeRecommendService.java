@@ -3,6 +3,7 @@ package jeonginho.perfume_recommend.service.perfume;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jeonginho.perfume_recommend.Entity.embedding.Embedding;
 import jeonginho.perfume_recommend.Entity.perfume.Perfume;
 import jeonginho.perfume_recommend.Entity.recommend.RecommendedPerfume;
@@ -43,7 +44,7 @@ public class PerfumeRecommendService {
         perfumeRepository.save(perfume);
     }
 
-    public List<RecommendedPerfume> recommendPerfumesUsingEmbedding(String userInput, HttpServletRequest request) {
+    public List<RecommendedPerfume> recommendPerfumesUsingEmbedding(String userInput, HttpServletRequest request, HttpSession session) {
         // JWT에서 userId 추출
         String userId = getUserIdFromRequest(request);
 
@@ -87,8 +88,6 @@ public class PerfumeRecommendService {
         // 추천 이유 생성
         try {
             String recommendationReasonJson = embeddingService.generateRecommendationReason(result, userInput);
-            System.out.println("추천 이유: " + recommendationReasonJson);
-
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode recommendationReasons = objectMapper.readTree(recommendationReasonJson);
 
@@ -103,20 +102,38 @@ public class PerfumeRecommendService {
                 }
             }
 
-            RecommendedPerfume recommendedPerfume = RecommendedPerfume.builder()
-                    .userId(userId)
-                    .perfumeRecommendations(perfumeRecommendations)
-                    .build();
+            if (userId != null) { // 회원인 경우
+                RecommendedPerfume recommendedPerfume = RecommendedPerfume.builder()
+                        .userId(userId)
+                        .perfumeRecommendations(perfumeRecommendations)
+                        .build();
+                recommendedPerfumeRepository.save(recommendedPerfume);
+                return List.of(recommendedPerfume);
+            } else { // 비회원인 경우 세션에 저장
+                session.setAttribute("nonMemberRecommendations", perfumeRecommendations);
+                return Collections.emptyList();
+            }
 
-            recommendedPerfumeRepository.save(recommendedPerfume);
-
-            return List.of(recommendedPerfume);
         } catch (Exception e) {
             System.err.println("추천 이유 생성 실패: " + e.getMessage());
             return List.of();
         }
     }
 
+    // 회원 추천 기록 조회
+    public List<RecommendedPerfume> getMemberRecommendations(HttpServletRequest request) {
+        String userId = getUserIdFromRequest(request);
+        if (userId != null) {
+            return recommendedPerfumeRepository.findByUserId(userId);
+        }
+        return Collections.emptyList();
+    }
+
+    // 비회원 추천 기록 조회
+    public List<RecommendedPerfume.PerfumeRecommendation> getNonMemberRecommendations(HttpSession session) {
+        List<RecommendedPerfume.PerfumeRecommendation> recommendations = (List<RecommendedPerfume.PerfumeRecommendation>) session.getAttribute("nonMemberRecommendations");
+        return recommendations != null ? recommendations : Collections.emptyList();
+    }
 
     // JWT에서 userId를 추출하는 메서드
     private String getUserIdFromRequest(HttpServletRequest request) {
@@ -155,9 +172,6 @@ public class PerfumeRecommendService {
         }
         return List.of("오 드 뚜왈렛", "오 드 퍼퓸", "퍼퓸", "오 드 코롱"); // 특정 지속 시간 없이 모두 포함
     }
-
-
-
 
 
     // 향수와 유사도를 담는 클래스
