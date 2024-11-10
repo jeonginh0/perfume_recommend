@@ -50,9 +50,9 @@ public class EmbeddingService {
         List<Perfume> allPerfumes = perfumeRepository.findAll();
 
         for (Perfume perfume : allPerfumes) {
-            // Check if the embedding already exists
+
             if (!embeddingRepository.findByPerfumeId(perfume.getId()).isPresent()) {
-                // Generate and save embedding
+
                 List<Double> embeddingValue = generateEmbedding(perfume);
                 Embedding embedding = Embedding.builder()
                         .perfumeId(perfume.getId())
