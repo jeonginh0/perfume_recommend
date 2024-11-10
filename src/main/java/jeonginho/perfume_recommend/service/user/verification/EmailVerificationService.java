@@ -1,14 +1,11 @@
 package jeonginho.perfume_recommend.service.user.verification;
 
-import jeonginho.perfume_recommend.Entity.User;
-import jeonginho.perfume_recommend.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service

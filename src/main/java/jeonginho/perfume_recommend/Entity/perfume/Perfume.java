@@ -32,4 +32,9 @@ public class Perfume {
     private String image; //이미지 URL
     private String pageurl; //향수 상세 페이지 URL
 
+    private List<String> season; //계절
+    private List<String> gender; //성별
+    private List<String> situation; //상황
+
+    private String price; //가격
 }
