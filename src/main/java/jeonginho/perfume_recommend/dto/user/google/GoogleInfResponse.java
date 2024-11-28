@@ -1,0 +1,34 @@
+package jeonginho.perfume_recommend.dto.user.google;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+public class GoogleInfResponse {
+    private String iss;
+    private String azp;
+    private String aud;
+    private String sub;
+    private String email;
+    private String email_verified;
+    private String at_hash;
+    private String name;
+    private String picture;
+    private String given_name;
+    private String family_name;
+    private String locale;
+    private String iat;
+    private String exp;
+    private String alg;
+    private String kid;
+    private String typ;
+
+    private String phoneNumber;
+    private List<String> preferenceNote;
+    private List<String> preferenceDuration;
+    private List<String> preferenceSeason;
+    private List<String> preferenceSituation;
+}
