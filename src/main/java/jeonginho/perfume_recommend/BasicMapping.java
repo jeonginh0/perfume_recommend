@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class BasicMapping {
 
     @GetMapping("/") // 루트페이지 이동
-    public String main() {
+    public String index() {
         return "index";
     }
 }
